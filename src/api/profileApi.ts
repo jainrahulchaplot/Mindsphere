@@ -3,13 +3,12 @@ import { api } from './client';
 export const profileApi = {
   // Memories
   getMemories: async (userId: string) => {
-    const response = await api.get(`/memories?user_id=${encodeURIComponent(userId)}`);
+    const response = await api.get(`/memories`);
     return response.data;
   },
 
   addMemory: async (userId: string, memory: { content: string; category: string }) => {
     const response = await api.post('/memories', {
-      user_id: userId,
       ...memory,
       importance: 1
     });
@@ -23,13 +22,12 @@ export const profileApi = {
 
   // Snippets
   getSnippets: async (userId: string) => {
-    const response = await api.get(`/snippets?user_id=${encodeURIComponent(userId)}`);
+    const response = await api.get(`/snippets`);
     return response.data;
   },
 
   addSnippet: async (userId: string, content: string) => {
     const response = await api.post('/snippets', {
-      user_id: userId,
       content
     });
     return response.data;

@@ -61,7 +61,7 @@ app.use(cors({
   origin: CORS_ORIGINS,
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'X-Idempotency-Key']
 }));
 
 // Authentication middleware - attaches req.user.id from JWT or demo mode

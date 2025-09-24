@@ -29,7 +29,7 @@ const MemoryManager: React.FC<{ userId: string }> = ({ userId }) => {
     queryKey: ['memories', userId],
     queryFn: async () => {
       const { api } = await import('../api/client');
-      const response = await api.get(`/memories?user_id=${userId}`);
+      const response = await api.get(`/memories`);
       return response.data;
     }
   });
@@ -39,7 +39,7 @@ const MemoryManager: React.FC<{ userId: string }> = ({ userId }) => {
     queryKey: ['snippets', userId],
     queryFn: async () => {
       const { api } = await import('../api/client');
-      const response = await api.get(`/snippets?user_id=${userId}`);
+      const response = await api.get(`/snippets`);
       return response.data;
     }
   });
@@ -49,7 +49,6 @@ const MemoryManager: React.FC<{ userId: string }> = ({ userId }) => {
     mutationFn: async (data: { content: string; category: string; importance: number }) => {
       const { api } = await import('../api/client');
       const response = await api.post('/memories', {
-        user_id: userId,
         ...data
       });
       return response.data;
@@ -65,7 +64,6 @@ const MemoryManager: React.FC<{ userId: string }> = ({ userId }) => {
     mutationFn: async (content: string) => {
       const { api } = await import('../api/client');
       const response = await api.post('/snippets', {
-        user_id: userId,
         content
       });
       return response.data;

@@ -13,10 +13,10 @@ const supabase = (SUPABASE_URL && SUPABASE_SERVICE_ROLE_KEY)
 // Get user memories
 router.get('/', async (req, res) => {
   try {
-    const { user_id } = req.query;
+    const user_id = req.user?.id;
     
     if (!user_id) {
-      return res.status(400).json({ error: 'user_id is required' });
+      return res.status(401).json({ error: 'User not authenticated' });
     }
 
     const { data, error } = await supabase
@@ -40,11 +40,16 @@ router.get('/', async (req, res) => {
 // Add new memory
 router.post('/', async (req, res) => {
   try {
-    const { user_id, content, category, importance } = req.body;
+    const user_id = req.user?.id;
+    const { content, category, importance } = req.body;
     
-    if (!user_id || !content) {
+    if (!user_id) {
+      return res.status(401).json({ error: 'User not authenticated' });
+    }
+    
+    if (!content) {
       return res.status(400).json({ 
-        error: 'user_id and content are required' 
+        error: 'content is required' 
       });
     }
 
