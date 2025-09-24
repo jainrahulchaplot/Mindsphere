@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { supabase, authMode } from '../lib/supabase';
 
-const baseURL = import.meta.env.VITE_API_BASE_URL ? `${import.meta.env.VITE_API_BASE_URL}/api/v1` : '/api/v1';
+// Force Railway backend URL for production
+const baseURL = import.meta.env.VITE_API_BASE_URL ? `${import.meta.env.VITE_API_BASE_URL}/api/v1` : 'https://mindsphere-production-fc81.up.railway.app/api/v1';
 console.log('🔧 API Base URL:', baseURL);
 console.log('🔧 VITE_API_BASE_URL:', import.meta.env.VITE_API_BASE_URL);
 
