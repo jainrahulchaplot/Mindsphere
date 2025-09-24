@@ -1,9 +1,19 @@
 const { TextToSpeechClient } = require('@google-cloud/text-to-speech');
 
-// Initialize Google Cloud TTS client
-const ttsClient = new TextToSpeechClient({
-  keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS
-});
+// Initialize Google Cloud TTS client (optional)
+let ttsClient = null;
+if (process.env.GOOGLE_APPLICATION_CREDENTIALS && process.env.GOOGLE_APPLICATION_CREDENTIALS !== './mindsphere-472512-653692846d5f.json') {
+  try {
+    ttsClient = new TextToSpeechClient({
+      keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS
+    });
+    console.log('✅ Google Cloud TTS initialized');
+  } catch (error) {
+    console.log('⚠️ Google Cloud TTS not available:', error.message);
+  }
+} else {
+  console.log('⚠️ Google Cloud TTS credentials not provided or using placeholder');
+}
 
 // Generate TTS audio for a single batch
 async function generateTTSBatch(text, kind, batchNum = 1) {
