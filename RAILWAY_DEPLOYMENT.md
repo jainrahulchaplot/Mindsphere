@@ -147,7 +147,7 @@ Railway provides:
 
 1. **Deploy to Railway** - Follow steps
 2. **Test endpoints** - Verify API is working
-3. **Update Vercel** - Point frontend to Railway backend
+3. **Update Vercel** - Point frontend to Railway
 4. **Monitor** - Check Railway dashboard for issues
 
 Your MindSphere app will be fully deployed with:
