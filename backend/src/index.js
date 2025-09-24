@@ -36,10 +36,33 @@ const supabase = (SUPABASE_URL && SUPABASE_SERVICE_ROLE_KEY)
 const app = express();
 const PORT = process.env.PORT || 8000;
 const ORIGIN = process.env.FRONTEND_ORIGIN || '*';
-const CORS_ORIGINS = process.env.CORS_ALLOWED_ORIGINS ? process.env.CORS_ALLOWED_ORIGINS.split(',') : ['*'];
+
+// Enhanced CORS configuration for production
+let CORS_ORIGINS = ['*']; // Default fallback
+
+if (process.env.CORS_ALLOWED_ORIGINS) {
+  CORS_ORIGINS = process.env.CORS_ALLOWED_ORIGINS.split(',').map(origin => origin.trim());
+} else if (process.env.FRONTEND_ORIGIN && process.env.FRONTEND_ORIGIN !== '*') {
+  CORS_ORIGINS = [process.env.FRONTEND_ORIGIN];
+} else {
+  // Fallback for common deployment platforms
+  CORS_ORIGINS = [
+    'https://mindsphere-theta.vercel.app',
+    'http://localhost:5173',
+    'http://localhost:5174'
+  ];
+}
+
+console.log('🌍 CORS Origins:', CORS_ORIGINS);
+console.log('🌍 Environment:', process.env.NODE_ENV || 'development');
 
 app.use(express.json({ limit: '1mb' }));
-app.use(cors({ origin: CORS_ORIGINS }));
+app.use(cors({ 
+  origin: CORS_ORIGINS,
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+}));
 
 // Authentication middleware - attaches req.user.id from JWT or demo mode
 app.use(attachUser);
@@ -48,6 +71,18 @@ app.use(attachUser);
 app.use('/audio', express.static(path.join(__dirname, '..', 'public', 'audio')));
 
 app.get('/health', (_req, res) => res.json({ status: 'ok', ts: new Date().toISOString() }));
+
+// CORS debugging endpoint
+app.get('/cors-info', (req, res) => {
+  res.json({
+    cors_origins: CORS_ORIGINS,
+    environment: process.env.NODE_ENV || 'development',
+    frontend_origin: process.env.FRONTEND_ORIGIN,
+    cors_allowed_origins: process.env.CORS_ALLOWED_ORIGINS,
+    request_origin: req.headers.origin,
+    timestamp: new Date().toISOString()
+  });
+});
 
 app.get('/', (_req, res) => res.json({ name: 'MindSphere API', version: 'mvp-1', routes: ['/health','POST /api/v1/session/start','GET /api/v1/session/:id','POST /api/v1/session/:id/feedback','GET /api/v1/journal','POST /api/v1/journal/submit','GET /api/v1/streaks/:user_id','POST /api/v1/streaks/:user_id','GET /api/v1/music_tracks','POST /api/v1/nudges/preview','POST /api/v1/journal/stt','POST /api/v1/coach/chat','GET /api/v1/notes','POST /api/v1/notes','GET /api/v1/notes/:id','PUT /api/v1/notes/:id','DELETE /api/v1/notes/:id','POST /api/v1/notes/similarity','POST /api/v1/notes/:id/embedding','GET /api/v1/usage/daily','GET /api/v1/library','POST /api/v1/me/sync','GET /api/v1/profile/basic','PUT /api/v1/profile/basic'] }));
 
