@@ -8,6 +8,12 @@ const ttsClient = new TextToSpeechClient({
 // Generate TTS audio for a single batch
 async function generateTTSBatch(text, kind, batchNum = 1) {
   try {
+    // Check if TTS client is available
+    if (!ttsClient) {
+      console.log('⚠️ Google Cloud TTS not available, skipping audio generation');
+      return { success: false, error: 'TTS not configured' };
+    }
+    
     console.log(`🎤 Generating batch ${batchNum} ${kind} audio with Google Cloud TTS Studio-O...`);
     console.log(`📝 Text length: ${text.length} characters`);
     
