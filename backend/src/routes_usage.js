@@ -25,6 +25,8 @@ router.get('/daily', async (req, res) => {
     const user_id = req.user?.id || req.query.user_id; // token-first; demo fallback
     const { from, to, kind } = req.query;
     
+    console.log('🔍 Usage route: user_id =', user_id, 'from =', from, 'to =', to, 'kind =', kind);
+    
     if (!user_id) {
       return res.status(400).json({ error: 'user_id is required' });
     }
@@ -58,6 +60,8 @@ router.get('/daily', async (req, res) => {
       console.error('Error fetching sessions:', error);
       return res.status(500).json({ error: 'Database error', details: error.message });
     }
+
+    console.log('🔍 Usage route: Found', sessions?.length || 0, 'sessions for user_id:', user_id);
 
     // Find first use date
     const { data: firstSession } = await supabase

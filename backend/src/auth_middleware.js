@@ -25,6 +25,7 @@ function getJwks() {
  */
 async function attachUser(req, res, next) {
   if (!SUPABASE_AUTH_ENABLED) {
+    console.log('🔍 Auth middleware: Demo mode, setting user_id to:', DEMO_USER_ID);
     req.user = { id: DEMO_USER_ID, mode: 'demo' };
     return next();
   }
@@ -53,6 +54,7 @@ async function attachUser(req, res, next) {
       picture: payload.user_metadata?.avatar_url || payload.picture,
       provider: payload.app_metadata?.provider || 'google'
     };
+    console.log('🔍 Auth middleware: JWT verified, setting user_id to:', payload.sub);
     next();
   } catch (e) {
     console.error('JWT verify failed', e);

@@ -25,6 +25,8 @@ router.get('/', async (req, res) => {
     const user_id = req.user?.id || req.query.user_id; // token-first; demo fallback
     const { kind, from, to, page = 1, limit = 20, q } = req.query;
     
+    console.log('🔍 Library route: user_id =', user_id, 'kind =', kind, 'page =', page);
+    
     if (!user_id) {
       return res.status(400).json({ error: 'user_id is required' });
     }
@@ -61,6 +63,8 @@ router.get('/', async (req, res) => {
       console.error('Error fetching sessions:', error);
       return res.status(500).json({ error: 'Database error', details: error.message });
     }
+
+    console.log('🔍 Library route: Found', sessions?.length || 0, 'sessions for user_id:', user_id);
 
     // Apply search filter if provided
     let filteredSessions = sessions || [];
