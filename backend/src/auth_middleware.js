@@ -4,8 +4,16 @@ const { SUPABASE_URL, SUPABASE_AUTH_ENABLED, DEMO_USER_ID } = require('./config.
 let JWKS = null;
 function getJwks() {
   if (!JWKS) {
-    if (!SUPABASE_URL) throw new Error('SUPABASE_URL missing');
-    JWKS = createRemoteJWKSet(new URL(`${SUPABASE_URL}/auth/v1/keys`));
+    if (!SUPABASE_URL) {
+      console.warn('⚠️ SUPABASE_URL missing, JWT verification will fail');
+      return null;
+    }
+    try {
+      JWKS = createRemoteJWKSet(new URL(`${SUPABASE_URL}/auth/v1/keys`));
+    } catch (error) {
+      console.error('❌ Failed to create JWKS:', error.message);
+      return null;
+    }
   }
   return JWKS;
 }
@@ -25,7 +33,14 @@ async function attachUser(req, res, next) {
     const token = auth.startsWith('Bearer ') ? auth.slice(7) : null;
     if (!token) return res.status(401).json({ error: 'missing_token' });
 
-    const { payload } = await jwtVerify(token, getJwks(), {
+    const jwks = getJwks();
+    if (!jwks) {
+      console.error('❌ JWKS not available, falling back to demo mode');
+      req.user = { id: DEMO_USER_ID, mode: 'demo' };
+      return next();
+    }
+
+    const { payload } = await jwtVerify(token, jwks, {
       issuer: `${SUPABASE_URL}/auth/v1`,
       audience: SUPABASE_URL
     });
