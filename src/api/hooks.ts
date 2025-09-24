@@ -69,7 +69,7 @@ export function useStreaks(userId: string | null) {
   return useQuery<StreaksRes, Error>({
     queryKey: ['streaks', userId],
     enabled: !!userId,
-    queryFn: () => getData(api.get(`/streaks/${encodeURIComponent(userId!)}`))
+    queryFn: () => getData(api.get(`/streaks/`))
   });
 }
 
@@ -77,7 +77,7 @@ export function useStreaks(userId: string | null) {
 export function useUpdateStreak() {
   const qc = useQueryClient();
   return useMutation<StreaksRes, Error, { userId: string }>({
-    mutationFn: ({ userId }) => getData(api.post(`/streaks/${encodeURIComponent(userId)}`)),
+    mutationFn: ({ userId }) => getData(api.post(`/streaks/`)),
     onSuccess: (_data, { userId }) => { qc.invalidateQueries({ queryKey: ['streaks', userId] }); }
   });
 }
