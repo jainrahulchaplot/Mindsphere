@@ -1,34 +1,28 @@
 import { useState } from 'react';
-import { supabase } from '../lib/supabase';
+import { useAuth } from '../state/auth';
 import Card from '../components/Card';
 import Button from '../components/Button';
 
 export default function SignIn() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const { signIn } = useAuth();
 
-  const handleGoogleSignIn = async () => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     setIsLoading(true);
     setError(null);
     
     try {
-      if (!supabase) {
-        throw new Error('Authentication service not available');
-      }
-      
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: `${window.location.origin}/`
-        }
-      });
-      
-      if (error) {
-        throw error;
-      }
-    } catch (error: any) {
-      console.error('Google sign in failed:', error);
-      setError('Google sign in failed. Please try again.');
+      // Add a small delay for better UX
+      await new Promise(resolve => setTimeout(resolve, 800));
+      await signIn(email, password);
+      // Redirect will happen via ProtectedRoute
+    } catch (error) {
+      console.error('Sign in failed:', error);
+      setError('Sign in failed. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -43,27 +37,52 @@ export default function SignIn() {
             <div className="subtle mt-1">Your meditation journey begins here</div>
           </div>
           
-          <div className={`mt-6 transition-all duration-300 ${isLoading ? 'opacity-75' : ''}`}>
+          <form onSubmit={handleSubmit} className={`mt-4 grid-gap transition-all duration-300 ${isLoading ? 'opacity-75' : ''}`}>
             {error && (
-              <div className="p-3 bg-red-500/20 border border-red-500/30 rounded text-red-200 text-sm animate-pulse mb-4">
+              <div className="p-2 bg-red-500/20 border border-red-500/30 rounded text-red-200 text-sm animate-pulse">
                 {error}
               </div>
             )}
             
+            <div>
+              <label htmlFor="email" className="subtle">Email</label>
+              <input
+                id="email"
+                type="email"
+                className="mt-1 w-full bg-graphite text-white border border-white/10 rounded-lg px-3 py-2 placeholder-silver/60 focus:outline-none focus:ring-2 focus:ring-white/10"
+                placeholder="demo@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                disabled={isLoading}
+                required
+                autoComplete="email"
+              />
+            </div>
+            
+            <div>
+              <label htmlFor="password" className="subtle">Password</label>
+              <input
+                id="password"
+                type="password"
+                className="mt-1 w-full bg-graphite text-white border border-white/10 rounded-lg px-3 py-2 placeholder-silver/60 focus:outline-none focus:ring-2 focus:ring-white/10"
+                placeholder="••••••••"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                disabled={isLoading}
+                required
+                autoComplete="current-password"
+              />
+            </div>
+            
             <Button 
-              label={isLoading ? "Signing in..." : "Continue with Google"} 
-              onClick={handleGoogleSignIn}
+              label="Begin Journey" 
+              onClick={() => {}} 
+              type="submit"
               disabled={isLoading}
               isLoading={isLoading}
-              className="w-full"
+              className="w-full mt-4"
             />
-            
-            <div className="text-center mt-4">
-              <p className="text-sm text-silver/60">
-                Sign in with your Google account to access your personalized meditation journey
-              </p>
-            </div>
-          </div>
+          </form>
         </Card>
       </div>
     </div>
