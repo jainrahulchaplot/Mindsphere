@@ -62,7 +62,9 @@ export default function SessionPage() {
     console.log('📡 Fetching session data for:', sessionId);
     try {
       setLoading(true);
-      const response = await fetch(`/api/v1/session/${sessionId}`);
+      // Force Railway backend URL for production
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ? `${import.meta.env.VITE_API_BASE_URL}/api/v1` : 'https://mindsphere-production-fc81.up.railway.app/api/v1';
+      const response = await fetch(`${API_BASE_URL}/session/${sessionId}`);
       
       if (!response.ok) {
         throw new Error('Session not found');
@@ -186,7 +188,9 @@ export default function SessionPage() {
 
   const handleFeedbackSubmit = async (feedback: { rating: number; text: string }) => {
     try {
-      const response = await fetch(`/api/v1/session/${sessionId}/feedback`, {
+      // Force Railway backend URL for production
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ? `${import.meta.env.VITE_API_BASE_URL}/api/v1` : 'https://mindsphere-production-fc81.up.railway.app/api/v1';
+      const response = await fetch(`${API_BASE_URL}/session/${sessionId}/feedback`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

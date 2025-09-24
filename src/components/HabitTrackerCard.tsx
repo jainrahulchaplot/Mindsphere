@@ -49,7 +49,9 @@ export default function HabitTrackerCard({ userId }: HabitTrackerCardProps) {
   const monthQ = useQuery<UsageData>({
     queryKey: ['usage-month', userId, from, to, activeTab],
     queryFn: async () => {
-      const res = await fetch(`/api/v1/usage/daily?user_id=${userId}&from=${from}&to=${to}&kind=${activeTab}`);
+      // Force Railway backend URL for production
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ? `${import.meta.env.VITE_API_BASE_URL}/api/v1` : 'https://mindsphere-production-fc81.up.railway.app/api/v1';
+      const res = await fetch(`${API_BASE_URL}/usage/daily?user_id=${userId}&from=${from}&to=${to}&kind=${activeTab}`);
       if (!res.ok) throw new Error('Failed to fetch usage data');
       return res.json();
     },
@@ -62,7 +64,9 @@ export default function HabitTrackerCard({ userId }: HabitTrackerCardProps) {
     queryFn: async () => {
       const first = monthQ.data?.first_use_date;
       if (!first) throw new Error('No first use date available');
-      const res = await fetch(`/api/v1/usage/daily?user_id=${userId}&from=${first}&to=${todayKey}&kind=${activeTab}`);
+      // Force Railway backend URL for production
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ? `${import.meta.env.VITE_API_BASE_URL}/api/v1` : 'https://mindsphere-production-fc81.up.railway.app/api/v1';
+      const res = await fetch(`${API_BASE_URL}/usage/daily?user_id=${userId}&from=${first}&to=${todayKey}&kind=${activeTab}`);
       if (!res.ok) throw new Error('Failed to fetch overall usage');
       return res.json();
     },
