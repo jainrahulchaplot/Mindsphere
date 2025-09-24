@@ -10,9 +10,13 @@ const supabase = (SUPABASE_URL && SUPABASE_SERVICE_ROLE_KEY)
 
 const router = Router();
 
-// GET /api/v1/streaks/:user_id
-router.get('/api/v1/streaks/:user_id', async (req,res) => {
-  const { user_id } = req.params;
+// GET /api/v1/streaks
+router.get('/api/v1/streaks', async (req,res) => {
+  const user_id = req.user?.id;
+  
+  if (!user_id) {
+    return res.status(401).json({ error: 'User not authenticated' });
+  }
   if (!supabase) return res.json({ current_streak: 0, best_streak: 0, note: 'Supabase not configured' });
   
   try {
@@ -116,8 +120,12 @@ function calculateStreaks(sessions) {
 }
 
 // POST /api/v1/streaks/:user_id -> updates streak if new day
-router.post('/api/v1/streaks/:user_id', async (req,res) => {
-  const { user_id } = req.params;
+router.post('/api/v1/streaks', async (req,res) => {
+  const user_id = req.user?.id;
+  
+  if (!user_id) {
+    return res.status(401).json({ error: 'User not authenticated' });
+  }
   if (!supabase) return res.json({ updated: false, note: 'Supabase not configured' });
   const today = new Date().toISOString().slice(0,10);
 
