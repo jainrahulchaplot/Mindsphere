@@ -49,7 +49,7 @@ async function attachUser(req, res, next) {
 
     const { payload } = await jwtVerify(token, jwks, {
       issuer: `${SUPABASE_URL}/auth/v1`,
-      audience: SUPABASE_URL
+      audience: 'authenticated'
     });
 
     // Payload claims: sub (user id), email, user_metadata, etc.
