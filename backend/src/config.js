@@ -1,0 +1,13 @@
+const SUPABASE_URL = process.env.SUPABASE_URL || '';
+const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || '';
+const SUPABASE_AUTH_ENABLED = process.env.SUPABASE_AUTH_ENABLED === 'true';
+
+// DEMO fallback user (matches current behavior)
+const DEMO_USER_ID = '550e8400-e29b-41d4-a716-446655440000';
+
+module.exports = {
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY,
+  SUPABASE_AUTH_ENABLED,
+  DEMO_USER_ID
+};
