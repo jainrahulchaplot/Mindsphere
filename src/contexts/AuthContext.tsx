@@ -16,8 +16,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (authMode === 'demo') {
-      // Demo mode - use hardcoded user ID
+    // Check if we're in local development
+    const isLocalDev = import.meta.env.DEV || 
+                       window.location.hostname === 'localhost' || 
+                       window.location.hostname === '127.0.0.1' ||
+                       !import.meta.env.VITE_SUPABASE_URL;
+
+    if (authMode === 'demo' || isLocalDev) {
+      // Demo mode or local development - use hardcoded user ID
       setUserId(DEMO_USER_ID);
       setIsLoading(false);
       return;
@@ -48,7 +54,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signOut = async () => {
-    if (authMode === 'demo') {
+    // Check if we're in local development
+    const isLocalDev = import.meta.env.DEV || 
+                       window.location.hostname === 'localhost' || 
+                       window.location.hostname === '127.0.0.1' ||
+                       !import.meta.env.VITE_SUPABASE_URL;
+
+    if (authMode === 'demo' || isLocalDev) {
       setUserId(null);
       return;
     }

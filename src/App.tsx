@@ -29,6 +29,8 @@ function AppContent() {
             <Route path="/view-session/:sessionId" element={<ViewOnlySessionPage />} />
             <Route path="/auth" element={<AuthPage />} />
             <Route path="/profile" element={<ProfilePage />} />
+            {/* Catch-all route - redirect unknown paths to homepage */}
+            <Route path="*" element={<MeditationPage />} />
           </Routes>
         </div>
         {!isSessionPage && <MobileNavBar userId={userId!} />}

@@ -36,9 +36,10 @@ const supabase = (SUPABASE_URL && SUPABASE_SERVICE_ROLE_KEY)
 const app = express();
 const PORT = process.env.PORT || 8000;
 const ORIGIN = process.env.FRONTEND_ORIGIN || '*';
+const CORS_ORIGINS = process.env.CORS_ALLOWED_ORIGINS ? process.env.CORS_ALLOWED_ORIGINS.split(',') : ['*'];
 
 app.use(express.json({ limit: '1mb' }));
-app.use(cors({ origin: ORIGIN }));
+app.use(cors({ origin: CORS_ORIGINS }));
 
 // Authentication middleware - attaches req.user.id from JWT or demo mode
 app.use(attachUser);
