@@ -54,7 +54,9 @@ export default function SessionsListCard({ userId }: SessionsListCardProps) {
         ...(filters.search && { q: filters.search }),
       });
       
-      const response = await fetch(`/api/v1/library?${params}`);
+      // Force Railway backend URL for production
+      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ? `${import.meta.env.VITE_API_BASE_URL}/api/v1` : 'https://mindsphere-production-fc81.up.railway.app/api/v1';
+      const response = await fetch(`${API_BASE_URL}/library?${params}`);
       if (!response.ok) {
         throw new Error('Failed to fetch sessions');
       }

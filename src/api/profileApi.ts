@@ -1,4 +1,5 @@
-const API_BASE_URL = '/api/v1';
+// Force Railway backend URL for production
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ? `${import.meta.env.VITE_API_BASE_URL}/api/v1` : 'https://mindsphere-production-fc81.up.railway.app/api/v1';
 
 export const profileApi = {
   // Memories
