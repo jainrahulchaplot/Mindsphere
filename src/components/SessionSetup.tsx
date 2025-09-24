@@ -4,13 +4,13 @@ import Card from './Card';
 import Button from './Button';
 import PremiumVoiceNotes from './PremiumVoiceNotes';
 import { getTimeOptions, getCustomRange, formatDuration } from '../config/sessionConfig';
-import { user } from '@elevenlabs/elevenlabs-js/api';
 
 type Props = { 
   onSessionCreated: (data: { 
     sessionId: string;
     status: string;
-  }) => void 
+  }) => void;
+  userId: string;
 };
 
 // Helper function to hydrate from localStorage
@@ -42,7 +42,7 @@ type MoodOption = typeof MOOD_OPTIONS[number] | 'custom';
 // Tab types
 type TabType = 'meditation' | 'sleep_story';
 
-export default function SessionSetup({ onSessionCreated }: Props) {
+export default function SessionSetup({ onSessionCreated, userId }: Props) {
   // Tab state
   const [activeTab, setActiveTab] = useState<TabType>(() => hydrate('ms.tab', 'meditation'));
   
@@ -152,8 +152,8 @@ export default function SessionSetup({ onSessionCreated }: Props) {
       
       // Update streak (non-blocking)
       try {
-        const userId = '550e8400-e29b-41d4-a716-446655440000';
-        await updateStreak.mutateAsync({ userId });
+        // Backend will use authenticated user from JWT token
+        await updateStreak.mutateAsync({ userId: '' }); // Backend auth middleware will use req.user.id
       } catch (streakError) {
         console.warn('Streak update failed:', streakError);
       }
@@ -333,6 +333,7 @@ export default function SessionSetup({ onSessionCreated }: Props) {
             disabled={createSession.isPending}
             placeholder=""
             onRecordingStateChange={setIsRecording}
+            userId={userId}
           />
         </div>
 

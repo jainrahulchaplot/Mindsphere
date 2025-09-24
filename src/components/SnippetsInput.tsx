@@ -114,6 +114,7 @@ export default function SnippetsInput({ userId }: SnippetsInputProps) {
             rows={3}
             onKeyPress={handleKeyPress}
             disabled={addSnippet.isPending}
+            userId={userId}
           />
           
           <div className="mt-6">

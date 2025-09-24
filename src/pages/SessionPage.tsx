@@ -6,6 +6,7 @@ import FeedbackModal from '../components/FeedbackModal';
 import PremiumLoadingAnimation from '../components/PremiumLoadingAnimation';
 import SoothingAnimation from '../components/SoothingAnimation';
 import { useGenerateScript, useGenerateAudio } from '../api/hooks';
+import { useAuth } from '../contexts/AuthContext';
 
 interface SessionData {
   id: string;
@@ -24,6 +25,7 @@ interface SessionData {
 
 export default function SessionPage() {
   const { sessionId } = useParams<{ sessionId: string }>();
+  const { userId } = useAuth();
   const navigate = useNavigate();
   const [sessionData, setSessionData] = useState<SessionData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -368,6 +370,7 @@ export default function SessionPage() {
           onSubmit={handleFeedbackSubmit}
           initialRating={sessionData?.post_rating}
           initialFeedback={sessionData?.post_feedback}
+          userId={userId || ''}
         />
 
         {/* Error Message */}

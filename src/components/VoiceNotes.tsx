@@ -5,11 +5,12 @@ type Props = {
   value: string;
   onChange: (value: string) => void;
   disabled?: boolean;
+  userId: string;
 };
 
 type RecordingState = 'idle' | 'recording' | 'processing';
 
-export default function VoiceNotes({ value, onChange, disabled }: Props) {
+export default function VoiceNotes({ value, onChange, disabled, userId }: Props) {
   const [recordingState, setRecordingState] = useState<RecordingState>('idle');
   const [recordingTime, setRecordingTime] = useState(0);
   const [error, setError] = useState<string | null>(null);
@@ -194,7 +195,7 @@ export default function VoiceNotes({ value, onChange, disabled }: Props) {
 
       const result = await stt.mutateAsync({
         audio: audioFile,
-        user_id: '550e8400-e29b-41d4-a716-446655440000'
+        user_id: userId
       });
 
       // Append transcription to existing notes

@@ -7,6 +7,7 @@ interface SessionFeedbackProps {
   onSubmit: (feedback: { rating: number; text: string }) => void;
   initialRating?: number;
   initialFeedback?: string;
+  userId: string;
 }
 
 const ratingOptions = [
@@ -48,7 +49,8 @@ const ratingOptions = [
 export default function SessionFeedback({ 
   onSubmit, 
   initialRating, 
-  initialFeedback 
+  initialFeedback,
+  userId
 }: SessionFeedbackProps) {
   const [selectedRating, setSelectedRating] = useState<number>(initialRating || 0);
   const [feedbackText, setFeedbackText] = useState<string>(initialFeedback || '');
@@ -138,6 +140,7 @@ export default function SessionFeedback({
               onChange={setFeedbackText}
               placeholder="How did this session make you feel? What worked well or could be improved?"
               disabled={false}
+              userId={userId}
             />
             <div className="text-right text-sm text-white/50 mt-2">
               {feedbackText.length}/500

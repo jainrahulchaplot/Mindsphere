@@ -7,6 +7,7 @@ interface FeedbackModalProps {
   onSubmit: (feedback: { rating: number; text: string }) => void;
   initialRating?: number;
   initialFeedback?: string;
+  userId: string;
 }
 
 export default function FeedbackModal({
@@ -15,6 +16,7 @@ export default function FeedbackModal({
   onSubmit,
   initialRating = 0,
   initialFeedback = '',
+  userId,
 }: FeedbackModalProps) {
   const [selectedRating, setSelectedRating] = useState(initialRating);
   const [feedbackText, setFeedbackText] = useState(initialFeedback);
@@ -169,6 +171,7 @@ export default function FeedbackModal({
                 onChange={setFeedbackText}
                 placeholder=""
                 disabled={false}
+                userId={userId}
               />
             </div>
           </div>

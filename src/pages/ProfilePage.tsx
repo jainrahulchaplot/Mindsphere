@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase, authMode } from '../lib/supabase';
 import { useBasicProfile, useSyncMe } from '../api/hooks';
-import { useAuth } from '../state/auth';
+import { useAuth } from '../contexts/AuthContext';
 import Card from '../components/Card';
 import UserMemories from '../components/UserMemories';
 import SnippetsInput from '../components/SnippetsInput';
@@ -11,7 +11,7 @@ export default function ProfilePage() {
   const navigate = useNavigate();
   const { data } = useBasicProfile();
   const syncMe = useSyncMe();
-  const { signOut } = useAuth();
+  const { userId, signOut } = useAuth();
   const user = data?.user;
   const profile = data?.profile;
 
@@ -93,10 +93,10 @@ export default function ProfilePage() {
       </Card>
 
       {/* Memory About Me Section */}
-      <UserMemories userId={user?.id || '550e8400-e29b-41d4-a716-446655440000'} />
+      <UserMemories userId={userId || ''} />
 
       {/* Snippets Input */}
-      <SnippetsInput userId={user?.id || '550e8400-e29b-41d4-a716-446655440000'} />
+      <SnippetsInput userId={userId || ''} />
 
       {/* Account Actions */}
       <Card>

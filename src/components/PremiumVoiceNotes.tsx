@@ -8,6 +8,7 @@ type Props = {
   placeholder?: string;
   className?: string;
   onRecordingStateChange?: (isRecording: boolean) => void;
+  userId: string;
 };
 
 type RecordingState = 'idle' | 'recording' | 'processing';
@@ -18,7 +19,8 @@ export default function PremiumVoiceNotes({
   disabled, 
   placeholder = "Share your thoughts or use voice notes...",
   className = "",
-  onRecordingStateChange
+  onRecordingStateChange,
+  userId
 }: Props) {
   const [recordingState, setRecordingState] = useState<RecordingState>('idle');
   const [recordingTime, setRecordingTime] = useState(0);
@@ -228,7 +230,7 @@ export default function PremiumVoiceNotes({
 
       const result = await stt.mutateAsync({
         audio: audioFile,
-        user_id: '550e8400-e29b-41d4-a716-446655440000'
+        user_id: userId
       });
 
       // Only update if there's actual text content

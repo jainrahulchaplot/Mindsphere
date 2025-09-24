@@ -2,9 +2,11 @@ import { useNavigate } from 'react-router-dom';
 import QuoteCard from '../components/QuoteCard';
 import SessionSetup from '../components/SessionSetup';
 import { useSession } from '../state/session';
+import { useAuth } from '../contexts/AuthContext';
 
 export default function MeditationPage() {
   const { setSession } = useSession();
+  const { userId } = useAuth();
   const navigate = useNavigate();
 
   const onSessionCreated = (d: { sessionId: string; status: string }) => {
@@ -21,7 +23,7 @@ export default function MeditationPage() {
       <div className='container-narrow grid-gap fadePop'>
         <QuoteCard />
         
-        <SessionSetup onSessionCreated={onSessionCreated} />
+        <SessionSetup onSessionCreated={onSessionCreated} userId={userId || ''} />
       </div>
     </div>
   );

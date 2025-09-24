@@ -10,6 +10,7 @@ interface NotesTextboxProps {
   rows?: number;
   onKeyPress?: (e: React.KeyboardEvent) => void;
   disabled?: boolean;
+  userId: string;
 }
 
 type RecordingState = 'idle' | 'recording' | 'processing';
@@ -22,7 +23,8 @@ export default function NotesTextbox({
   maxLength = 500,
   rows = 3,
   onKeyPress,
-  disabled = false
+  disabled = false,
+  userId
 }: NotesTextboxProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [recordingState, setRecordingState] = useState<RecordingState>('idle');
@@ -200,7 +202,7 @@ export default function NotesTextbox({
 
       const result = await stt.mutateAsync({
         audio: audioFile,
-        user_id: '550e8400-e29b-41d4-a716-446655440000'
+        user_id: userId
       });
 
       // Only update if there's actual text content

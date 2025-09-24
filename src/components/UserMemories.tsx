@@ -154,6 +154,7 @@ export default function UserMemories({ userId }: UserMemoriesProps) {
             placeholder=""
             onKeyPress={handleKeyPress}
             disabled={addMemory.isPending}
+            userId={userId}
           />
           
           <div className="mt-6">
