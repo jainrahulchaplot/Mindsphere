@@ -104,6 +104,8 @@ router.post('/create', async (req, res) => {
     // Get user_id from request body, user object, or use default
     const userId = user_id || req.user?.id || '550e8400-e29b-41d4-a716-446655440000';
     
+    console.log(`[${sessionId}] User ID derivation: user_id=${user_id}, req.user?.id=${req.user?.id}, final userId=${userId}`);
+    
     // Generate session name for the session
     const { generateSessionName } = require('./openai-content-generator');
     const sessionName = await generateSessionName(
@@ -409,6 +411,8 @@ router.post('/start', async (req, res) => {
     // Generate content with OpenAI using enhanced prompts
     const { generateContentWithOpenAI, generateSessionName } = require('./openai-content-generator');
     const userId = user_id || req.user?.id || '550e8400-e29b-41d4-a716-446655440000';
+    
+    console.log(`[${requestId}] User ID derivation: user_id=${user_id}, req.user?.id=${req.user?.id}, final userId=${userId}`);
     
     // Generate session name first
     const sessionName = await generateSessionName(kind, mood, duration, user_notes, user_name, userId);
