@@ -141,7 +141,7 @@ Railway provides:
 - **Environment variables** - Securely stored in Railway
 - **HTTPS** - Automatic SSL certificates
 - **CORS** - Configured for your Vercel domain
-- **Database** - Supabase handles security
+- **Database** - Supabase handles securit
 
 ## 🎯 Next Steps
 
