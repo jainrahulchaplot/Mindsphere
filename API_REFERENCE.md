@@ -370,6 +370,5 @@ curl -X POST http://localhost:8000/api/v1/notes/similarity \
 }
 ```
 
----
 
 **For full documentation, see README.md**
