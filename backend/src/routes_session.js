@@ -96,15 +96,19 @@ router.post('/create', async (req, res) => {
     console.log(`[${sessionId}] Creating session without audio...`);
     console.log(`[${sessionId}] Request body:`, req.body);
     
-    const { kind, mood, duration, user_notes, user_id } = req.body;
+    const { kind, mood, duration, user_notes } = req.body;
     
     // Use duration as provided
     let validatedDuration = duration || 5;
     
-    // Get user_id from request body, user object, or use default
-    const userId = user_id || req.user?.id || '550e8400-e29b-41d4-a716-446655440000';
+    // Get user_id from authenticated user only
+    const userId = req.user?.id;
     
-    console.log(`[${sessionId}] User ID derivation: user_id=${user_id}, req.user?.id=${req.user?.id}, final userId=${userId}`);
+    if (!userId) {
+      return res.status(401).json({ error: 'User not authenticated' });
+    }
+    
+    console.log(`[${sessionId}] User ID: ${userId}`);
     
     // Generate session name for the session
     const { generateSessionName } = require('./openai-content-generator');
@@ -375,7 +379,11 @@ router.post('/start', async (req, res) => {
     const mood = req.body.mood || 'calm';
     const duration = req.body.duration || 5;
     const user_notes = req.body.user_notes || '';
-    const user_id = req.body.user_id || '550e8400-e29b-41d4-a716-446655440000';
+    const user_id = req.user?.id;
+    
+    if (!user_id) {
+      return res.status(401).json({ error: 'User not authenticated' });
+    }
 
     // Check idempotency
     const idempotencyKey = req.headers['x-idempotency-key'];
@@ -410,9 +418,9 @@ router.post('/start', async (req, res) => {
 
     // Generate content with OpenAI using enhanced prompts
     const { generateContentWithOpenAI, generateSessionName } = require('./openai-content-generator');
-    const userId = user_id || req.user?.id || '550e8400-e29b-41d4-a716-446655440000';
+    const userId = user_id;
     
-    console.log(`[${requestId}] User ID derivation: user_id=${user_id}, req.user?.id=${req.user?.id}, final userId=${userId}`);
+    console.log(`[${requestId}] User ID: ${userId}`);
     
     // Generate session name first
     const sessionName = await generateSessionName(kind, mood, duration, user_notes, user_name, userId);

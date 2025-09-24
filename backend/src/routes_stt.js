@@ -12,7 +12,7 @@ const rateLimitStore = new Map();
 // Rate limiting middleware
 const rateLimit = (req, res, next) => {
   const ip = req.ip || req.connection.remoteAddress;
-  const userId = req.body.user_id || 'anonymous';
+  const userId = req.user?.id || 'anonymous';
   const key = `${ip}:${userId}`;
   
   const now = Date.now();

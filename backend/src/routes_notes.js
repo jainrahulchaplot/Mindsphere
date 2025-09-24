@@ -24,7 +24,13 @@ router.use((req, res, next) => {
 // POST /api/v1/notes - Create a new note
 router.post('/', async (req, res) => {
   try {
-    const { error, value } = noteSchema.validate(req.body);
+    const user_id = req.user?.id;
+    
+    if (!user_id) {
+      return res.status(401).json({ error: 'User not authenticated' });
+    }
+
+    const { error, value } = noteSchema.validate({ ...req.body, user_id });
     if (error) {
       return res.status(400).json({ error: 'Invalid input', details: error.details });
     }

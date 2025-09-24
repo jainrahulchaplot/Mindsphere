@@ -64,7 +64,7 @@ router.post('/api/v1/journal/stt', upload.single('audio'), async (req, res) => {
     return res.json({ 
       text, 
       duration_sec,
-      user_id: req.body.user_id || null,
+      user_id: req.user?.id || null,
       session_id: req.body.session_id || null
     });
   } catch (error) {
