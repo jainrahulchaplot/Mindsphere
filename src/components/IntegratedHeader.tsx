@@ -279,7 +279,10 @@ export default function IntegratedHeader({ userId }: Props) {
                   value={volume}
                   onChange={(e) => setVolume(parseFloat(e.target.value))}
                   className="flex-1 h-2 bg-white/10 rounded-lg appearance-none cursor-pointer slider"
-                  style={{ pointerEvents: 'auto' }}
+                  style={{ 
+                    pointerEvents: 'auto',
+                    background: `linear-gradient(to right, #6366f1 0%, #6366f1 ${volume * 100}%, rgba(255,255,255,0.1) ${volume * 100}%, rgba(255,255,255,0.1) 100%)`
+                  }}
                 />
                 <div className="text-xs text-white/60 font-medium w-8 text-right">
                   {Math.round(volume * 100)}%

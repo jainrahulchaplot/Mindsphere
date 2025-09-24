@@ -62,10 +62,13 @@ function calculateStreaks(sessions) {
     return { current: 0, best: 0 };
   }
 
-  // Group sessions by date
+  // Group sessions by date (using local timezone)
   const sessionsByDate = {};
   sessions.forEach(session => {
-    const date = new Date(session.created_at).toISOString().split('T')[0];
+    // Convert to local date instead of UTC
+    const sessionDate = new Date(session.created_at);
+    const localDate = new Date(sessionDate.getTime() - (sessionDate.getTimezoneOffset() * 60000));
+    const date = localDate.toISOString().split('T')[0];
     if (!sessionsByDate[date]) {
       sessionsByDate[date] = [];
     }
@@ -108,8 +111,11 @@ function calculateStreaks(sessions) {
   currentStreak = tempStreak;
 
   // Check if current streak is still active (last session was today or yesterday)
-  const today = new Date().toISOString().split('T')[0];
-  const yesterday = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+  // Use local timezone for today/yesterday calculation
+  const now = new Date();
+  const localNow = new Date(now.getTime() - (now.getTimezoneOffset() * 60000));
+  const today = localNow.toISOString().split('T')[0];
+  const yesterday = new Date(localNow.getTime() - 24 * 60 * 60 * 1000).toISOString().split('T')[0];
   const lastSessionDate = dates[dates.length - 1];
   
   if (lastSessionDate !== today && lastSessionDate !== yesterday) {
@@ -127,7 +133,11 @@ router.post('/api/v1/streaks', async (req,res) => {
     return res.status(401).json({ error: 'User not authenticated' });
   }
   if (!supabase) return res.json({ updated: false, note: 'Supabase not configured' });
-  const today = new Date().toISOString().slice(0,10);
+  
+  // Use local timezone for today calculation
+  const now = new Date();
+  const localNow = new Date(now.getTime() - (now.getTimezoneOffset() * 60000));
+  const today = localNow.toISOString().slice(0,10);
 
   let { data: row, error } = await supabase.from('streaks').select('*').eq('user_id', user_id).single();
   if (error && error.code !== 'PGRST116') return res.status(500).json({ error: 'db_error', detail: error.message });
@@ -142,7 +152,7 @@ router.post('/api/v1/streaks', async (req,res) => {
   let { current_streak, best_streak, last_entry_date } = row;
   if (last_entry_date === today) return res.json({ current_streak, best_streak });
 
-  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0,10);
+  const yesterday = new Date(localNow.getTime() - 24 * 60 * 60 * 1000).toISOString().slice(0,10);
   if (last_entry_date === yesterday) {
     current_streak += 1;
   } else {

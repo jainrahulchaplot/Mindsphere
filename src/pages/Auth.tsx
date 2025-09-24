@@ -3,24 +3,32 @@ import { supabase, authMode } from '../lib/supabase';
 
 export default function AuthPage() {
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [isHovered, setIsHovered] = useState(false);
   const isGoogle = authMode === 'google';
 
   async function signInWithGoogle() {
     if (!supabase) return alert('Supabase not configured');
     setLoading(true);
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-      options: { 
-        queryParams: { prompt: 'select_account' }, 
-        redirectTo: `${window.location.origin}/`
+    
+    try {
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: 'google',
+        options: {
+          redirectTo: `${window.location.origin}/`
+        }
+      });
+      
+      if (error) {
+        console.error('Google sign in failed:', error);
+        setError('Google sign in failed. Please try again.');
+        setLoading(false);
       }
-    });
-    if (error) {
-      console.error(error);
-      alert('Google sign-in failed: ' + error.message);
+    } catch (error: any) {
+      console.error('Google sign in failed:', error);
+      setError('Google sign in failed. Please try again.');
+      setLoading(false);
     }
-    setLoading(false);
   }
 
   return (
@@ -82,6 +90,11 @@ export default function AuthPage() {
             
             {/* Main Card */}
             <div className="relative backdrop-blur-2xl bg-white/5 border border-white/10 rounded-3xl p-10 shadow-2xl group-hover:bg-white/8 transition-all duration-500">
+              {error && (
+                <div className="mb-6 p-4 bg-red-500/20 border border-red-500/30 rounded-xl text-red-200 text-sm animate-pulse">
+                  {error}
+                </div>
+              )}
               {isGoogle ? (
                 <button
                   onClick={signInWithGoogle}

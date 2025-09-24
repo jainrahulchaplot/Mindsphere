@@ -86,6 +86,12 @@ export default function HabitTrackerCard({ userId }: HabitTrackerCardProps) {
     return hit?.date ?? null;
   }, [overallQ.data]);
 
+  /* Check if user is fresh (no sessions ever) */
+  const isFreshUser = useMemo(() => {
+    if (!monthQ.data) return false;
+    return !monthQ.data.first_use_date || monthQ.data.analytics.totalSessions === 0;
+  }, [monthQ.data]);
+
   /* Calendar grid (6 weeks) */
   const calendarGrid = useMemo(() => {
     if (!monthQ.data) return [];
@@ -95,14 +101,16 @@ export default function HabitTrackerCard({ userId }: HabitTrackerCardProps) {
       dayNumber: number;
       isCurrentMonth: boolean;
       isToday: boolean;
-      dotColor: '' | 'bg-green-500' | 'bg-red-500';
+      dotColor: '' | 'bg-green-500' | 'bg-red-500' | 'bg-indigo-400/30';
       isDimmed: boolean;
+      isPlaceholder: boolean;
     }> = [];
     for (let i = 0; i < 42; i++) {
       const d = addDays(firstGridDay, i);
       const key = toKey(d);
       const entry = dayMap.get(key);
-      let dot: '' | 'bg-green-500' | 'bg-red-500' = '';
+      let dot: '' | 'bg-green-500' | 'bg-red-500' | 'bg-indigo-400/30' = '';
+      let isPlaceholder = false;
 
       const firstUse = monthQ.data.first_use_date;
       if (firstUse && key < firstUse) {
@@ -111,6 +119,10 @@ export default function HabitTrackerCard({ userId }: HabitTrackerCardProps) {
         dot = '';
       } else if (entry?.sessions && entry.sessions > 0) {
         dot = 'bg-green-500';
+      } else if (isFreshUser) {
+        // For fresh users, show subtle placeholder dots instead of red
+        dot = 'bg-indigo-400/30';
+        isPlaceholder = true;
       } else {
         dot = 'bg-red-500';
       }
@@ -124,10 +136,11 @@ export default function HabitTrackerCard({ userId }: HabitTrackerCardProps) {
         isToday: key === todayKey,
         dotColor: dot,
         isDimmed,
+        isPlaceholder,
       });
     }
     return items;
-  }, [monthQ.data, monthStart, currentMonth, dayMap, todayKey, firstSessionKey]);
+  }, [monthQ.data, monthStart, currentMonth, dayMap, todayKey, firstSessionKey, isFreshUser]);
 
   /* Month analytics from backend */
   const monthAnalytics = useMemo(() => {
@@ -276,7 +289,9 @@ export default function HabitTrackerCard({ userId }: HabitTrackerCardProps) {
                 >
                   <div className="text-xs mb-1 font-medium">{day.dayNumber}</div>
                   {day.dotColor && (
-                    <div className={`w-3 h-3 rounded-full ${day.dotColor} ${day.isDimmed ? 'opacity-30' : ''}`} />
+                    <div className={`w-3 h-3 rounded-full ${day.dotColor} ${day.isDimmed ? 'opacity-30' : ''} ${
+                      day.isPlaceholder ? 'animate-pulse' : ''
+                    }`} />
                   )}
                 </div>
               ))}
@@ -285,18 +300,33 @@ export default function HabitTrackerCard({ userId }: HabitTrackerCardProps) {
 
       {/* Legend */}
       <div className="flex items-center justify-center gap-4 mt-3 text-xs text-silver">
-        <div className="flex items-center gap-1">
-          <div className="w-3 h-3 bg-green-500 rounded-full" />
-          <span>Done</span>
-        </div>
-        <div className="flex items-center gap-1">
-          <div className="w-3 h-3 bg-red-500 rounded-full" />
-          <span>Missed</span>
-        </div>
+        {isFreshUser ? (
+          <>
+            <div className="flex items-center gap-1">
+              <div className="w-3 h-3 bg-indigo-400/30 rounded-full animate-pulse" />
+              <span>Start your journey</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <div className="w-3 h-3 bg-green-500 rounded-full" />
+              <span>Completed</span>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="flex items-center gap-1">
+              <div className="w-3 h-3 bg-green-500 rounded-full" />
+              <span>Done</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <div className="w-3 h-3 bg-red-500 rounded-full" />
+              <span>Missed</span>
+            </div>
+          </>
+        )}
       </div>
 
       {/* MONTH Analytics - Filtered by Session Type */}
-      {monthAnalytics && (
+      {monthAnalytics && !isFreshUser && (
         <div className="border-t border-white/10 mt-4 pt-4">
           {/* Main metrics - Total Sessions, Total Time, Completion Rate */}
           {/* <div className="grid grid-cols-3 gap-2 text-xs mb-3">
@@ -331,6 +361,22 @@ export default function HabitTrackerCard({ userId }: HabitTrackerCardProps) {
               </div>
             </div>
           )}
+        </div>
+      )}
+
+      {/* Fresh User Onboarding */}
+      {!isLoading && isFreshUser && (
+        <div className="text-center mt-6 py-6 bg-gradient-to-br from-indigo-500/10 to-purple-600/10 rounded-xl border border-indigo-400/20">
+          <div className="text-4xl mb-3">🌟</div>
+          <div className="text-white font-medium text-lg mb-2">Start Your Mindfulness Journey</div>
+          <div className="text-silver text-sm mb-4 max-w-sm mx-auto">
+            Complete your first meditation session to begin building your habit streak. 
+            Each day you practice will light up your calendar!
+          </div>
+          <div className="flex items-center justify-center gap-2 text-xs text-indigo-300">
+            <div className="w-2 h-2 bg-indigo-400 rounded-full animate-pulse" />
+            <span>Ready to begin? Head to the home page to start your first session</span>
+          </div>
         </div>
       )}
 

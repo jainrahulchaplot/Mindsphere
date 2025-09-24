@@ -277,7 +277,7 @@ export default function SessionPlayer({
                 step={0.1}
                 value={volume}
                 onChange={(e) => handleVolumeChange(parseFloat(e.target.value))}
-                className="flex-1 h-1 appearance-none bg-gray-700 rounded-full cursor-pointer"
+                className="flex-1 h-2 appearance-none bg-gray-700 rounded-full cursor-pointer slider"
                 style={{
                   background: `linear-gradient(to right, #6366f1 0%, #6366f1 ${volume * 100}%, #374151 ${volume * 100}%, #374151 100%)`
                 }}
