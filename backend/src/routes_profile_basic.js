@@ -21,23 +21,9 @@ router.get('/basic', async (req, res) => {
       return res.status(401).json({ error: 'User not authenticated' });
     }
 
-    // In demo mode, return mock data
+    // Demo mode only for local development
     if (req.user?.mode === 'demo') {
-      return res.json({
-        user: {
-          id: DEMO_USER_ID,
-          email: 'demo@mindsphere.app',
-          display_name: 'Demo User',
-          avatar_url: null,
-          provider: 'demo'
-        },
-        profile: {
-          given_name: 'Demo',
-          family_name: 'User',
-          locale: 'en-US',
-          timezone: 'UTC'
-        }
-      });
+      return res.status(400).json({ error: 'Demo mode not available in production' });
     }
 
     if (!supabase) {
@@ -103,13 +89,9 @@ router.put('/basic', async (req, res) => {
       return res.status(401).json({ error: 'User not authenticated' });
     }
 
-    // In demo mode, return success without database operations
+    // Demo mode only for local development
     if (req.user?.mode === 'demo') {
-      return res.json({ 
-        ok: true, 
-        mode: 'demo',
-        profile: req.body
-      });
+      return res.status(400).json({ error: 'Demo mode not available in production' });
     }
 
     if (!supabase) {

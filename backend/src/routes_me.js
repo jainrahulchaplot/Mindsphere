@@ -22,9 +22,9 @@ router.post('/sync', async (req, res) => {
       return res.status(401).json({ error: 'User not authenticated' });
     }
 
-    // In demo mode, return success without database operations
+    // Demo mode only for local development
     if (req.user?.mode === 'demo') {
-      return res.json({ ok: true, mode: 'demo' });
+      return res.status(400).json({ error: 'Demo mode not available in production' });
     }
 
     if (!supabase) {

@@ -13,21 +13,18 @@ class AuthStore implements AuthState, AuthActions {
   userId: string | null = null;
 
   constructor() {
-    // Load from localStorage on init, or set demo user
-    this.userId = localStorage.getItem('userId') || '550e8400-e29b-41d4-a716-446655440000';
-    localStorage.setItem('userId', this.userId);
+    // Load from localStorage on init
+    this.userId = localStorage.getItem('userId');
   }
 
   async signIn(email: string, password: string): Promise<void> {
-    // Demo mode - always succeeds
-    this.userId = '550e8400-e29b-41d4-a716-446655440000';
-    localStorage.setItem('userId', this.userId);
+    // Production: Implement real authentication
+    throw new Error('Authentication not implemented - use Google OAuth');
   }
 
   async signUp(email: string, password: string): Promise<void> {
-    // Demo mode - always succeeds
-    this.userId = '550e8400-e29b-41d4-a716-446655440000';
-    localStorage.setItem('userId', this.userId);
+    // Production: Implement real authentication
+    throw new Error('Authentication not implemented - use Google OAuth');
   }
 
   signOut(): void {

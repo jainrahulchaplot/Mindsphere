@@ -24,8 +24,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                        window.location.hostname === '127.0.0.1' ||
                        !import.meta.env.VITE_SUPABASE_URL;
 
-    if (authMode === 'demo' || isLocalDev) {
-      // Demo mode or local development - use hardcoded user ID
+    if (authMode === 'demo' && isLocalDev) {
+      // Demo mode only for local development
       setUserId(DEMO_USER_ID);
       setUser({
         id: DEMO_USER_ID,
@@ -74,7 +74,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                        window.location.hostname === '127.0.0.1' ||
                        !import.meta.env.VITE_SUPABASE_URL;
 
-    if (authMode === 'demo' || isLocalDev) {
+    if (authMode === 'demo' && isLocalDev) {
       setUserId(null);
       setUser(null);
       return;

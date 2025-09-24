@@ -4,8 +4,8 @@ import Card from '../components/Card';
 import Button from '../components/Button';
 
 export default function SignIn() {
-  const [email, setEmail] = useState('a@a.com');
-  const [password, setPassword] = useState('a@a');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const { signIn } = useAuth();

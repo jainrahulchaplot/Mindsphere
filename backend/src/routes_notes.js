@@ -126,13 +126,13 @@ router.delete('/:id', async (req, res) => {
 // POST /api/v1/notes/similarity - Find similar notes (requires embedding)
 router.post('/similarity', async (req, res) => {
   try {
-    const user_id = req.user?.id || req.body?.user_id; // token-first; demo fallback
+    const user_id = req.user?.id;
     const { embedding, limit = 5 } = req.body;
     if (!embedding || !Array.isArray(embedding) || embedding.length === 0) {
       return res.status(400).json({ error: 'Embedding array required' });
     }
     if (!user_id) {
-      return res.status(400).json({ error: 'User ID required' });
+      return res.status(401).json({ error: 'User not authenticated' });
     }
 
     const { data, error } = await supabase.rpc('match_notes', {

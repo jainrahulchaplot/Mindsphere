@@ -19,10 +19,13 @@ const rateLimit = new Map();
 // POST /api/v1/coach/chat
 router.post('/api/v1/coach/chat', async (req, res) => {
   try {
-    const user_id = req.user?.id || req.body?.user_id; // token-first; demo fallback
+    const user_id = req.user?.id;
     const { message, lookback_days = 30 } = req.body || {};
-    if (!user_id || !message) {
-      return res.status(400).json({ error: 'user_id and message required' });
+    if (!user_id) {
+      return res.status(401).json({ error: 'User not authenticated' });
+    }
+    if (!message) {
+      return res.status(400).json({ error: 'message required' });
     }
 
     // Rate limiting (1 request per 3 seconds per user)

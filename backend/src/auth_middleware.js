@@ -20,33 +20,31 @@ function getJwks() {
 
 /**
  * attachUser middleware:
- * - If SUPABASE_AUTH_ENABLED=true: expects Authorization: Bearer <jwt>; verifies and sets req.user = { id, email, ... }
- * - Else: DEMO mode, sets req.user = { id: DEMO_USER_ID }
- * - Graceful fallback: If JWT verification fails, falls back to demo mode instead of crashing
+ * - Production: Requires valid JWT token, returns 401 if missing/invalid
+ * - Local development: Falls back to demo mode if SUPABASE_AUTH_ENABLED=false
  */
 async function attachUser(req, res, next) {
+  // Local development fallback
   if (!SUPABASE_AUTH_ENABLED) {
+    console.log('🔍 Development mode: Using demo user');
     req.user = { id: DEMO_USER_ID, mode: 'demo' };
     return next();
   }
 
-  // Try to get JWT token from Authorization header
+  // Production: Require valid JWT token
   const auth = req.headers.authorization || '';
   const token = auth.startsWith('Bearer ') ? auth.slice(7) : null;
   
-  // If no token provided, fall back to demo mode (don't crash)
   if (!token) {
-    console.log('🔍 No JWT token provided, falling back to demo mode');
-    req.user = { id: DEMO_USER_ID, mode: 'demo' };
-    return next();
+    console.log('🔍 No JWT token provided');
+    return res.status(401).json({ error: 'Authentication required' });
   }
 
   try {
     const jwks = getJwks();
     if (!jwks) {
-      console.log('🔍 JWKS not available, falling back to demo mode');
-      req.user = { id: DEMO_USER_ID, mode: 'demo' };
-      return next();
+      console.error('❌ JWKS not available');
+      return res.status(500).json({ error: 'Authentication service unavailable' });
     }
 
     const { payload } = await jwtVerify(token, jwks, {
@@ -65,9 +63,8 @@ async function attachUser(req, res, next) {
     console.log('🔍 JWT verified, user_id:', payload.sub);
     next();
   } catch (e) {
-    console.log('🔍 JWT verification failed, falling back to demo mode:', e.message);
-    req.user = { id: DEMO_USER_ID, mode: 'demo' };
-    next();
+    console.log('🔍 JWT verification failed:', e.message);
+    return res.status(401).json({ error: 'Invalid authentication token' });
   }
 }
 
