@@ -47,15 +47,10 @@ export default function ViewOnlySessionPage() {
     console.log('📡 Fetching session data for:', sessionId);
     try {
       setLoading(true);
-      // Force Railway backend URL for production
-      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ? `${import.meta.env.VITE_API_BASE_URL}/api/v1` : 'https://mindsphere-production-fc81.up.railway.app/api/v1';
-      const response = await fetch(`${API_BASE_URL}/session/${sessionId}`);
+      const { api } = await import('../api/client');
+      const response = await api.get(`/session/${sessionId}`);
       
-      if (!response.ok) {
-        throw new Error('Session not found');
-      }
-      
-      const data = await response.json();
+      const data = response.data;
       setSessionData(data);
       
       // Check if we need to generate content

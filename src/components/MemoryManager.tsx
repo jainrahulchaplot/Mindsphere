@@ -28,10 +28,9 @@ const MemoryManager: React.FC<{ userId: string }> = ({ userId }) => {
   const { data: memories = [] } = useQuery<Memory[]>({
     queryKey: ['memories', userId],
     queryFn: async () => {
-      // Force Railway backend URL for production
-      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ? `${import.meta.env.VITE_API_BASE_URL}/api/v1` : 'https://mindsphere-production-fc81.up.railway.app/api/v1';
-      const response = await fetch(`${API_BASE_URL}/memories?user_id=${userId}`);
-      return response.json();
+      const { api } = await import('../api/client');
+      const response = await api.get(`/memories?user_id=${userId}`);
+      return response.data;
     }
   });
 
@@ -39,27 +38,21 @@ const MemoryManager: React.FC<{ userId: string }> = ({ userId }) => {
   const { data: snippets = [] } = useQuery<Snippet[]>({
     queryKey: ['snippets', userId],
     queryFn: async () => {
-      // Force Railway backend URL for production
-      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ? `${import.meta.env.VITE_API_BASE_URL}/api/v1` : 'https://mindsphere-production-fc81.up.railway.app/api/v1';
-      const response = await fetch(`${API_BASE_URL}/snippets?user_id=${userId}`);
-      return response.json();
+      const { api } = await import('../api/client');
+      const response = await api.get(`/snippets?user_id=${userId}`);
+      return response.data;
     }
   });
 
   // Save memory with debounce
   const saveMemory = useMutation({
     mutationFn: async (data: { content: string; category: string; importance: number }) => {
-      // Force Railway backend URL for production
-      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ? `${import.meta.env.VITE_API_BASE_URL}/api/v1` : 'https://mindsphere-production-fc81.up.railway.app/api/v1';
-      const response = await fetch(`${API_BASE_URL}/memories`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          user_id: userId,
-          ...data
-        })
+      const { api } = await import('../api/client');
+      const response = await api.post('/memories', {
+        user_id: userId,
+        ...data
       });
-      return response.json();
+      return response.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['memories', userId] });
@@ -70,17 +63,12 @@ const MemoryManager: React.FC<{ userId: string }> = ({ userId }) => {
   // Save snippet with debounce
   const saveSnippet = useMutation({
     mutationFn: async (content: string) => {
-      // Force Railway backend URL for production
-      const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ? `${import.meta.env.VITE_API_BASE_URL}/api/v1` : 'https://mindsphere-production-fc81.up.railway.app/api/v1';
-      const response = await fetch(`${API_BASE_URL}/snippets`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          user_id: userId,
-          content
-        })
+      const { api } = await import('../api/client');
+      const response = await api.post('/snippets', {
+        user_id: userId,
+        content
       });
-      return response.json();
+      return response.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['snippets', userId] });
