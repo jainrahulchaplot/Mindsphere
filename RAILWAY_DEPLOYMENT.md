@@ -16,7 +16,7 @@
 - **Port**: Railway will auto-assign (use `process.env.PORT`)
 
 ### 3. Set Environment Variables
-In Railway dashboard, go to your project → Variables tab and add:
+In Railway dashboard, go to your project → Variables tab and add
 
 ```env
 # OpenAI API
