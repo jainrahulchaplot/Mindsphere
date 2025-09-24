@@ -21,8 +21,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Check if we're in local development
     const isLocalDev = import.meta.env.DEV || 
                        window.location.hostname === 'localhost' || 
-                       window.location.hostname === '127.0.0.1' ||
-                       !import.meta.env.VITE_SUPABASE_URL;
+                       window.location.hostname === '127.0.0.1';
 
     if (authMode === 'demo' && isLocalDev) {
       // Demo mode only for local development
@@ -71,8 +70,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Check if we're in local development
     const isLocalDev = import.meta.env.DEV || 
                        window.location.hostname === 'localhost' || 
-                       window.location.hostname === '127.0.0.1' ||
-                       !import.meta.env.VITE_SUPABASE_URL;
+                       window.location.hostname === '127.0.0.1';
 
     if (authMode === 'demo' && isLocalDev) {
       setUserId(null);
