@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test API URL</title>
+</head>
+<body>
+    <h1>API URL Test</h1>
+    <div id="output"></div>
+    
+    <script>
+        // Simulate Vite environment variables
+        const env = {
+            VITE_API_BASE_URL: 'https://mindsphere-production-fc81.up.railway.app',
+            MODE: 'production',
+            DEV: false
+        };
+        
+        const isLocalDev = env.DEV || 
+                           window.location.hostname === 'localhost' || 
+                           window.location.hostname === '127.0.0.1';
+
+        const baseURL = env.VITE_API_BASE_URL 
+          ? `${env.VITE_API_BASE_URL}/api/v1`
+          : isLocalDev 
+            ? 'http://localhost:8000/api/v1'
+            : 'https://mindsphere-production-fc81.up.railway.app/api/v1';
+            
+        document.getElementById('output').innerHTML = `
+            <p><strong>VITE_API_BASE_URL:</strong> ${env.VITE_API_BASE_URL}</p>
+            <p><strong>isLocalDev:</strong> ${isLocalDev}</p>
+            <p><strong>hostname:</strong> ${window.location.hostname}</p>
+            <p><strong>Final baseURL:</strong> ${baseURL}</p>
+        `;
+    </script>
+</body>
+</html>
