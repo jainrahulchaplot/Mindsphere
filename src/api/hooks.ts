@@ -106,7 +106,7 @@ export function useJournalList(userId: string | null, options: { limit?: number;
   return useQuery<JournalListRes, Error>({
     queryKey: ['journal-list', userId, limit, offset],
     enabled: !!userId,
-    queryFn: () => getData(api.get(`/journal?user_id=${encodeURIComponent(userId!)}&limit=${limit}&offset=${offset}`))
+    queryFn: () => getData(api.get(`/journal?limit=${limit}&offset=${offset}`))
   });
 }
 

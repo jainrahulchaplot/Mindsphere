@@ -22,13 +22,13 @@ router.use((req, res, next) => {
 // GET /api/v1/library - Get user's sessions library
 router.get('/', async (req, res) => {
   try {
-    const user_id = req.user?.id || req.query.user_id; // token-first; demo fallback
+    const user_id = req.user?.id;
     const { kind, from, to, page = 1, limit = 20, q } = req.query;
     
     console.log('🔍 Library route: user_id =', user_id, 'kind =', kind, 'page =', page);
     
     if (!user_id) {
-      return res.status(400).json({ error: 'user_id is required' });
+      return res.status(401).json({ error: 'User not authenticated' });
     }
 
     let query = supabase

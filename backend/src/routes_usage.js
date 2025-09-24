@@ -22,13 +22,13 @@ router.use((req, res, next) => {
 // GET /api/v1/usage/daily - Get daily usage data
 router.get('/daily', async (req, res) => {
   try {
-    const user_id = req.user?.id || req.query.user_id; // token-first; demo fallback
+    const user_id = req.user?.id;
     const { from, to, kind } = req.query;
     
     console.log('🔍 Usage route: user_id =', user_id, 'from =', from, 'to =', to, 'kind =', kind);
     
     if (!user_id) {
-      return res.status(400).json({ error: 'user_id is required' });
+      return res.status(401).json({ error: 'User not authenticated' });
     }
     
     if (!from || !to) {

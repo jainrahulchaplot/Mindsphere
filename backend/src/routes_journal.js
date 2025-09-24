@@ -14,9 +14,9 @@ const router = Router();
 // GET /api/v1/journal?limit=50&offset=0
 router.get('/api/v1/journal', async (req, res) => {
   try {
-    const user_id = req.user?.id || req.query.user_id; // token-first; demo fallback
+    const user_id = req.user?.id;
     const { limit = 50, offset = 0 } = req.query;
-    if (!user_id) return res.status(400).json({ error: 'user_id required' });
+    if (!user_id) return res.status(401).json({ error: 'User not authenticated' });
     if (!supabase) return res.json({ entries: [], note: 'Supabase not configured' });
 
     const { data, error } = await supabase
@@ -38,7 +38,7 @@ router.get('/api/v1/journal', async (req, res) => {
 // POST /api/v1/journal/submit -> { text, session_id? }
 router.post('/api/v1/journal/submit', async (req, res) => {
   try {
-    const user_id = req.user?.id || req.body?.user_id; // token-first; demo fallback
+    const user_id = req.user?.id;
     const { text, session_id = null } = req.body || {};
     if (!text || typeof text !== 'string')
       return res.status(400).json({ error: 'invalid_input', message: 'body.text required' });

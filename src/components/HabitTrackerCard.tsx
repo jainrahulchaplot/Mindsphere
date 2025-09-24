@@ -51,7 +51,7 @@ export default function HabitTrackerCard({ userId }: HabitTrackerCardProps) {
     queryFn: async () => {
       console.log('🔍 HabitTrackerCard: Fetching usage data for userId:', userId, 'from:', from, 'to:', to, 'kind:', activeTab);
       const { api } = await import('../api/client');
-      const res = await api.get(`/usage/daily?user_id=${userId}&from=${from}&to=${to}&kind=${activeTab}`);
+      const res = await api.get(`/usage/daily?from=${from}&to=${to}&kind=${activeTab}`);
       console.log('🔍 HabitTrackerCard: Received usage data:', res.data);
       return res.data;
     },
@@ -65,7 +65,7 @@ export default function HabitTrackerCard({ userId }: HabitTrackerCardProps) {
       const first = monthQ.data?.first_use_date;
       if (!first) throw new Error('No first use date available');
       const { api } = await import('../api/client');
-      const res = await api.get(`/usage/daily?user_id=${userId}&from=${first}&to=${todayKey}&kind=${activeTab}`);
+      const res = await api.get(`/usage/daily?from=${first}&to=${todayKey}&kind=${activeTab}`);
       return res.data;
     },
     enabled: !!userId && !!monthQ.data?.first_use_date,

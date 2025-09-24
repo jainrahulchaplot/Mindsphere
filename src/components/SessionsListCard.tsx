@@ -47,7 +47,6 @@ export default function SessionsListCard({ userId }: SessionsListCardProps) {
     queryFn: async ({ pageParam = 1 }) => {
       console.log('🔍 SessionsListCard: Fetching sessions for userId:', userId, 'kind:', filters.kind, 'page:', pageParam);
       const params = new URLSearchParams({
-        user_id: userId,
         kind: filters.kind,
         page: pageParam.toString(),
         limit: '20',
