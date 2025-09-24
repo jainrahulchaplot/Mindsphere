@@ -5,4 +5,6 @@ const key = import.meta.env.VITE_SUPABASE_ANON_KEY as string;
 
 export const supabase = (url && key) ? createClient(url, key) : null;
 
-export const authMode = (import.meta.env.VITE_AUTH_MODE || 'demo') as 'google'|'demo';
+// Auto-detect auth mode based on Supabase configuration
+// If Supabase is properly configured, use Google auth; otherwise use demo mode
+export const authMode = (supabase && url && key) ? 'google' : 'demo';

@@ -38,10 +38,18 @@ api.interceptors.request.use((config) => {
 });
 
 api.interceptors.request.use(async (config) => {
-  if (authMode === 'google' && supabase) {
-    const { data } = await supabase.auth.getSession();
-    const token = data.session?.access_token;
-    if (token) config.headers.Authorization = `Bearer ${token}`;
+  // Always try to get JWT token if Supabase is available
+  if (supabase) {
+    try {
+      const { data } = await supabase.auth.getSession();
+      const token = data.session?.access_token;
+      if (token) {
+        config.headers.Authorization = `Bearer ${token}`;
+        console.log('🔍 Added JWT token to request');
+      }
+    } catch (error) {
+      console.log('🔍 Could not get JWT token:', error.message);
+    }
   }
   return config;
 });

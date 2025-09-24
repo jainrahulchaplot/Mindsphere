@@ -22,24 +22,29 @@ function getJwks() {
  * attachUser middleware:
  * - If SUPABASE_AUTH_ENABLED=true: expects Authorization: Bearer <jwt>; verifies and sets req.user = { id, email, ... }
  * - Else: DEMO mode, sets req.user = { id: DEMO_USER_ID }
+ * - Graceful fallback: If JWT verification fails, falls back to demo mode instead of crashing
  */
 async function attachUser(req, res, next) {
-  console.log('🔍 Auth middleware: SUPABASE_AUTH_ENABLED =', SUPABASE_AUTH_ENABLED);
-  console.log('🔍 Auth middleware: SUPABASE_URL =', SUPABASE_URL);
-  
   if (!SUPABASE_AUTH_ENABLED) {
-    console.log('🔍 Auth middleware: Demo mode, setting user_id to:', DEMO_USER_ID);
     req.user = { id: DEMO_USER_ID, mode: 'demo' };
     return next();
   }
-  try {
-    const auth = req.headers.authorization || '';
-    const token = auth.startsWith('Bearer ') ? auth.slice(7) : null;
-    if (!token) return res.status(401).json({ error: 'missing_token' });
 
+  // Try to get JWT token from Authorization header
+  const auth = req.headers.authorization || '';
+  const token = auth.startsWith('Bearer ') ? auth.slice(7) : null;
+  
+  // If no token provided, fall back to demo mode (don't crash)
+  if (!token) {
+    console.log('🔍 No JWT token provided, falling back to demo mode');
+    req.user = { id: DEMO_USER_ID, mode: 'demo' };
+    return next();
+  }
+
+  try {
     const jwks = getJwks();
     if (!jwks) {
-      console.error('❌ JWKS not available, falling back to demo mode');
+      console.log('🔍 JWKS not available, falling back to demo mode');
       req.user = { id: DEMO_USER_ID, mode: 'demo' };
       return next();
     }
@@ -57,13 +62,12 @@ async function attachUser(req, res, next) {
       picture: payload.user_metadata?.avatar_url || payload.picture,
       provider: payload.app_metadata?.provider || 'google'
     };
-    console.log('🔍 Auth middleware: JWT verified, setting user_id to:', payload.sub);
+    console.log('🔍 JWT verified, user_id:', payload.sub);
     next();
   } catch (e) {
-    console.error('JWT verify failed', e);
-    console.error('Falling back to demo mode due to JWT error');
+    console.log('🔍 JWT verification failed, falling back to demo mode:', e.message);
     req.user = { id: DEMO_USER_ID, mode: 'demo' };
-    return next();
+    next();
   }
 }
 
