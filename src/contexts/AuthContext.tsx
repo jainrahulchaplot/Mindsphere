@@ -3,6 +3,7 @@ import { supabase, authMode } from '../lib/supabase';
 
 interface AuthContextType {
   userId: string | null;
+  user: any | null;
   isLoading: boolean;
   signOut: () => Promise<void>;
 }
@@ -13,6 +14,7 @@ const DEMO_USER_ID = "550e8400-e29b-41d4-a716-446655440000";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [userId, setUserId] = useState<string | null>(null);
+  const [user, setUser] = useState<any | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -25,6 +27,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (authMode === 'demo' || isLocalDev) {
       // Demo mode or local development - use hardcoded user ID
       setUserId(DEMO_USER_ID);
+      setUser({
+        id: DEMO_USER_ID,
+        display_name: 'Demo User',
+        email: 'demo@mindsphere.app',
+        provider: 'demo'
+      });
       setIsLoading(false);
       return;
     }
@@ -39,6 +47,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setUserId(session?.user?.id || null);
+      setUser(session?.user || null);
       setIsLoading(false);
     });
 
@@ -46,6 +55,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
         setUserId(session?.user?.id || null);
+        setUser(session?.user || null);
         setIsLoading(false);
       }
     );
@@ -62,6 +72,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     if (authMode === 'demo' || isLocalDev) {
       setUserId(null);
+      setUser(null);
       return;
     }
 
@@ -71,7 +82,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <AuthContext.Provider value={{ userId, isLoading, signOut }}>
+    <AuthContext.Provider value={{ userId, user, isLoading, signOut }}>
       {children}
     </AuthContext.Provider>
   );

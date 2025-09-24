@@ -5,11 +5,11 @@ import { supabase, authMode } from '../lib/supabase';
 const isLocalDev = import.meta.env.DEV || 
                    window.location.hostname === 'localhost' || 
                    window.location.hostname === '127.0.0.1';
-const baseURL = import.meta.env.VITE_API_BASE_URL 
-  ? `${import.meta.env.VITE_API_BASE_URL}/api/v1` 
-  : isLocalDev 
-    ? 'http://localhost:8000/api/v1'
-    : 'https://mindsphere-production-fc81.up.railway.app/api/v1';
+
+// Always use Railway backend for production, never call frontend
+const baseURL = isLocalDev 
+  ? 'http://localhost:8000/api/v1'
+  : 'https://mindsphere-production-fc81.up.railway.app/api/v1';
 console.log('🔧 API Base URL:', baseURL);
 console.log('🔧 VITE_API_BASE_URL:', import.meta.env.VITE_API_BASE_URL);
 

@@ -11,7 +11,7 @@ export default function ProfilePage() {
   const navigate = useNavigate();
   const { data } = useBasicProfile();
   const syncMe = useSyncMe();
-  const { userId, signOut } = useAuth();
+  const { userId, user: authUser, signOut } = useAuth();
   const user = data?.user;
   const profile = data?.profile;
 
@@ -71,10 +71,10 @@ export default function ProfilePage() {
           
           {/* User Info */}
           <h1 className="text-2xl font-bold text-white">
-            {user?.display_name || (profile?.given_name && profile?.family_name ? `${profile.given_name} ${profile.family_name}` : profile?.given_name) || 'Demo User'}
+            {authUser?.display_name || user?.display_name || (profile?.given_name && profile?.family_name ? `${profile.given_name} ${profile.family_name}` : profile?.given_name) || 'Demo User'}
           </h1>
           
-          <div className="text-silver text-sm mb-2">{user?.email || 'demo@mindsphere.app'}</div>
+          <div className="text-silver text-sm mb-2">{authUser?.email || user?.email || 'demo@mindsphere.app'}</div>
           
           {/* Phone number if available */}
           {user?.phone && (
