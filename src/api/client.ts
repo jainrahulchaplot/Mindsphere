@@ -6,12 +6,16 @@ const isLocalDev = import.meta.env.DEV ||
                    window.location.hostname === 'localhost' || 
                    window.location.hostname === '127.0.0.1';
 
-// Always use Railway backend for production, never call frontend
-const baseURL = isLocalDev 
-  ? 'http://localhost:8000/api/v1'
-  : 'https://mindsphere-production-fc81.up.railway.app/api/v1';
+// Use environment variable if available, otherwise fallback to Railway
+const baseURL = import.meta.env.VITE_API_BASE_URL 
+  ? `${import.meta.env.VITE_API_BASE_URL}/api/v1`
+  : isLocalDev 
+    ? 'http://localhost:8000/api/v1'
+    : 'https://mindsphere-production-fc81.up.railway.app/api/v1';
 console.log('🔧 API Base URL:', baseURL);
 console.log('🔧 VITE_API_BASE_URL:', import.meta.env.VITE_API_BASE_URL);
+console.log('🔧 Environment:', import.meta.env.MODE);
+console.log('🔧 Hostname:', window.location.hostname);
 
 export const api = axios.create({ baseURL });
 

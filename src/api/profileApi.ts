@@ -1,59 +1,42 @@
-// Force Railway backend URL for production
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL ? `${import.meta.env.VITE_API_BASE_URL}/api/v1` : 'https://mindsphere-production-fc81.up.railway.app/api/v1';
+import { api } from './client';
 
 export const profileApi = {
   // Memories
   getMemories: async (userId: string) => {
-    const response = await fetch(`${API_BASE_URL}/memories?user_id=${encodeURIComponent(userId)}`);
-    if (!response.ok) throw new Error('Failed to fetch memories');
-    return response.json();
+    const response = await api.get(`/memories?user_id=${encodeURIComponent(userId)}`);
+    return response.data;
   },
 
   addMemory: async (userId: string, memory: { content: string; category: string }) => {
-    const response = await fetch(`${API_BASE_URL}/memories`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        user_id: userId,
-        ...memory,
-        importance: 1
-      }),
+    const response = await api.post('/memories', {
+      user_id: userId,
+      ...memory,
+      importance: 1
     });
-    if (!response.ok) throw new Error('Failed to add memory');
-    return response.json();
+    return response.data;
   },
 
   deleteMemory: async (id: string) => {
-    const response = await fetch(`${API_BASE_URL}/memories/${id}`, {
-      method: 'DELETE',
-    });
-    if (!response.ok) throw new Error('Failed to delete memory');
+    const response = await api.delete(`/memories/${id}`);
+    return response.data;
   },
 
   // Snippets
   getSnippets: async (userId: string) => {
-    const response = await fetch(`${API_BASE_URL}/snippets?user_id=${encodeURIComponent(userId)}`);
-    if (!response.ok) throw new Error('Failed to fetch snippets');
-    return response.json();
+    const response = await api.get(`/snippets?user_id=${encodeURIComponent(userId)}`);
+    return response.data;
   },
 
   addSnippet: async (userId: string, content: string) => {
-    const response = await fetch(`${API_BASE_URL}/snippets`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        user_id: userId,
-        content
-      }),
+    const response = await api.post('/snippets', {
+      user_id: userId,
+      content
     });
-    if (!response.ok) throw new Error('Failed to add snippet');
-    return response.json();
+    return response.data;
   },
 
   deleteSnippet: async (id: string) => {
-    const response = await fetch(`${API_BASE_URL}/snippets/${id}`, {
-      method: 'DELETE',
-    });
-    if (!response.ok) throw new Error('Failed to delete snippet');
+    const response = await api.delete(`/snippets/${id}`);
+    return response.data;
   },
 };
