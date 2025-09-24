@@ -145,7 +145,7 @@ Railway provides:
 
 ## 🎯 Next Steps
 
-1. **Deploy to Railway** - Follow steps above
+1. **Deploy to Railway** - Follow steps
 2. **Test endpoints** - Verify API is working
 3. **Update Vercel** - Point frontend to Railway backend
 4. **Monitor** - Check Railway dashboard for issues
