@@ -48,7 +48,7 @@ async function attachUser(req, res, next) {
     }
 
     const { payload } = await jwtVerify(token, jwks, {
-      issuer: `${SUPABASE_URL}/auth/v1`,
+      issuer: `https://ylrrlzwphuktzocwjjin.supabase.co/auth/v1`,
       audience: 'authenticated'
     });
 
