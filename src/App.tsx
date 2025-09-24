@@ -15,13 +15,14 @@ import ProfilePage from './pages/ProfilePage';
 function AppContent() {
   const location = useLocation();
   const isSessionPage = location.pathname.startsWith('/session/') || location.pathname.startsWith('/view-session/');
+  const isAuthPage = location.pathname === '/auth';
   const { userId } = useAuth();
 
   return (
     <ProtectedRoute>
       <div className='relative animate-fadeIn'>
-        <IntegratedHeader userId={userId!} />
-        <div className={!isSessionPage ? 'pb-20' : ''}> {/* 80px bottom padding for mobile nav spacing */}
+        {!isAuthPage && <IntegratedHeader userId={userId!} />}
+        <div className={!isSessionPage && !isAuthPage ? 'pb-20' : ''}> {/* 80px bottom padding for mobile nav spacing */}
           <Routes>
             <Route path="/" element={<MeditationPage />} />
             <Route path="/dashboard" element={<Dashboard />} />
@@ -33,7 +34,7 @@ function AppContent() {
             <Route path="*" element={<MeditationPage />} />
           </Routes>
         </div>
-        {!isSessionPage && <MobileNavBar userId={userId!} />}
+        {!isSessionPage && !isAuthPage && <MobileNavBar userId={userId!} />}
       </div>
     </ProtectedRoute>
   );
