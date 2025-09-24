@@ -9,13 +9,9 @@ function getJwks() {
       return null;
     }
     try {
-      const jwksUrl = `${SUPABASE_URL}/auth/v1/keys`;
-      console.log('🔍 Creating JWKS from:', jwksUrl);
-      JWKS = createRemoteJWKSet(new URL(jwksUrl));
-      console.log('✅ JWKS created successfully');
+      JWKS = createRemoteJWKSet(new URL(`${SUPABASE_URL}/auth/v1/keys`));
     } catch (error) {
       console.error('❌ Failed to create JWKS:', error.message);
-      console.error('❌ JWKS URL:', `${SUPABASE_URL}/auth/v1/keys`);
       return null;
     }
   }
@@ -47,59 +43,13 @@ async function attachUser(req, res, next) {
   try {
     const jwks = getJwks();
     if (!jwks) {
-      console.error('❌ JWKS not available, trying fallback verification');
-      // Fallback: Basic JWT decode without verification (for testing)
-      try {
-        const [header, payload, signature] = token.split('.');
-        const decodedPayload = JSON.parse(Buffer.from(payload, 'base64url').toString());
-        
-        console.log('🔍 Fallback JWT decode:', {
-          sub: decodedPayload.sub,
-          email: decodedPayload.email,
-          iss: decodedPayload.iss,
-          aud: decodedPayload.aud
-        });
-
-        // Basic validation
-        if (decodedPayload.iss !== `${SUPABASE_URL}/auth/v1`) {
-          throw new Error('Invalid issuer');
-        }
-        if (decodedPayload.aud !== 'authenticated') {
-          throw new Error('Invalid audience');
-        }
-
-        req.user = {
-          id: decodedPayload.sub,
-          email: decodedPayload.email,
-          name: decodedPayload.user_metadata?.name || decodedPayload.name,
-          picture: decodedPayload.user_metadata?.avatar_url || decodedPayload.picture,
-          provider: decodedPayload.app_metadata?.provider || 'google'
-        };
-        console.log('🔍 Fallback JWT verified, user_id:', decodedPayload.sub);
-        next();
-        return;
-      } catch (fallbackError) {
-        console.log('🔍 Fallback JWT verification failed:', fallbackError.message);
-        return res.status(401).json({ error: 'Invalid authentication token' });
-      }
+      console.error('❌ JWKS not available');
+      return res.status(500).json({ error: 'Authentication service unavailable' });
     }
-
-    console.log('🔍 Attempting JWT verification with:', {
-      issuer: `${SUPABASE_URL}/auth/v1`,
-      audience: 'authenticated',
-      tokenLength: token.length
-    });
 
     const { payload } = await jwtVerify(token, jwks, {
       issuer: `${SUPABASE_URL}/auth/v1`,
       audience: 'authenticated'
-    });
-
-    console.log('🔍 JWT payload:', {
-      sub: payload.sub,
-      email: payload.email,
-      iss: payload.iss,
-      aud: payload.aud
     });
 
     // Payload claims: sub (user id), email, user_metadata, etc.
@@ -114,7 +64,6 @@ async function attachUser(req, res, next) {
     next();
   } catch (e) {
     console.log('🔍 JWT verification failed:', e.message);
-    console.log('🔍 Error details:', e);
     return res.status(401).json({ error: 'Invalid authentication token' });
   }
 }
