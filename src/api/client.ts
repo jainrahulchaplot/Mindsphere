@@ -24,6 +24,13 @@ export const api = axios.create({ baseURL });
 // Add interceptor to log every request
 api.interceptors.request.use((config) => {
   console.log('🌐 Making API request to:', config.baseURL + config.url);
+  console.log('🌐 Request config:', {
+    baseURL: config.baseURL,
+    url: config.url,
+    fullURL: config.baseURL + config.url,
+    method: config.method,
+    headers: config.headers
+  });
   return config;
 }, (error) => {
   console.error('❌ API request error:', error);
