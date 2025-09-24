@@ -13,7 +13,7 @@ export default function AuthPage() {
       provider: 'google',
       options: { 
         queryParams: { prompt: 'select_account' }, 
-        redirectTo: `${window.location.origin}/profile`
+        redirectTo: `${window.location.origin}/`
       }
     });
     if (error) {
@@ -32,6 +32,18 @@ export default function AuthPage() {
         <div className="absolute top-3/4 right-1/4 w-48 h-48 bg-gradient-to-r from-white/3 to-white/8 rounded-full blur-2xl animate-pulse delay-1000"></div>
         <div className="absolute bottom-1/4 left-1/3 w-32 h-32 bg-gradient-to-r from-white/4 to-white/6 rounded-full blur-xl animate-pulse delay-500"></div>
         
+        {/* Floating Particles */}
+        <div className="absolute top-1/6 left-1/6 w-2 h-2 bg-white/20 rounded-full animate-float-slow"></div>
+        <div className="absolute top-1/3 right-1/5 w-1 h-1 bg-white/30 rounded-full animate-float-slow delay-1000"></div>
+        <div className="absolute top-2/3 left-1/5 w-1.5 h-1.5 bg-white/25 rounded-full animate-float-slow delay-2000"></div>
+        <div className="absolute bottom-1/3 right-1/3 w-1 h-1 bg-white/35 rounded-full animate-float-slow delay-3000"></div>
+        <div className="absolute bottom-1/6 left-2/3 w-2 h-2 bg-white/15 rounded-full animate-float-slow delay-4000"></div>
+        <div className="absolute top-1/2 right-1/6 w-1 h-1 bg-white/20 rounded-full animate-float-slow delay-5000"></div>
+        <div className="absolute bottom-1/2 left-1/2 w-1.5 h-1.5 bg-white/25 rounded-full animate-float-slow delay-1500"></div>
+        <div className="absolute top-3/4 left-1/2 w-1 h-1 bg-white/30 rounded-full animate-float-slow delay-2500"></div>
+        <div className="absolute bottom-1/4 right-1/4 w-2 h-2 bg-white/10 rounded-full animate-float-slow delay-3500"></div>
+        <div className="absolute top-1/4 right-1/2 w-1 h-1 bg-white/40 rounded-full animate-float-slow delay-4500"></div>
+        
         {/* Grid Pattern */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:50px_50px] animate-pulse"></div>
         
@@ -49,7 +61,7 @@ export default function AuthPage() {
               <img 
                 src="/assets/mindsphere logo.png" 
                 alt="MindSphere" 
-                className="relative mx-auto h-16 w-16 object-contain drop-shadow-2xl animate-float" 
+                className="relative mx-auto h-32 w-auto object-contain drop-shadow-2xl animate-float" 
               />
             </div>
             <h1 className="text-white text-4xl font-light mb-3 tracking-wide animate-slide-up">
@@ -167,6 +179,13 @@ export default function AuthPage() {
           50% { transform: translateY(-10px); }
         }
         
+        @keyframes float-slow {
+          0%, 100% { transform: translateY(0px) translateX(0px); opacity: 0.3; }
+          25% { transform: translateY(-20px) translateX(10px); opacity: 0.8; }
+          50% { transform: translateY(-10px) translateX(-5px); opacity: 0.6; }
+          75% { transform: translateY(-15px) translateX(8px); opacity: 0.9; }
+        }
+        
         .animate-fade-in {
           animation: fade-in 1s ease-out;
         }
@@ -177,6 +196,10 @@ export default function AuthPage() {
         
         .animate-float {
           animation: float 3s ease-in-out infinite;
+        }
+        
+        .animate-float-slow {
+          animation: float-slow 8s ease-in-out infinite;
         }
       `}</style>
     </div>
