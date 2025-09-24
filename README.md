@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # MindSphere - AI-Powered Meditation & Journaling Platform
 
 > **A premium, monochrome meditation app with AI-generated scripts, text-to-speech, and intelligent journaling with emotion analysis.**
@@ -848,3 +849,7 @@ For support, questions, or feature requests:
 ---
 
 **Built with ❤️ for mental wellness and mindfulness**
+=======
+# Mindsphere
+Mindsphere
+>>>>>>> e5b7c98ab7fdd51eeed6b2bd556df316f1bd51c9
