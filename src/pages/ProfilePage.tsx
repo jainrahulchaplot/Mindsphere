@@ -71,7 +71,11 @@ export default function ProfilePage() {
           
           {/* User Info */}
           <h1 className="text-2xl font-bold text-white">
-            {authUser?.display_name || user?.display_name || (profile?.given_name && profile?.family_name ? `${profile.given_name} ${profile.family_name}` : profile?.given_name) || 'Demo User'}
+            {authUser?.user_metadata?.full_name || 
+             authUser?.display_name || 
+             user?.display_name || 
+             (profile?.given_name && profile?.family_name ? `${profile.given_name} ${profile.family_name}` : profile?.given_name) || 
+             'Demo User'}
           </h1>
           
           <div className="text-silver text-sm mb-2">{authUser?.email || user?.email || 'demo@mindsphere.app'}</div>

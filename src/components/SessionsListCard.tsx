@@ -45,7 +45,7 @@ export default function SessionsListCard({ userId }: SessionsListCardProps) {
   } = useInfiniteQuery<{sessions: SessionItem[], stats: any}, Error, {sessions: SessionItem[], stats: any}, string[], number>({
     queryKey: ['sessions', userId, filters.kind, filters.search],
     queryFn: async ({ pageParam = 1 }) => {
-      console.log('Fetching sessions for kind:', filters.kind, 'page:', pageParam);
+      console.log('🔍 SessionsListCard: Fetching sessions for userId:', userId, 'kind:', filters.kind, 'page:', pageParam);
       const params = new URLSearchParams({
         user_id: userId,
         kind: filters.kind,
@@ -57,7 +57,7 @@ export default function SessionsListCard({ userId }: SessionsListCardProps) {
       const { api } = await import('../api/client');
       const response = await api.get(`/library?${params}`);
       const data = response.data;
-      console.log('Fetched sessions data:', data.sessions?.length, 'sessions for kind:', filters.kind, 'page:', pageParam);
+      console.log('🔍 SessionsListCard: Received sessions data:', data.sessions?.length, 'sessions for userId:', userId, 'kind:', filters.kind, 'page:', pageParam);
       return data as {sessions: SessionItem[], stats: any};
     },
     initialPageParam: 1,

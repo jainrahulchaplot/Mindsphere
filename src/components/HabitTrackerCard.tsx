@@ -49,8 +49,10 @@ export default function HabitTrackerCard({ userId }: HabitTrackerCardProps) {
   const monthQ = useQuery<UsageData>({
     queryKey: ['usage-month', userId, from, to, activeTab],
     queryFn: async () => {
+      console.log('🔍 HabitTrackerCard: Fetching usage data for userId:', userId, 'from:', from, 'to:', to, 'kind:', activeTab);
       const { api } = await import('../api/client');
       const res = await api.get(`/usage/daily?user_id=${userId}&from=${from}&to=${to}&kind=${activeTab}`);
+      console.log('🔍 HabitTrackerCard: Received usage data:', res.data);
       return res.data;
     },
     enabled: !!userId,
