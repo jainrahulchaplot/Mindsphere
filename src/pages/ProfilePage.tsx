@@ -71,7 +71,7 @@ export default function ProfilePage() {
           
           {/* User Info */}
           <h1 className="text-2xl font-bold text-white">
-            {user?.display_name || profile?.given_name + ' ' + profile?.family_name || 'Demo User'}
+            {user?.display_name || (profile?.given_name && profile?.family_name ? `${profile.given_name} ${profile.family_name}` : profile?.given_name) || 'Demo User'}
           </h1>
           
           <div className="text-silver text-sm mb-2">{user?.email || 'demo@mindsphere.app'}</div>
@@ -87,7 +87,7 @@ export default function ProfilePage() {
           {/* Account type badge */}
           <div className="inline-flex items-center gap-1 px-3 py-2 rounded-full bg-gradient-to-r from-indigo-500/20 to-purple-600/20 border border-indigo-400/30 text-xs font-medium text-indigo-300">
             <span>✨</span>
-            <span>{user?.provider || (authMode==='google'?'Google':'Demo')} Account</span>
+            <span>{authMode === 'google' ? 'Free Plan' : 'Demo Account'}</span>
           </div>
         </div>
       </Card>

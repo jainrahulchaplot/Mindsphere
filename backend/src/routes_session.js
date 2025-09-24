@@ -104,6 +104,18 @@ router.post('/create', async (req, res) => {
     // Get user_id from request body, user object, or use default
     const userId = user_id || req.user?.id || '550e8400-e29b-41d4-a716-446655440000';
     
+    // Generate session name for the session
+    const { generateSessionName } = require('./openai-content-generator');
+    const sessionName = await generateSessionName(
+      kind || 'meditation',
+      mood || 'calm', 
+      validatedDuration,
+      user_notes || '',
+      null, // user_name - will be fetched from profile if needed
+      userId
+    );
+    console.log(`[${sessionId}] Generated session name: ${sessionName}`);
+
     // Create session data without audio (using existing schema)
     const sessionData = {
       user_id: userId,
@@ -111,7 +123,8 @@ router.post('/create', async (req, res) => {
       mood: mood || 'calm',
       duration: validatedDuration,
       script: '', // Empty script initially
-      user_notes: user_notes || ''
+      user_notes: user_notes || '',
+      session_name: sessionName
     };
 
     // Insert session into database and get the generated ID
@@ -394,8 +407,13 @@ router.post('/start', async (req, res) => {
     }
 
     // Generate content with OpenAI using enhanced prompts
-    const { generateContentWithOpenAI } = require('./openai-content-generator');
+    const { generateContentWithOpenAI, generateSessionName } = require('./openai-content-generator');
     const userId = user_id || req.user?.id || '550e8400-e29b-41d4-a716-446655440000';
+    
+    // Generate session name first
+    const sessionName = await generateSessionName(kind, mood, duration, user_notes, user_name, userId);
+    console.log(`[${requestId}] Generated session name: ${sessionName}`);
+    
     const content = await generateContentWithOpenAI(kind, mood, duration, user_notes, user_name, userId);
     console.log(`[${requestId}] Generated ${kind} content: ${content.length} characters`);
 
@@ -422,6 +440,7 @@ router.post('/start', async (req, res) => {
       user_notes: user_notes || null,
       duration_sec,
       audio_url: audioUrl,
+      session_name: sessionName,
       created_at: new Date().toISOString()
     };
 
