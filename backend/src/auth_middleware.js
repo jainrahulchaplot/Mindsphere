@@ -47,9 +47,22 @@ async function attachUser(req, res, next) {
       return res.status(500).json({ error: 'Authentication service unavailable' });
     }
 
+    console.log('🔍 Attempting JWT verification with:', {
+      issuer: `${SUPABASE_URL}/auth/v1`,
+      audience: 'authenticated',
+      tokenLength: token.length
+    });
+
     const { payload } = await jwtVerify(token, jwks, {
       issuer: `${SUPABASE_URL}/auth/v1`,
       audience: 'authenticated'
+    });
+
+    console.log('🔍 JWT payload:', {
+      sub: payload.sub,
+      email: payload.email,
+      iss: payload.iss,
+      aud: payload.aud
     });
 
     // Payload claims: sub (user id), email, user_metadata, etc.
@@ -64,6 +77,7 @@ async function attachUser(req, res, next) {
     next();
   } catch (e) {
     console.log('🔍 JWT verification failed:', e.message);
+    console.log('🔍 Error details:', e);
     return res.status(401).json({ error: 'Invalid authentication token' });
   }
 }
