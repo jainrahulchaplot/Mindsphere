@@ -16,6 +16,7 @@ console.log('🔧 API Base URL:', baseURL);
 console.log('🔧 VITE_API_BASE_URL:', import.meta.env.VITE_API_BASE_URL);
 console.log('🔧 Environment:', import.meta.env.MODE);
 console.log('🔧 Hostname:', window.location.hostname);
+console.log('🔧 All env vars:', Object.keys(import.meta.env).filter(key => key.startsWith('VITE_')));
 
 export const api = axios.create({ baseURL });
 

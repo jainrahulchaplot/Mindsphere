@@ -47,7 +47,6 @@ if (process.env.CORS_ALLOWED_ORIGINS) {
 } else {
   // Fallback for common deployment platforms
   CORS_ORIGINS = [
-    'https://mindsphere-theta.vercel.app',
     'mindsphere-production-fc81.up.railway.app',
     'http://localhost:5173',
     'http://localhost:5174'
