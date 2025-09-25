@@ -433,7 +433,7 @@ router.post('/start', async (req, res) => {
     const { generateTTSAudio } = require('./tts-generator');
     const ttsPromise = generateTTSAudio(content, kind);
     const timeoutPromise = new Promise((_, reject) => 
-      setTimeout(() => reject(new Error('TTS timeout')), 300000) // 5 minutes
+      setTimeout(() => reject(new Error('TTS timeout')), 600000) // 10 minutes
     );
 
     const { audioBuffer, duration_sec } = await Promise.race([ttsPromise, timeoutPromise]);
