@@ -45,7 +45,17 @@ api.interceptors.request.use((config) => {
 });
 
 api.interceptors.request.use(async (config) => {
-  // Always try to get JWT token if Supabase is available
+  // Check for local development mode (only in development environment)
+  const isLocalDev = import.meta.env.DEV && localStorage.getItem('mindsphere_local_dev') === 'true';
+  
+  if (isLocalDev) {
+    // In local development mode, don't add any auth headers
+    // Backend will use demo user mode
+    console.log('🔍 Local dev mode: No auth headers needed');
+    return config;
+  }
+  
+  // Production mode: Always try to get JWT token if Supabase is available
   if (supabase) {
     try {
       const { data } = await supabase.auth.getSession();
