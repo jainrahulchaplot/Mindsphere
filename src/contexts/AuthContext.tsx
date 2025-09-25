@@ -17,8 +17,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Local development bypass - use demo user when Supabase not configured
-    if (!supabase) {
+    // Check for local development mode flag
+    const isLocalDev = localStorage.getItem('mindsphere_local_dev') === 'true';
+    
+    // Local development bypass - use demo user
+    if (isLocalDev || !supabase) {
       console.warn('Local development mode - using demo user');
       setUserId('550e8400-e29b-41d4-a716-446655440000');
       setUser({

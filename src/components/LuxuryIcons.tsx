@@ -11,15 +11,15 @@ export const VolumeIcon = ({ className = "w-5 h-5", size = 20 }: IconProps) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
     <defs>
       <linearGradient id="speakerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#1a1a1a" />
-        <stop offset="30%" stopColor="#2d2d2d" />
-        <stop offset="70%" stopColor="#404040" />
-        <stop offset="100%" stopColor="#1a1a1a" />
+        <stop offset="0%" stopColor="#4a4a4a" />
+        <stop offset="30%" stopColor="#6a6a6a" />
+        <stop offset="70%" stopColor="#8a8a8a" />
+        <stop offset="100%" stopColor="#4a4a4a" />
       </linearGradient>
       <linearGradient id="speakerHighlight" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#4a4a4a" />
-        <stop offset="50%" stopColor="#6a6a6a" />
-        <stop offset="100%" stopColor="#4a4a4a" />
+        <stop offset="0%" stopColor="#8a8a8a" />
+        <stop offset="50%" stopColor="#aaaaaa" />
+        <stop offset="100%" stopColor="#8a8a8a" />
       </linearGradient>
       <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
         <feGaussianBlur stdDeviation="1" result="coloredBlur"/>
@@ -30,8 +30,8 @@ export const VolumeIcon = ({ className = "w-5 h-5", size = 20 }: IconProps) => (
       </filter>
     </defs>
     
-    <path d="M3 9v6h4l5 5V4L7 9H3z" fill="url(#speakerGradient)" stroke="url(#speakerHighlight)" strokeWidth="0.5" filter="url(#glow)" />
-    <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z" fill="url(#speakerGradient)" stroke="url(#speakerHighlight)" strokeWidth="0.3" />
+    <path d="M3 9v6h4l5 5V4L7 9H3z" fill="url(#speakerGradient)" stroke="#cccccc" strokeWidth="0.5" filter="url(#glow)" />
+    <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z" fill="url(#speakerGradient)" stroke="#cccccc" strokeWidth="0.3" />
   </svg>
 );
 
@@ -39,15 +39,15 @@ export const VolumeMutedIcon = ({ className = "w-5 h-5", size = 20 }: IconProps)
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
     <defs>
       <linearGradient id="speakerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#1a1a1a" />
-        <stop offset="30%" stopColor="#2d2d2d" />
-        <stop offset="70%" stopColor="#404040" />
-        <stop offset="100%" stopColor="#1a1a1a" />
+        <stop offset="0%" stopColor="#4a4a4a" />
+        <stop offset="30%" stopColor="#6a6a6a" />
+        <stop offset="70%" stopColor="#8a8a8a" />
+        <stop offset="100%" stopColor="#4a4a4a" />
       </linearGradient>
       <linearGradient id="speakerHighlight" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#4a4a4a" />
-        <stop offset="50%" stopColor="#6a6a6a" />
-        <stop offset="100%" stopColor="#4a4a4a" />
+        <stop offset="0%" stopColor="#8a8a8a" />
+        <stop offset="50%" stopColor="#aaaaaa" />
+        <stop offset="100%" stopColor="#8a8a8a" />
       </linearGradient>
       <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
         <feGaussianBlur stdDeviation="1" result="coloredBlur"/>
@@ -58,7 +58,7 @@ export const VolumeMutedIcon = ({ className = "w-5 h-5", size = 20 }: IconProps)
       </filter>
     </defs>
     
-    <path d="M3 9v6h4l5 5V4L7 9H3z" fill="url(#speakerGradient)" stroke="url(#speakerHighlight)" strokeWidth="0.5" filter="url(#glow)" />
+    <path d="M3 9v6h4l5 5V4L7 9H3z" fill="url(#speakerGradient)" stroke="#cccccc" strokeWidth="0.5" filter="url(#glow)" />
     <line x1="18" y1="6" x2="6" y2="18" stroke="#ff4444" strokeWidth="2.5" strokeLinecap="round" filter="url(#glow)" />
   </svg>
 );
@@ -67,15 +67,15 @@ export const VolumeHighIcon = ({ className = "w-5 h-5", size = 20 }: IconProps) 
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
     <defs>
       <linearGradient id="speakerGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#1a1a1a" />
-        <stop offset="30%" stopColor="#2d2d2d" />
-        <stop offset="70%" stopColor="#404040" />
-        <stop offset="100%" stopColor="#1a1a1a" />
+        <stop offset="0%" stopColor="#4a4a4a" />
+        <stop offset="30%" stopColor="#6a6a6a" />
+        <stop offset="70%" stopColor="#8a8a8a" />
+        <stop offset="100%" stopColor="#4a4a4a" />
       </linearGradient>
       <linearGradient id="speakerHighlight" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#4a4a4a" />
-        <stop offset="50%" stopColor="#6a6a6a" />
-        <stop offset="100%" stopColor="#4a4a4a" />
+        <stop offset="0%" stopColor="#8a8a8a" />
+        <stop offset="50%" stopColor="#aaaaaa" />
+        <stop offset="100%" stopColor="#8a8a8a" />
       </linearGradient>
       <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
         <feGaussianBlur stdDeviation="1" result="coloredBlur"/>
@@ -86,9 +86,9 @@ export const VolumeHighIcon = ({ className = "w-5 h-5", size = 20 }: IconProps) 
       </filter>
     </defs>
     
-    <path d="M3 9v6h4l5 5V4L7 9H3z" fill="url(#speakerGradient)" stroke="url(#speakerHighlight)" strokeWidth="0.5" filter="url(#glow)" />
-    <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z" fill="url(#speakerGradient)" stroke="url(#speakerHighlight)" strokeWidth="0.3" />
-    <path d="M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" fill="url(#speakerGradient)" stroke="url(#speakerHighlight)" strokeWidth="0.3" />
+    <path d="M3 9v6h4l5 5V4L7 9H3z" fill="url(#speakerGradient)" stroke="#cccccc" strokeWidth="0.5" filter="url(#glow)" />
+    <path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02z" fill="url(#speakerGradient)" stroke="#cccccc" strokeWidth="0.3" />
+    <path d="M14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z" fill="url(#speakerGradient)" stroke="#cccccc" strokeWidth="0.3" />
   </svg>
 );
 
@@ -98,15 +98,15 @@ export const MicrophoneIcon = ({ className = "w-5 h-5", size = 20 }: IconProps) 
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
     <defs>
       <linearGradient id="micGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#1a1a1a" />
-        <stop offset="30%" stopColor="#2d2d2d" />
-        <stop offset="70%" stopColor="#404040" />
-        <stop offset="100%" stopColor="#1a1a1a" />
+        <stop offset="0%" stopColor="#4a4a4a" />
+        <stop offset="30%" stopColor="#6a6a6a" />
+        <stop offset="70%" stopColor="#8a8a8a" />
+        <stop offset="100%" stopColor="#4a4a4a" />
       </linearGradient>
       <linearGradient id="micHighlight" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#4a4a4a" />
-        <stop offset="50%" stopColor="#6a6a6a" />
-        <stop offset="100%" stopColor="#4a4a4a" />
+        <stop offset="0%" stopColor="#8a8a8a" />
+        <stop offset="50%" stopColor="#aaaaaa" />
+        <stop offset="100%" stopColor="#8a8a8a" />
       </linearGradient>
       <filter id="micGlow" x="-50%" y="-50%" width="200%" height="200%">
         <feGaussianBlur stdDeviation="1" result="coloredBlur"/>
@@ -117,10 +117,10 @@ export const MicrophoneIcon = ({ className = "w-5 h-5", size = 20 }: IconProps) 
       </filter>
     </defs>
     
-    <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" fill="url(#micGradient)" stroke="url(#micHighlight)" strokeWidth="0.5" filter="url(#micGlow)" />
-    <path d="M19 10v2a7 7 0 0 1-14 0v-2" fill="none" stroke="url(#micHighlight)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" filter="url(#micGlow)" />
-    <line x1="12" y1="19" x2="12" y2="23" stroke="url(#micHighlight)" strokeWidth="2" strokeLinecap="round" filter="url(#micGlow)" />
-    <line x1="8" y1="23" x2="16" y2="23" stroke="url(#micHighlight)" strokeWidth="2" strokeLinecap="round" filter="url(#micGlow)" />
+    <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" fill="url(#micGradient)" stroke="#cccccc" strokeWidth="0.5" filter="url(#micGlow)" />
+    <path d="M19 10v2a7 7 0 0 1-14 0v-2" fill="none" stroke="#cccccc" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" filter="url(#micGlow)" />
+    <line x1="12" y1="19" x2="12" y2="23" stroke="#cccccc" strokeWidth="2" strokeLinecap="round" filter="url(#micGlow)" />
+    <line x1="8" y1="23" x2="16" y2="23" stroke="#cccccc" strokeWidth="2" strokeLinecap="round" filter="url(#micGlow)" />
   </svg>
 );
 
@@ -128,15 +128,15 @@ export const MicrophoneRecordingIcon = ({ className = "w-5 h-5", size = 20 }: Ic
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
     <defs>
       <linearGradient id="micGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#1a1a1a" />
-        <stop offset="30%" stopColor="#2d2d2d" />
-        <stop offset="70%" stopColor="#404040" />
-        <stop offset="100%" stopColor="#1a1a1a" />
+        <stop offset="0%" stopColor="#4a4a4a" />
+        <stop offset="30%" stopColor="#6a6a6a" />
+        <stop offset="70%" stopColor="#8a8a8a" />
+        <stop offset="100%" stopColor="#4a4a4a" />
       </linearGradient>
       <linearGradient id="micHighlight" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#4a4a4a" />
-        <stop offset="50%" stopColor="#6a6a6a" />
-        <stop offset="100%" stopColor="#4a4a4a" />
+        <stop offset="0%" stopColor="#8a8a8a" />
+        <stop offset="50%" stopColor="#aaaaaa" />
+        <stop offset="100%" stopColor="#8a8a8a" />
       </linearGradient>
       <filter id="micGlow" x="-50%" y="-50%" width="200%" height="200%">
         <feGaussianBlur stdDeviation="1" result="coloredBlur"/>
@@ -165,15 +165,15 @@ export const PlayIcon = ({ className = "w-5 h-5", size = 20 }: IconProps) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
     <defs>
       <linearGradient id="playGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#1a1a1a" />
-        <stop offset="30%" stopColor="#2d2d2d" />
-        <stop offset="70%" stopColor="#404040" />
-        <stop offset="100%" stopColor="#1a1a1a" />
+        <stop offset="0%" stopColor="#4a4a4a" />
+        <stop offset="30%" stopColor="#6a6a6a" />
+        <stop offset="70%" stopColor="#8a8a8a" />
+        <stop offset="100%" stopColor="#4a4a4a" />
       </linearGradient>
       <linearGradient id="playHighlight" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#4a4a4a" />
-        <stop offset="50%" stopColor="#6a6a6a" />
-        <stop offset="100%" stopColor="#4a4a4a" />
+        <stop offset="0%" stopColor="#8a8a8a" />
+        <stop offset="50%" stopColor="#aaaaaa" />
+        <stop offset="100%" stopColor="#8a8a8a" />
       </linearGradient>
       <filter id="playGlow" x="-50%" y="-50%" width="200%" height="200%">
         <feGaussianBlur stdDeviation="1" result="coloredBlur"/>
@@ -184,7 +184,7 @@ export const PlayIcon = ({ className = "w-5 h-5", size = 20 }: IconProps) => (
       </filter>
     </defs>
     
-    <polygon points="5,3 19,12 5,21" fill="url(#playGradient)" stroke="url(#playHighlight)" strokeWidth="0.5" filter="url(#playGlow)" />
+    <polygon points="5,3 19,12 5,21" fill="url(#playGradient)" stroke="#cccccc" strokeWidth="0.5" filter="url(#playGlow)" />
   </svg>
 );
 
@@ -192,15 +192,15 @@ export const PauseIcon = ({ className = "w-5 h-5", size = 20 }: IconProps) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
     <defs>
       <linearGradient id="pauseGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#1a1a1a" />
-        <stop offset="30%" stopColor="#2d2d2d" />
-        <stop offset="70%" stopColor="#404040" />
-        <stop offset="100%" stopColor="#1a1a1a" />
+        <stop offset="0%" stopColor="#4a4a4a" />
+        <stop offset="30%" stopColor="#6a6a6a" />
+        <stop offset="70%" stopColor="#8a8a8a" />
+        <stop offset="100%" stopColor="#4a4a4a" />
       </linearGradient>
       <linearGradient id="pauseHighlight" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#4a4a4a" />
-        <stop offset="50%" stopColor="#6a6a6a" />
-        <stop offset="100%" stopColor="#4a4a4a" />
+        <stop offset="0%" stopColor="#8a8a8a" />
+        <stop offset="50%" stopColor="#aaaaaa" />
+        <stop offset="100%" stopColor="#8a8a8a" />
       </linearGradient>
       <filter id="pauseGlow" x="-50%" y="-50%" width="200%" height="200%">
         <feGaussianBlur stdDeviation="1" result="coloredBlur"/>
@@ -211,8 +211,8 @@ export const PauseIcon = ({ className = "w-5 h-5", size = 20 }: IconProps) => (
       </filter>
     </defs>
     
-    <rect x="6" y="4" width="4" height="16" fill="url(#pauseGradient)" stroke="url(#pauseHighlight)" strokeWidth="0.5" filter="url(#pauseGlow)" />
-    <rect x="14" y="4" width="4" height="16" fill="url(#pauseGradient)" stroke="url(#pauseHighlight)" strokeWidth="0.5" filter="url(#pauseGlow)" />
+    <rect x="6" y="4" width="4" height="16" fill="url(#pauseGradient)" stroke="#cccccc" strokeWidth="0.5" filter="url(#pauseGlow)" />
+    <rect x="14" y="4" width="4" height="16" fill="url(#pauseGradient)" stroke="#cccccc" strokeWidth="0.5" filter="url(#pauseGlow)" />
   </svg>
 );
 
@@ -220,15 +220,15 @@ export const StopIcon = ({ className = "w-5 h-5", size = 20 }: IconProps) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
     <defs>
       <linearGradient id="stopGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#1a1a1a" />
-        <stop offset="30%" stopColor="#2d2d2d" />
-        <stop offset="70%" stopColor="#404040" />
-        <stop offset="100%" stopColor="#1a1a1a" />
+        <stop offset="0%" stopColor="#4a4a4a" />
+        <stop offset="30%" stopColor="#6a6a6a" />
+        <stop offset="70%" stopColor="#8a8a8a" />
+        <stop offset="100%" stopColor="#4a4a4a" />
       </linearGradient>
       <linearGradient id="stopHighlight" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#4a4a4a" />
-        <stop offset="50%" stopColor="#6a6a6a" />
-        <stop offset="100%" stopColor="#4a4a4a" />
+        <stop offset="0%" stopColor="#8a8a8a" />
+        <stop offset="50%" stopColor="#aaaaaa" />
+        <stop offset="100%" stopColor="#8a8a8a" />
       </linearGradient>
       <filter id="stopGlow" x="-50%" y="-50%" width="200%" height="200%">
         <feGaussianBlur stdDeviation="1" result="coloredBlur"/>
@@ -239,7 +239,7 @@ export const StopIcon = ({ className = "w-5 h-5", size = 20 }: IconProps) => (
       </filter>
     </defs>
     
-    <rect x="6" y="6" width="12" height="12" fill="url(#stopGradient)" stroke="url(#stopHighlight)" strokeWidth="0.5" filter="url(#stopGlow)" />
+    <rect x="6" y="6" width="12" height="12" fill="url(#stopGradient)" stroke="#cccccc" strokeWidth="0.5" filter="url(#stopGlow)" />
   </svg>
 );
 
@@ -249,15 +249,15 @@ export const MusicNoteIcon = ({ className = "w-5 h-5", size = 20 }: IconProps) =
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
     <defs>
       <linearGradient id="musicGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#1a1a1a" />
-        <stop offset="30%" stopColor="#2d2d2d" />
-        <stop offset="70%" stopColor="#404040" />
-        <stop offset="100%" stopColor="#1a1a1a" />
+        <stop offset="0%" stopColor="#4a4a4a" />
+        <stop offset="30%" stopColor="#6a6a6a" />
+        <stop offset="70%" stopColor="#8a8a8a" />
+        <stop offset="100%" stopColor="#4a4a4a" />
       </linearGradient>
       <linearGradient id="musicHighlight" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#4a4a4a" />
-        <stop offset="50%" stopColor="#6a6a6a" />
-        <stop offset="100%" stopColor="#4a4a4a" />
+        <stop offset="0%" stopColor="#8a8a8a" />
+        <stop offset="50%" stopColor="#aaaaaa" />
+        <stop offset="100%" stopColor="#8a8a8a" />
       </linearGradient>
       <filter id="musicGlow" x="-50%" y="-50%" width="200%" height="200%">
         <feGaussianBlur stdDeviation="1" result="coloredBlur"/>
@@ -268,9 +268,9 @@ export const MusicNoteIcon = ({ className = "w-5 h-5", size = 20 }: IconProps) =
       </filter>
     </defs>
     
-    <path d="M9 18V5l12-2v13" fill="none" stroke="url(#musicHighlight)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" filter="url(#musicGlow)" />
-    <circle cx="6" cy="18" r="3" fill="url(#musicGradient)" stroke="url(#musicHighlight)" strokeWidth="0.5" filter="url(#musicGlow)" />
-    <circle cx="18" cy="16" r="3" fill="url(#musicGradient)" stroke="url(#musicHighlight)" strokeWidth="0.5" filter="url(#musicGlow)" />
+    <path d="M9 18V5l12-2v13" fill="none" stroke="#cccccc" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" filter="url(#musicGlow)" />
+    <circle cx="6" cy="18" r="3" fill="url(#musicGradient)" stroke="#cccccc" strokeWidth="0.5" filter="url(#musicGlow)" />
+    <circle cx="18" cy="16" r="3" fill="url(#musicGradient)" stroke="#cccccc" strokeWidth="0.5" filter="url(#musicGlow)" />
   </svg>
 );
 
@@ -280,15 +280,15 @@ export const HomeIcon = ({ className = "w-5 h-5", size = 20 }: IconProps) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
     <defs>
       <linearGradient id="homeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#1a1a1a" />
-        <stop offset="30%" stopColor="#2d2d2d" />
-        <stop offset="70%" stopColor="#404040" />
-        <stop offset="100%" stopColor="#1a1a1a" />
+        <stop offset="0%" stopColor="#4a4a4a" />
+        <stop offset="30%" stopColor="#6a6a6a" />
+        <stop offset="70%" stopColor="#8a8a8a" />
+        <stop offset="100%" stopColor="#4a4a4a" />
       </linearGradient>
       <linearGradient id="homeHighlight" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#4a4a4a" />
-        <stop offset="50%" stopColor="#6a6a6a" />
-        <stop offset="100%" stopColor="#4a4a4a" />
+        <stop offset="0%" stopColor="#8a8a8a" />
+        <stop offset="50%" stopColor="#aaaaaa" />
+        <stop offset="100%" stopColor="#8a8a8a" />
       </linearGradient>
       <filter id="homeGlow" x="-50%" y="-50%" width="200%" height="200%">
         <feGaussianBlur stdDeviation="1" result="coloredBlur"/>
@@ -299,8 +299,8 @@ export const HomeIcon = ({ className = "w-5 h-5", size = 20 }: IconProps) => (
       </filter>
     </defs>
     
-    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" fill="url(#homeGradient)" stroke="url(#homeHighlight)" strokeWidth="0.5" filter="url(#homeGlow)" />
-    <polyline points="9,22 9,12 15,12 15,22" fill="none" stroke="url(#homeHighlight)" strokeWidth="1" filter="url(#homeGlow)" />
+    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" fill="url(#homeGradient)" stroke="#cccccc" strokeWidth="0.5" filter="url(#homeGlow)" />
+    <polyline points="9,22 9,12 15,12 15,22" fill="none" stroke="#cccccc" strokeWidth="1" filter="url(#homeGlow)" />
   </svg>
 );
 
@@ -308,15 +308,15 @@ export const DashboardIcon = ({ className = "w-5 h-5", size = 20 }: IconProps) =
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
     <defs>
       <linearGradient id="dashboardGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#1a1a1a" />
-        <stop offset="30%" stopColor="#2d2d2d" />
-        <stop offset="70%" stopColor="#404040" />
-        <stop offset="100%" stopColor="#1a1a1a" />
+        <stop offset="0%" stopColor="#4a4a4a" />
+        <stop offset="30%" stopColor="#6a6a6a" />
+        <stop offset="70%" stopColor="#8a8a8a" />
+        <stop offset="100%" stopColor="#4a4a4a" />
       </linearGradient>
       <linearGradient id="dashboardHighlight" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#4a4a4a" />
-        <stop offset="50%" stopColor="#6a6a6a" />
-        <stop offset="100%" stopColor="#4a4a4a" />
+        <stop offset="0%" stopColor="#8a8a8a" />
+        <stop offset="50%" stopColor="#aaaaaa" />
+        <stop offset="100%" stopColor="#8a8a8a" />
       </linearGradient>
       <filter id="dashboardGlow" x="-50%" y="-50%" width="200%" height="200%">
         <feGaussianBlur stdDeviation="1" result="coloredBlur"/>
@@ -327,10 +327,10 @@ export const DashboardIcon = ({ className = "w-5 h-5", size = 20 }: IconProps) =
       </filter>
     </defs>
     
-    <rect x="3" y="3" width="7" height="7" fill="url(#dashboardGradient)" stroke="url(#dashboardHighlight)" strokeWidth="0.5" filter="url(#dashboardGlow)" />
-    <rect x="14" y="3" width="7" height="7" fill="url(#dashboardGradient)" stroke="url(#dashboardHighlight)" strokeWidth="0.5" filter="url(#dashboardGlow)" />
-    <rect x="3" y="14" width="7" height="7" fill="url(#dashboardGradient)" stroke="url(#dashboardHighlight)" strokeWidth="0.5" filter="url(#dashboardGlow)" />
-    <rect x="14" y="14" width="7" height="7" fill="url(#dashboardGradient)" stroke="url(#dashboardHighlight)" strokeWidth="0.5" filter="url(#dashboardGlow)" />
+    <rect x="3" y="3" width="7" height="7" fill="url(#dashboardGradient)" stroke="#cccccc" strokeWidth="0.5" filter="url(#dashboardGlow)" />
+    <rect x="14" y="3" width="7" height="7" fill="url(#dashboardGradient)" stroke="#cccccc" strokeWidth="0.5" filter="url(#dashboardGlow)" />
+    <rect x="3" y="14" width="7" height="7" fill="url(#dashboardGradient)" stroke="#cccccc" strokeWidth="0.5" filter="url(#dashboardGlow)" />
+    <rect x="14" y="14" width="7" height="7" fill="url(#dashboardGradient)" stroke="#cccccc" strokeWidth="0.5" filter="url(#dashboardGlow)" />
   </svg>
 );
 
@@ -338,15 +338,15 @@ export const ProfileIcon = ({ className = "w-5 h-5", size = 20 }: IconProps) => 
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
     <defs>
       <linearGradient id="profileGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#1a1a1a" />
-        <stop offset="30%" stopColor="#2d2d2d" />
-        <stop offset="70%" stopColor="#404040" />
-        <stop offset="100%" stopColor="#1a1a1a" />
+        <stop offset="0%" stopColor="#4a4a4a" />
+        <stop offset="30%" stopColor="#6a6a6a" />
+        <stop offset="70%" stopColor="#8a8a8a" />
+        <stop offset="100%" stopColor="#4a4a4a" />
       </linearGradient>
       <linearGradient id="profileHighlight" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#4a4a4a" />
-        <stop offset="50%" stopColor="#6a6a6a" />
-        <stop offset="100%" stopColor="#4a4a4a" />
+        <stop offset="0%" stopColor="#8a8a8a" />
+        <stop offset="50%" stopColor="#aaaaaa" />
+        <stop offset="100%" stopColor="#8a8a8a" />
       </linearGradient>
       <filter id="profileGlow" x="-50%" y="-50%" width="200%" height="200%">
         <feGaussianBlur stdDeviation="1" result="coloredBlur"/>
@@ -357,8 +357,8 @@ export const ProfileIcon = ({ className = "w-5 h-5", size = 20 }: IconProps) => 
       </filter>
     </defs>
     
-    <circle cx="12" cy="8" r="4" fill="url(#profileGradient)" stroke="url(#profileHighlight)" strokeWidth="0.5" filter="url(#profileGlow)" />
-    <path d="M6 21C6 17.6863 8.68629 15 12 15C15.3137 15 18 17.6863 18 21" fill="url(#profileGradient)" stroke="url(#profileHighlight)" strokeWidth="0.5" filter="url(#profileGlow)" />
+    <circle cx="12" cy="8" r="4" fill="url(#profileGradient)" stroke="#cccccc" strokeWidth="0.5" filter="url(#profileGlow)" />
+    <path d="M6 21C6 17.6863 8.68629 15 12 15C15.3137 15 18 17.6863 18 21" fill="url(#profileGradient)" stroke="#cccccc" strokeWidth="0.5" filter="url(#profileGlow)" />
   </svg>
 );
 

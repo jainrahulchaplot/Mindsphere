@@ -12,6 +12,8 @@ export default function AuthPage() {
   // Local development bypass
   const handleLocalDevSignIn = () => {
     console.log('Local development mode - bypassing auth');
+    // Set flag for local development mode
+    localStorage.setItem('mindsphere_local_dev', 'true');
     // This will trigger the auth context to use demo user
     window.location.reload();
   };
