@@ -9,6 +9,15 @@ export default function AuthPage() {
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
   const isGoogle = authMode === 'google';
 
+  // Local development bypass
+  const handleLocalDevSignIn = () => {
+    if (import.meta.env.DEV) {
+      console.log('Local development mode - bypassing auth');
+      // This will trigger the auth context to use demo user
+      window.location.reload();
+    }
+  };
+
   async function signInWithGoogle() {
     if (!supabase) return alert('Supabase not configured');
     setLoading(true);
@@ -140,6 +149,21 @@ export default function AuthPage() {
                   {/* Hover Effect */}
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700"></div>
                 </button>
+                
+                {/* Local Development Bypass Button */}
+                {import.meta.env.DEV && (
+                  <button
+                    onClick={handleLocalDevSignIn}
+                    className="w-full mt-4 py-3 px-6 bg-gradient-to-r from-purple-500/20 to-blue-500/20 border border-purple-400/30 rounded-2xl text-purple-200 hover:from-purple-500/30 hover:to-blue-500/30 hover:border-purple-400/50 transition-all duration-300"
+                  >
+                    <div className="flex items-center justify-center gap-3">
+                      <div className="w-5 h-5 bg-gradient-to-r from-purple-400 to-blue-400 rounded-full flex items-center justify-center">
+                        <span className="text-white text-xs font-bold">D</span>
+                      </div>
+                      <span className="font-medium">Local Development Mode</span>
+                    </div>
+                  </button>
+                )}
               ) : (
                 <div className="text-center">
                   <div className="text-white/70 text-lg mb-6">
