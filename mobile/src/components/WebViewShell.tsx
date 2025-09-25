@@ -18,7 +18,8 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { WebView } from 'react-native-webview';
 import { Linking } from 'react-native';
-import VolumeManager from 'react-native-volume-manager';
+// Note: VolumeManager requires native linking, using alternative approach for Expo managed workflow
+// import VolumeManager from 'react-native-volume-manager';
 import { logInfo, logWarn, logError } from '../lib/logger';
 import { validateAppUrl } from '../lib/validation';
 
@@ -109,30 +110,37 @@ export default function WebViewShell({ onError }: WebViewShellProps) {
     } catch (error) {
       logWarn('invalid_js_message', { data: event.nativeEvent.data });
     }
-  }, [handleVolumeChange]);
+  }, []);
 
   const handleRefresh = useCallback(() => {
     setIsRefreshing(true);
     webViewRef.current?.reload();
   }, []);
 
-  // Volume management functions
+  // Volume management functions (simplified for Expo managed workflow)
   const getSystemVolume = useCallback(async () => {
     try {
-      const volume = await VolumeManager.getVolume();
-      setSystemVolume(volume.volume);
-      return volume.volume;
+      // In Expo managed workflow, we can't directly control system volume
+      // Instead, we'll manage volume through the WebView
+      logInfo('volume_get', { volume: systemVolume });
+      return systemVolume;
     } catch (error) {
       logWarn('volume_get_failed', { error: error instanceof Error ? error.message : 'Unknown error' });
       return 0.8;
     }
-  }, []);
+  }, [systemVolume]);
 
   const setSystemVolumeLevel = useCallback(async (volume: number) => {
     try {
-      await VolumeManager.setVolume(volume);
+      // In Expo managed workflow, we communicate volume changes to the WebView
       setSystemVolume(volume);
       logInfo('volume_changed', { volume });
+      
+      // Notify WebView of volume change
+      webViewRef.current?.postMessage(JSON.stringify({
+        type: 'system_volume_change',
+        volume: volume
+      }));
     } catch (error) {
       logError('volume_set_failed', { error: error instanceof Error ? error.message : 'Unknown error', volume });
     }
@@ -148,26 +156,11 @@ export default function WebViewShell({ onError }: WebViewShellProps) {
     getSystemVolume();
   }, [getSystemVolume]);
 
-  // Handle hardware volume buttons
+  // Handle hardware volume buttons (simplified for Expo managed workflow)
   useEffect(() => {
-    const handleVolumeChange = (result: any) => {
-      const volume = result.volume || result;
-      setSystemVolume(volume);
-      // Notify web app of volume change
-      webViewRef.current?.postMessage(JSON.stringify({
-        type: 'system_volume_change',
-        volume: volume
-      }));
-    };
-
-    // Listen for volume changes
-    const volumeListener = VolumeManager.addVolumeListener(handleVolumeChange);
-    
-    return () => {
-      if (volumeListener) {
-        volumeListener.remove();
-      }
-    };
+    // In Expo managed workflow, we can't directly listen to hardware volume buttons
+    // Volume changes will be handled through the WebView's volume controls
+    logInfo('volume_listener_setup', { message: 'Volume changes handled through WebView' });
   }, []);
 
   const handleBackPress = useCallback(() => {
@@ -260,12 +253,57 @@ export default function WebViewShell({ onError }: WebViewShellProps) {
         }
       });
 
-      // Override audio volume controls
+      // Enhanced audio lifecycle management for mobile
+      let audioElements = new Set();
+      
+      // Track all audio elements
       const originalAudioConstructor = window.Audio;
       window.Audio = function() {
         const audio = new originalAudioConstructor();
-        const originalVolumeSetter = Object.getOwnPropertyDescriptor(HTMLMediaElement.prototype, 'volume').set;
+        audioElements.add(audio);
         
+        // Remove from tracking when audio ends or is removed
+        audio.addEventListener('ended', () => {
+          audioElements.delete(audio);
+        });
+        
+        return audio;
+      };
+      
+      // Pause all audio when page becomes hidden
+      document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+          audioElements.forEach(audio => {
+            if (!audio.paused) {
+              audio.pause();
+            }
+          });
+        }
+      });
+      
+      // Pause all audio when page is about to unload
+      window.addEventListener('beforeunload', function() {
+        audioElements.forEach(audio => {
+          if (!audio.paused) {
+            audio.pause();
+          }
+        });
+      });
+
+      // Override audio volume controls (integrated with lifecycle management)
+      const originalVolumeSetter = Object.getOwnPropertyDescriptor(HTMLMediaElement.prototype, 'volume').set;
+      
+      // Update the Audio constructor to include volume control
+      const enhancedAudioConstructor = function() {
+        const audio = new originalAudioConstructor();
+        audioElements.add(audio);
+        
+        // Remove from tracking when audio ends
+        audio.addEventListener('ended', () => {
+          audioElements.delete(audio);
+        });
+        
+        // Override volume setter to notify React Native
         Object.defineProperty(audio, 'volume', {
           set: function(value) {
             originalVolumeSetter.call(this, value);
@@ -282,6 +320,9 @@ export default function WebViewShell({ onError }: WebViewShellProps) {
         
         return audio;
       };
+      
+      // Replace the Audio constructor
+      window.Audio = enhancedAudioConstructor;
 
       // Add safe area CSS to prevent slipping
       const style = document.createElement('style');

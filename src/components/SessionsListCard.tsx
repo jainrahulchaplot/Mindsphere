@@ -1,7 +1,8 @@
 import { useState, useMemo, useEffect, useRef, useCallback } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAudioManager } from '../contexts/AudioManagerContext';
+import { usePageVisibility } from '../hooks/usePageVisibility';
 import Card from './Card';
 import { MusicNoteIcon, HomeIcon, LoadingIcon, MicrophoneIcon, SearchIcon, ClockIcon } from './LuxuryIcons';
 
@@ -24,6 +25,7 @@ interface SessionsListCardProps {
 
 export default function SessionsListCard({ userId }: SessionsListCardProps) {
   const navigate = useNavigate();
+  const location = useLocation();
   const { playAudio, pauseAllExcept } = useAudioManager();
   const [filters, setFilters] = useState({
     kind: 'meditation' as 'meditation' | 'sleep_story',
@@ -33,6 +35,41 @@ export default function SessionsListCard({ userId }: SessionsListCardProps) {
   const [playingId, setPlayingId] = useState<string | null>(null);
   const audioRefs = useRef<Map<string, HTMLAudioElement>>(new Map());
   const observerRef = useRef<IntersectionObserver | null>(null);
+
+  // Handle page visibility - pause all audio when page becomes hidden
+  usePageVisibility({
+    onHidden: () => {
+      // Pause all playing audio when page becomes hidden
+      audioRefs.current.forEach((audio) => {
+        if (!audio.paused) {
+          audio.pause();
+        }
+      });
+      setPlayingId(null);
+    },
+    onVisible: () => {
+      // Don't auto-resume when page becomes visible
+      // User needs to manually play again
+    }
+  });
+
+  // Handle route changes - pause audio when navigating away from sessions list
+  useEffect(() => {
+    const handleRouteChange = () => {
+      // Pause all audio when navigating away
+      audioRefs.current.forEach((audio) => {
+        if (!audio.paused) {
+          audio.pause();
+        }
+      });
+      setPlayingId(null);
+    };
+
+    // Clean up audio when component unmounts or route changes
+    return () => {
+      handleRouteChange();
+    };
+  }, [location.pathname]);
 
   // Fetch sessions data with infinite scroll
   const {

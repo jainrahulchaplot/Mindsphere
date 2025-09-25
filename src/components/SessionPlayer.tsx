@@ -1,7 +1,9 @@
 import React from "react";
+import { useLocation } from 'react-router-dom';
 import Card from './Card';
 import { useAudio } from '../contexts/AudioContext';
 import { useAudioManager } from '../contexts/AudioManagerContext';
+import { usePageVisibility } from '../hooks/usePageVisibility';
 import { VolumeIcon, VolumeMutedIcon, VolumeHighIcon, PlayIcon, PauseIcon, StopIcon } from './LuxuryIcons';
 
 type Props = {
@@ -23,6 +25,7 @@ export default function SessionPlayer({
   mood = 'calm',
   sessionName
 }: Props) {
+  const location = useLocation();
   const { playAudio, isPlaying } = useAudio();
   const { playAudio: playAudioGlobal, pauseAllExcept } = useAudioManager();
   const { globalVolume, setGlobalVolume } = useAudio();
@@ -35,6 +38,35 @@ export default function SessionPlayer({
   const [duration, setDuration] = React.useState(0);
   const [current, setCurrent] = React.useState(0);
   const [volume, setVolume] = React.useState(globalVolume);
+
+  // Handle page visibility - pause audio when page becomes hidden
+  usePageVisibility({
+    onHidden: () => {
+      if (audioRef.current && !audioRef.current.paused) {
+        audioRef.current.pause();
+        setPlaying(false);
+      }
+    },
+    onVisible: () => {
+      // Don't auto-resume when page becomes visible
+      // User needs to manually play again
+    }
+  });
+
+  // Handle route changes - pause audio when navigating away from session page
+  React.useEffect(() => {
+    const handleRouteChange = () => {
+      if (audioRef.current && !audioRef.current.paused) {
+        audioRef.current.pause();
+        setPlaying(false);
+      }
+    };
+
+    // Clean up audio when component unmounts or route changes
+    return () => {
+      handleRouteChange();
+    };
+  }, [location.pathname]);
   const [playbackRate, setPlaybackRate] = React.useState(1);
 
   const [seeking, setSeeking] = React.useState(false);
