@@ -2,6 +2,7 @@ import React from "react";
 import Card from './Card';
 import { useAudio } from '../contexts/AudioContext';
 import { useAudioManager } from '../contexts/AudioManagerContext';
+import { VolumeIcon, VolumeMutedIcon, VolumeHighIcon, PlayIcon, PauseIcon, StopIcon } from './LuxuryIcons';
 
 type Props = {
   sessionId: string;
@@ -243,7 +244,7 @@ export default function SessionPlayer({
           disabled={!ready}
           aria-label="Skip backward 15s"
         >
-          ⏪
+          <StopIcon className="w-4 h-4" />
         </button>
         
         <button
@@ -252,7 +253,7 @@ export default function SessionPlayer({
           disabled={!ready}
           aria-label={playing ? "Pause" : "Play"}
         >
-          {playing ? "⏸" : "▶"}
+          {playing ? <PauseIcon className="w-6 h-6" /> : <PlayIcon className="w-6 h-6" />}
         </button>
         
         <button
@@ -261,7 +262,7 @@ export default function SessionPlayer({
           disabled={!ready}
           aria-label="Skip forward 15s"
         >
-          ⏩
+          <PlayIcon className="w-4 h-4" />
         </button>
       </div>
 
@@ -271,7 +272,15 @@ export default function SessionPlayer({
           <div className="flex items-center gap-3">
             <span className="text-sm text-gray-400 w-16">Volume</span>
             <div className="flex-1 flex items-center gap-2">
-              <span className="text-xs text-gray-500">🔇</span>
+              <div className="text-gray-500">
+                {volume === 0 ? (
+                  <VolumeMutedIcon className="w-4 h-4" />
+                ) : volume > 0.7 ? (
+                  <VolumeHighIcon className="w-4 h-4" />
+                ) : (
+                  <VolumeIcon className="w-4 h-4" />
+                )}
+              </div>
               <input
                 type="range"
                 min={0}
@@ -284,7 +293,15 @@ export default function SessionPlayer({
                   background: `linear-gradient(to right, #6366f1 0%, #6366f1 ${volume * 100}%, #374151 ${volume * 100}%, #374151 100%)`
                 }}
               />
-              <span className="text-xs text-gray-500">🔊</span>
+              <div className="text-gray-500">
+                {volume === 0 ? (
+                  <VolumeMutedIcon className="w-4 h-4" />
+                ) : volume > 0.7 ? (
+                  <VolumeHighIcon className="w-4 h-4" />
+                ) : (
+                  <VolumeIcon className="w-4 h-4" />
+                )}
+              </div>
             </div>
             <span className="text-xs text-gray-400 w-8">{Math.round(volume * 100)}%</span>
           </div>

@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useSTT } from '../api/hooks';
+import { MicrophoneIcon, StopIcon } from './LuxuryIcons';
 
 interface NotesTextboxProps {
   value: string;
@@ -298,7 +299,7 @@ export default function NotesTextbox({
               title="Record voice note"
               aria-label="Start recording voice note"
             >
-              <div className="text-lg">🎤</div>
+              <MicrophoneIcon className="w-5 h-5" />
             </button>
           )}
           
@@ -326,7 +327,7 @@ export default function NotesTextbox({
                 title="Stop recording"
                 aria-label="Stop recording"
               >
-                <div className="text-lg">⏹</div>
+                <StopIcon className="w-5 h-5" />
               </button>
               <button
                 type="button"

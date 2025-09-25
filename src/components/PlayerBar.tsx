@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import Card from './Card';
 import Button from './Button';
 import { useMusicTracks } from '../api/hooks';
+import { PlayIcon, PauseIcon, MusicNoteIcon } from './LuxuryIcons';
 
 type Track = { id: string; url: string; order: number; duration_sec: number };
 type Props = { tracks: Track[]; onEnded?: ()=>void };
@@ -62,7 +63,7 @@ export default function PlayerBar({ tracks, onEnded }: Props){
         <div className="subtle">Track {i+1}/{tracks.length}</div>
         <div className="flex items-center gap-2">
           <button className="btn px-2 py-1" onClick={prev}>⏮</button>
-          <button className="btn px-2 py-1" onClick={()=>setPlaying(p=>!p)}>{playing? '⏸':'▶️'}</button>
+          <button className="btn px-2 py-1" onClick={()=>setPlaying(p=>!p)}>{playing? <PauseIcon className="w-4 h-4" />:<PlayIcon className="w-4 h-4" />}</button>
           <button className="btn px-2 py-1" onClick={next}>⏭</button>
         </div>
       </div>
@@ -72,7 +73,7 @@ export default function PlayerBar({ tracks, onEnded }: Props){
           className={`btn px-2 py-1 text-xs ${musicEnabled ? 'opacity-100' : 'opacity-70'}`}
           onClick={() => setMusicEnabled(!musicEnabled)}
         >
-          🎵
+          <MusicNoteIcon className="w-4 h-4" />
         </button>
         
         {musicEnabled && musicData?.tracks && (

@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useSTT } from '../api/hooks';
+import { MicrophoneIcon, MicrophoneRecordingIcon, PlayIcon, PauseIcon, StopIcon, ErrorIcon } from './LuxuryIcons';
 
 type Props = {
   value: string;
@@ -328,7 +329,7 @@ export default function PremiumVoiceNotes({
               title="Record voice note"
               aria-label="Start recording voice note"
             >
-              <div className="text-lg">🎤</div>
+              <MicrophoneIcon className="w-5 h-5" />
             </button>
           )}
           
@@ -356,7 +357,7 @@ export default function PremiumVoiceNotes({
                 title="Stop recording"
                 aria-label="Stop recording"
               >
-                <div className="text-lg">⏹</div>
+                <StopIcon className="w-5 h-5" />
               </button>
               <button
                 onClick={cancelRecording}
@@ -374,7 +375,7 @@ export default function PremiumVoiceNotes({
                 title="Cancel recording"
                 aria-label="Cancel recording"
               >
-                <div className="text-lg">✕</div>
+                <ErrorIcon className="w-5 h-5" />
               </button>
             </>
           )}
@@ -410,7 +411,7 @@ export default function PremiumVoiceNotes({
             className="text-white/60 hover:text-white/80 transition-colors p-1 rounded-lg hover:bg-white/10"
             aria-label="Dismiss error"
           >
-            ✕
+            <ErrorIcon className="w-4 h-4" />
           </button>
         </div>
       )}

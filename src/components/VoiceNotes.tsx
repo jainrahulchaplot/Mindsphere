@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useSTT } from '../api/hooks';
+import { MicrophoneIcon, MicrophoneRecordingIcon } from './LuxuryIcons';
 
 type Props = {
   value: string;
@@ -261,7 +262,7 @@ export default function VoiceNotes({ value, onChange, disabled, userId }: Props)
               title="Record voice note"
               aria-label="Start recording voice note"
             >
-              🎤
+              <MicrophoneIcon className="w-4 h-4" />
             </button>
           )}
           

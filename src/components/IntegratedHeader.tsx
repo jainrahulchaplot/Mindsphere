@@ -3,6 +3,7 @@ import { useStreaks } from '../api/hooks';
 import { StreakIcon } from './Icons';
 import { useMusicTracks } from '../api/hooks';
 import { useAudio } from '../contexts/AudioContext';
+import { VolumeIcon, VolumeMutedIcon, VolumeHighIcon, PlayIcon, PauseIcon, MusicNoteIcon } from './LuxuryIcons';
 
 type Props = { userId: string };
 
@@ -199,7 +200,7 @@ export default function IntegratedHeader({ userId }: Props) {
           ) : tracks.length === 0 ? (
             <div className="flex items-center justify-center">
               <div className="text-sm text-white/50 font-medium">
-                🎵 No ambient tracks available
+                <MusicNoteIcon className="w-4 h-4" /> No ambient tracks available
               </div>
             </div>
           ) : (
@@ -241,7 +242,7 @@ export default function IntegratedHeader({ userId }: Props) {
                   className="w-12 h-12 flex items-center justify-center text-white hover:text-white transition-all duration-300 rounded-xl bg-gradient-to-r from-blue-500/20 to-purple-500/20 hover:from-blue-500/30 hover:to-purple-500/30 active:scale-95 backdrop-blur-sm border border-white/20 hover:border-white/30"
                   style={{ pointerEvents: 'auto' }}
                 >
-                  <div className="text-xl">{ambientIsPlaying ? '⏸' : '▶'}</div>
+                  {ambientIsPlaying ? <PauseIcon className="w-5 h-5" /> : <PlayIcon className="w-5 h-5" />}
                 </button>
                 
                 <button
@@ -261,7 +262,13 @@ export default function IntegratedHeader({ userId }: Props) {
                   className="w-10 h-10 flex items-center justify-center text-white/70 hover:text-white transition-all duration-300 rounded-xl hover:bg-white/10 active:scale-95 backdrop-blur-sm border border-white/10 hover:border-white/20"
                   style={{ pointerEvents: 'auto' }}
                 >
-                  <div className="text-lg">🔊</div>
+                  {globalVolume === 0 ? (
+                    <VolumeMutedIcon className="w-5 h-5" />
+                  ) : globalVolume > 0.7 ? (
+                    <VolumeHighIcon className="w-5 h-5" />
+                  ) : (
+                    <VolumeIcon className="w-5 h-5" />
+                  )}
                 </button>
               </div>
             </div>

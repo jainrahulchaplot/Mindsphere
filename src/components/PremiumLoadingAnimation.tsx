@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { MusicNoteIcon, HomeIcon } from './LuxuryIcons';
 
 interface PremiumLoadingAnimationProps {
   status: string;
@@ -15,7 +16,7 @@ export default function PremiumLoadingAnimation({ kind }: PremiumLoadingAnimatio
     { text: "Crafting personalized guidance...", icon: "✨", color: "from-purple-500 to-blue-600" },
     { text: "Weaving words of wisdom...", icon: "🌙", color: "from-blue-500 to-cyan-600" },
     { text: "Infusing with calming energy...", icon: "🌸", color: "from-cyan-500 to-indigo-600" },
-    { text: "Generating serene audio...", icon: "🎵", color: "from-indigo-500 to-purple-600" },
+    { text: "Generating serene audio...", icon: <MusicNoteIcon className="w-5 h-5" />, color: "from-indigo-500 to-purple-600" },
     { text: "Almost ready to begin...", icon: "🌟", color: "from-purple-500 to-blue-600" }
   ];
 
@@ -24,7 +25,7 @@ export default function PremiumLoadingAnimation({ kind }: PremiumLoadingAnimatio
     { text: "Gathering dreamy elements...", icon: "🌙", color: "from-indigo-500 to-purple-600" },
     { text: "Painting peaceful scenes...", icon: "🎨", color: "from-purple-500 to-blue-600" },
     { text: "Whispering gentle words...", icon: "💫", color: "from-blue-500 to-cyan-600" },
-    { text: "Creating cozy atmosphere...", icon: "🏠", color: "from-cyan-500 to-indigo-600" },
+    { text: "Creating cozy atmosphere...", icon: <HomeIcon className="w-5 h-5" />, color: "from-cyan-500 to-indigo-600" },
     { text: "Weaving lullaby melodies...", icon: "🎶", color: "from-indigo-500 to-purple-600" },
     { text: "Ready for sweet dreams...", icon: "✨", color: "from-purple-500 to-blue-600" }
   ];
@@ -165,7 +166,7 @@ export default function PremiumLoadingAnimation({ kind }: PremiumLoadingAnimatio
         </div>
 
         {/* Inspirational Quote */}
-        <div style={{ maxWidth: '200px'}}>
+        <div style={{ maxWidth: '300px'}} className="text-center">
           <p className="text-sm text-white/60 italic leading-relaxed">
             {kind === 'meditation' 
               ? "In the silence between thoughts, we find our true self."

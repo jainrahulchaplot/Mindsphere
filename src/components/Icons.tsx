@@ -1,42 +1,48 @@
 import React from 'react';
-import { Flame, User, Home, LayoutDashboard, Brain } from 'lucide-react';
+import { 
+  StreakIcon as LuxuryStreakIcon, 
+  ProfileIcon as LuxuryProfileIcon, 
+  HomeIcon as LuxuryHomeIcon, 
+  DashboardIcon as LuxuryDashboardIcon,
+  MusicNoteIcon as LuxuryMeditationIcon
+} from './LuxuryIcons';
 
 interface IconProps {
   className?: string;
   size?: number;
 }
 
-// Lucide React icons with consistent styling
+// Luxury dark-themed icons with consistent styling
 export const StreakIcon = ({ className = "w-5 h-5", size }: IconProps) => (
-  <Flame 
+  <LuxuryStreakIcon 
     size={size || 20} 
-    className={`${className} text-orange-400`}
+    className={className}
   />
 );
 
 export const ProfileIcon = ({ className = "w-5 h-5", size }: IconProps) => (
-  <User 
+  <LuxuryProfileIcon 
     size={size || 20} 
     className={className}
   />
 );
 
 export const HomeIcon = ({ className = "w-5 h-5", size }: IconProps) => (
-  <Home 
+  <LuxuryHomeIcon 
     size={size || 20} 
     className={className}
   />
 );
 
 export const DashboardIcon = ({ className = "w-5 h-5", size }: IconProps) => (
-  <LayoutDashboard 
+  <LuxuryDashboardIcon 
     size={size || 20} 
     className={className}
   />
 );
 
 export const MeditationIcon = ({ className = "w-5 h-5", size }: IconProps) => (
-  <Brain 
+  <LuxuryMeditationIcon 
     size={size || 20} 
     className={className}
   />

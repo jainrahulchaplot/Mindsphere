@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useVoiceSTT } from '../api/hooks';
+import { MicrophoneIcon, MicrophoneRecordingIcon, StopIcon, LoadingIcon } from './LuxuryIcons';
 import Card from './Card';
 
 type Props = {
@@ -149,7 +150,7 @@ export default function VoiceJournal({ onTranscription, userId, sessionId }: Pro
           onTouchEnd={stopRecording}
           disabled={isProcessing}
         >
-          {isProcessing ? '⏳' : isRecording ? '⏹' : '🎤'}
+          {isProcessing ? <LoadingIcon className="w-5 h-5" /> : isRecording ? <StopIcon className="w-5 h-5" /> : <MicrophoneIcon className="w-5 h-5" />}
         </button>
         
         <div className="flex-1">
