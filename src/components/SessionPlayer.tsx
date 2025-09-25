@@ -24,6 +24,7 @@ export default function SessionPlayer({
 }: Props) {
   const { playAudio, isPlaying } = useAudio();
   const { playAudio: playAudioGlobal, pauseAllExcept } = useAudioManager();
+  const { globalVolume, setGlobalVolume } = useAudio();
   const audioRef = React.useRef<HTMLAudioElement | null>(null);
   
   const sessionPlayerId = `session-player-${sessionId}`;
@@ -32,7 +33,7 @@ export default function SessionPlayer({
   const [playing, setPlaying] = React.useState(false);
   const [duration, setDuration] = React.useState(0);
   const [current, setCurrent] = React.useState(0);
-  const [volume, setVolume] = React.useState(0.8);
+  const [volume, setVolume] = React.useState(globalVolume);
   const [playbackRate, setPlaybackRate] = React.useState(1);
 
   const [seeking, setSeeking] = React.useState(false);
@@ -143,6 +144,7 @@ export default function SessionPlayer({
   // 5) New control functions
   const handleVolumeChange = (newVolume: number) => {
     setVolume(newVolume);
+    setGlobalVolume(newVolume);
     if (audioRef.current) {
       audioRef.current.volume = newVolume;
     }

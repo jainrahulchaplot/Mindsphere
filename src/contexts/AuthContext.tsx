@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
-import { supabase, authMode } from '../lib/supabase';
+import { supabase } from '../lib/supabase';
 
 interface AuthContextType {
   userId: string | null;
@@ -10,7 +10,6 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const DEMO_USER_ID = "550e8400-e29b-41d4-a716-446655440000";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [userId, setUserId] = useState<string | null>(null);
@@ -18,47 +17,66 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Check if we're in local development
-    const isLocalDev = import.meta.env.DEV || 
-                       window.location.hostname === 'localhost' || 
-                       window.location.hostname === '127.0.0.1';
-
-    if (authMode === 'demo' && isLocalDev) {
-      // Demo mode only for local development
-      setUserId(DEMO_USER_ID);
-      setUser({
-        id: DEMO_USER_ID,
-        display_name: 'Demo User',
-        email: 'demo@mindsphere.app',
-        provider: 'demo'
-      });
-      setIsLoading(false);
-      return;
-    }
-
-    // Google auth mode - get user from Supabase
+    // Only use Supabase auth in production
     if (!supabase) {
+      console.warn('Supabase not configured - authentication disabled');
       setUserId(null);
       setIsLoading(false);
       return;
     }
 
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      console.log('🔍 AuthContext: Initial session:', session);
-      console.log('🔍 AuthContext: Setting userId to:', session?.user?.id);
-      setUserId(session?.user?.id || null);
-      setUser(session?.user || null);
-      setIsLoading(false);
-    });
+    // Get initial session with better error handling
+    const initializeAuth = async () => {
+      try {
+        const { data: { session }, error } = await supabase!.auth.getSession();
+        
+        if (error) {
+          console.error('Auth initialization error:', error);
+          setUserId(null);
+          setUser(null);
+        } else if (session?.user) {
+          setUserId(session.user.id);
+          setUser(session.user);
+        } else {
+          setUserId(null);
+          setUser(null);
+        }
+      } catch (error) {
+        console.error('Auth initialization failed:', error);
+        setUserId(null);
+        setUser(null);
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+    initializeAuth();
+
+    // Listen for auth changes with better error handling
+    const { data: { subscription } } = supabase!.auth.onAuthStateChange(
       async (event, session) => {
-        console.log('🔍 AuthContext: Auth state change:', event, 'session:', session);
-        console.log('🔍 AuthContext: Setting userId to:', session?.user?.id);
-        setUserId(session?.user?.id || null);
-        setUser(session?.user || null);
+        console.log('Auth state change:', event);
+        
+        if (event === 'SIGNED_IN' && session?.user) {
+          setUserId(session.user.id);
+          setUser(session.user);
+          // Store login state in localStorage for persistence
+          localStorage.setItem('mindsphere_auth', 'true');
+        } else if (event === 'SIGNED_OUT') {
+          setUserId(null);
+          setUser(null);
+          // Clear login state from localStorage
+          localStorage.removeItem('mindsphere_auth');
+        } else if (event === 'TOKEN_REFRESHED' && session?.user) {
+          setUserId(session.user.id);
+          setUser(session.user);
+          // Ensure login state is maintained
+          localStorage.setItem('mindsphere_auth', 'true');
+        } else if (event === 'USER_UPDATED' && session?.user) {
+          setUserId(session.user.id);
+          setUser(session.user);
+        }
+        
         setIsLoading(false);
       }
     );
@@ -67,19 +85,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const signOut = async () => {
-    // Check if we're in local development
-    const isLocalDev = import.meta.env.DEV || 
-                       window.location.hostname === 'localhost' || 
-                       window.location.hostname === '127.0.0.1';
-
-    if (authMode === 'demo' && isLocalDev) {
+    try {
+      if (supabase) {
+        await supabase!.auth.signOut();
+      }
       setUserId(null);
       setUser(null);
-      return;
-    }
-
-    if (supabase) {
-      await supabase.auth.signOut();
+      // Clear login state from localStorage
+      localStorage.removeItem('mindsphere_auth');
+    } catch (error) {
+      console.error('Sign out failed:', error);
+      // Force local sign out even if Supabase fails
+      setUserId(null);
+      setUser(null);
+      localStorage.removeItem('mindsphere_auth');
     }
   };
 

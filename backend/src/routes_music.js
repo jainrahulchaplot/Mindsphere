@@ -13,7 +13,10 @@ const router = Router();
 // GET /music_tracks
 router.get('/music_tracks', async (req, res) => {
   try {
+    console.log('🎵 Music tracks request from user:', req.user?.id);
+    
     if (!supabase) {
+      console.error('❌ Supabase not configured');
       return res.json({ tracks: [], note: 'Supabase not configured' });
     }
 
@@ -23,12 +26,14 @@ router.get('/music_tracks', async (req, res) => {
       .order('sort_order', { ascending: true });
 
     if (error) {
+      console.error('❌ Database error:', error);
       return res.status(500).json({ error: 'db_error', detail: error.message });
     }
 
+    console.log('✅ Music tracks retrieved:', data?.length || 0, 'tracks');
     return res.json({ tracks: data || [] });
   } catch (e) {
-    console.error('music_tracks error', e);
+    console.error('❌ Music tracks error:', e);
     return res.status(500).json({ error: 'music_failed', detail: e?.message || String(e) });
   }
 });

@@ -1,10 +1,12 @@
 import { useState } from 'react';
 import { supabase, authMode } from '../lib/supabase';
+import PrivacyPolicyModal from '../components/PrivacyPolicyModal';
 
 export default function AuthPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isHovered, setIsHovered] = useState(false);
+  const [showPrivacyModal, setShowPrivacyModal] = useState(false);
   const isGoogle = authMode === 'google';
 
   async function signInWithGoogle() {
@@ -64,22 +66,23 @@ export default function AuthPage() {
         <div className="w-full max-w-md">
           {/* Logo and Title Section */}
           <div className="text-center mb-12 animate-fade-in">
-            <div className="relative inline-block mb-6">
-              <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-white/5 rounded-full blur-xl"></div>
+            
+            <h1 className="text-white text-4xl mb-0 font-light mb-3 tracking-wide animate-slide-up">
+              Welcome to
+              {/* <span className="block text-5xl font-thin bg-gradient-to-r from-white via-gray-200 to-white bg-clip-text text-transparent">
+                MindSphere
+              </span> */}
+            </h1>
+            <div className="relative inline-block mb-0">
+              <div className="absolute inset-0"></div>
               <img 
                 src="/assets/mindsphere logo.png" 
                 alt="MindSphere" 
                 className="relative mx-auto h-32 w-auto object-contain drop-shadow-2xl animate-float" 
               />
             </div>
-            <h1 className="text-white text-4xl font-light mb-3 tracking-wide animate-slide-up">
-              Welcome to
-              <span className="block text-5xl font-thin bg-gradient-to-r from-white via-gray-200 to-white bg-clip-text text-transparent">
-                MindSphere
-              </span>
-            </h1>
-            <p className="text-white/70 text-lg font-light tracking-wide animate-slide-up delay-200">
-              Your personal sanctuary for growth & reflection
+            <p className="text-white/70 text-lg font-medium tracking-wide animate-slide-up delay-200">
+              Your personalized space for growth, reflection and consistency
             </p>
           </div>
 
@@ -89,7 +92,7 @@ export default function AuthPage() {
             <div className="absolute inset-0 bg-gradient-to-r from-white/10 via-white/5 to-white/10 rounded-3xl blur-xl group-hover:blur-2xl transition-all duration-500"></div>
             
             {/* Main Card */}
-            <div className="relative backdrop-blur-2xl bg-white/5 border border-white/10 rounded-3xl p-10 shadow-2xl group-hover:bg-white/8 transition-all duration-500">
+            <div className="relative backdrop-blur-2xl bg-white/5 border border-white/10 rounded-3xl px-6 py-6 shadow-2xl group-hover:bg-white/8 transition-all duration-500">
               {error && (
                 <div className="mb-6 p-4 bg-red-500/20 border border-red-500/30 rounded-xl text-red-200 text-sm animate-pulse">
                   {error}
@@ -123,7 +126,7 @@ export default function AuthPage() {
                           />
                         </div>
                         <span className="text-white font-medium text-lg tracking-wide">
-                          Continue with Google
+                          Sign in with Google
                         </span>
                         <div className={`transition-transform duration-300 ${isHovered ? 'translate-x-1' : ''}`}>
                           <svg className="w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -158,9 +161,12 @@ export default function AuthPage() {
               <div className="text-center mt-8 pt-6 border-t border-white/10">
                 <p className="text-white/40 text-sm font-light">
                   By continuing, you agree to our{' '}
-                  <span className="text-white/60 hover:text-white transition-colors cursor-pointer underline decoration-white/30 hover:decoration-white/60">
+                  <button
+                    onClick={() => setShowPrivacyModal(true)}
+                    className="text-white/60 hover:text-white transition-colors underline decoration-white/30 hover:decoration-white/60 bg-transparent border-none cursor-pointer"
+                  >
                     Privacy Policy
-                  </span>
+                  </button>
                 </p>
               </div>
             </div>
@@ -215,6 +221,12 @@ export default function AuthPage() {
           animation: float-slow 8s ease-in-out infinite;
         }
       `}</style>
+
+      {/* Privacy Policy Modal */}
+      <PrivacyPolicyModal 
+        isOpen={showPrivacyModal} 
+        onClose={() => setShowPrivacyModal(false)} 
+      />
     </div>
   );
 }

@@ -2,12 +2,14 @@ import { useState, useEffect, useRef } from 'react';
 import { useStreaks } from '../api/hooks';
 import { StreakIcon } from './Icons';
 import { useMusicTracks } from '../api/hooks';
+import { useAudio } from '../contexts/AudioContext';
 
 type Props = { userId: string };
 
 export default function IntegratedHeader({ userId }: Props) {
   const { data: streak, isLoading } = useStreaks(userId);
   const { data: musicData, isLoading: musicLoading, error: musicError } = useMusicTracks();
+  const { globalVolume, setGlobalVolume } = useAudio();
   
   const currentStreak = streak?.current_streak ?? 0;
   const tracks = musicData?.tracks || [];
@@ -15,7 +17,6 @@ export default function IntegratedHeader({ userId }: Props) {
   // Ambient music state
   const [currentTrackIndex, setCurrentTrackIndex] = useState(0);
   const [ambientIsPlaying, setAmbientIsPlaying] = useState(false);
-  const [volume, setVolume] = useState(0.25);
   const [showVolumeSlider, setShowVolumeSlider] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -25,7 +26,7 @@ export default function IntegratedHeader({ userId }: Props) {
   useEffect(() => {
     if (!audioRef.current) {
       audioRef.current = new Audio();
-      audioRef.current.volume = volume;
+      audioRef.current.volume = globalVolume;
       audioRef.current.loop = false;
     }
   }, []);
@@ -54,9 +55,9 @@ export default function IntegratedHeader({ userId }: Props) {
   // Handle volume changes
   useEffect(() => {
     if (audioRef.current) {
-      audioRef.current.volume = volume;
+      audioRef.current.volume = globalVolume;
     }
-  }, [volume]);
+  }, [globalVolume]);
 
   // Handle track end - completely independent
   useEffect(() => {
@@ -276,16 +277,16 @@ export default function IntegratedHeader({ userId }: Props) {
                   min="0"
                   max="1"
                   step="0.1"
-                  value={volume}
-                  onChange={(e) => setVolume(parseFloat(e.target.value))}
+                  value={globalVolume}
+                  onChange={(e) => setGlobalVolume(parseFloat(e.target.value))}
                   className="flex-1 h-2 bg-white/10 rounded-lg appearance-none cursor-pointer slider"
                   style={{ 
                     pointerEvents: 'auto',
-                    background: `linear-gradient(to right, #6366f1 0%, #6366f1 ${volume * 100}%, rgba(255,255,255,0.1) ${volume * 100}%, rgba(255,255,255,0.1) 100%)`
+                    background: `linear-gradient(to right, #6366f1 0%, #6366f1 ${globalVolume * 100}%, rgba(255,255,255,0.1) ${globalVolume * 100}%, rgba(255,255,255,0.1) 100%)`
                   }}
                 />
                 <div className="text-xs text-white/60 font-medium w-8 text-right">
-                  {Math.round(volume * 100)}%
+                  {Math.round(globalVolume * 100)}%
                 </div>
               </div>
             </div>
