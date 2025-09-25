@@ -95,6 +95,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signOut = async () => {
     try {
+      // Check if in local development mode
+      const isLocalDev = localStorage.getItem('mindsphere_local_dev') === 'true';
+      
+      if (isLocalDev) {
+        // Clear local development mode
+        localStorage.removeItem('mindsphere_local_dev');
+        setUserId(null);
+        setUser(null);
+        localStorage.removeItem('mindsphere_auth');
+        // Redirect to signin page
+        window.location.href = '/signin';
+        return;
+      }
+      
       if (supabase) {
         await supabase!.auth.signOut();
       }

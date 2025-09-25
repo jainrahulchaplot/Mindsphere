@@ -199,6 +199,13 @@ export default function SessionsListCard({ userId }: SessionsListCardProps) {
       
       setPlayingId(session.id);
       
+      // Start playing the audio
+      audio.play().catch(error => {
+        console.error('Error playing audio:', error);
+        setPlayingId(null);
+        audioRefs.current.delete(session.id);
+      });
+      
       audio.onended = () => {
         setPlayingId(null);
         audioRefs.current.delete(session.id);

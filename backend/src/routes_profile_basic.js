@@ -21,9 +21,26 @@ router.get('/basic', async (req, res) => {
       return res.status(401).json({ error: 'User not authenticated' });
     }
 
-    // Demo mode only for local development
+    // Demo mode - return mock data for local development
     if (req.user?.mode === 'demo') {
-      return res.status(400).json({ error: 'Demo mode not available in production' });
+      return res.json({
+        user: {
+          id: req.user.id,
+          email: 'demo@mindsphere.local',
+          display_name: 'Demo User',
+          avatar_url: null,
+          provider: 'demo',
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        },
+        profile: {
+          given_name: 'Demo',
+          family_name: 'User',
+          locale: 'en-US',
+          timezone: 'UTC',
+          updated_at: new Date().toISOString()
+        }
+      });
     }
 
     if (!supabase) {
@@ -89,9 +106,18 @@ router.put('/basic', async (req, res) => {
       return res.status(401).json({ error: 'User not authenticated' });
     }
 
-    // Demo mode only for local development
+    // Demo mode - return success for local development
     if (req.user?.mode === 'demo') {
-      return res.status(400).json({ error: 'Demo mode not available in production' });
+      return res.json({ 
+        ok: true,
+        profile: {
+          given_name: req.body.given_name || 'Demo',
+          family_name: req.body.family_name || 'User',
+          locale: req.body.locale || 'en-US',
+          timezone: req.body.timezone || 'UTC',
+          updated_at: new Date().toISOString()
+        }
+      });
     }
 
     if (!supabase) {
