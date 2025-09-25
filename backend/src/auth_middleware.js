@@ -12,12 +12,6 @@ async function attachUser(req, res, next) {
   
   // If no token, check if we should use demo mode
   if (!token) {
-    // Debug logging
-    console.log('🔍 No JWT token provided');
-    console.log('🔍 NODE_ENV:', process.env.NODE_ENV);
-    console.log('🔍 SUPABASE_AUTH_ENABLED:', SUPABASE_AUTH_ENABLED);
-    console.log('🔍 SUPABASE_URL:', process.env.SUPABASE_URL ? 'SET' : 'NOT SET');
-    
     // Use demo mode if auth is disabled OR if we're in development OR if Supabase is not configured
     // BUT ONLY if we're not in production
     const isProduction = process.env.NODE_ENV === 'production';
@@ -25,9 +19,6 @@ async function attachUser(req, res, next) {
                          process.env.NODE_ENV === 'dev' || 
                          !SUPABASE_AUTH_ENABLED ||
                          !process.env.SUPABASE_URL;
-    
-    console.log('🔍 isProduction:', isProduction);
-    console.log('🔍 isDevelopment:', isDevelopment);
     
     if (!isProduction && isDevelopment) {
       console.log('🔍 Development mode: Using demo user');

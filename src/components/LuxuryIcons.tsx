@@ -460,3 +460,63 @@ export const ErrorIcon = ({ className = "w-5 h-5", size = 20 }: IconProps) => (
     <line x1="9" y1="9" x2="15" y2="15" stroke="white" strokeWidth="2" strokeLinecap="round" />
   </svg>
 );
+
+// ===== SEARCH ICON =====
+
+export const SearchIcon = ({ className = "w-5 h-5", size = 20 }: IconProps) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+    <defs>
+      <linearGradient id="searchGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#4a4a4a" />
+        <stop offset="30%" stopColor="#6a6a6a" />
+        <stop offset="70%" stopColor="#8a8a8a" />
+        <stop offset="100%" stopColor="#4a4a4a" />
+      </linearGradient>
+      <linearGradient id="searchHighlight" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#8a8a8a" />
+        <stop offset="50%" stopColor="#aaaaaa" />
+        <stop offset="100%" stopColor="#8a8a8a" />
+      </linearGradient>
+      <filter id="searchGlow" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="1" result="coloredBlur"/>
+        <feMerge> 
+          <feMergeNode in="coloredBlur"/>
+          <feMergeNode in="SourceGraphic"/>
+        </feMerge>
+      </filter>
+    </defs>
+    
+    <circle cx="11" cy="11" r="8" fill="none" stroke="#cccccc" strokeWidth="2" filter="url(#searchGlow)" />
+    <path d="M21 21l-4.35-4.35" stroke="#cccccc" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" filter="url(#searchGlow)" />
+  </svg>
+);
+
+// ===== CLOCK/DURATION ICON =====
+
+export const ClockIcon = ({ className = "w-5 h-5", size = 20 }: IconProps) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+    <defs>
+      <linearGradient id="clockGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#4a4a4a" />
+        <stop offset="30%" stopColor="#6a6a6a" />
+        <stop offset="70%" stopColor="#8a8a8a" />
+        <stop offset="100%" stopColor="#4a4a4a" />
+      </linearGradient>
+      <linearGradient id="clockHighlight" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#8a8a8a" />
+        <stop offset="50%" stopColor="#aaaaaa" />
+        <stop offset="100%" stopColor="#8a8a8a" />
+      </linearGradient>
+      <filter id="clockGlow" x="-50%" y="-50%" width="200%" height="200%">
+        <feGaussianBlur stdDeviation="1" result="coloredBlur"/>
+        <feMerge> 
+          <feMergeNode in="coloredBlur"/>
+          <feMergeNode in="SourceGraphic"/>
+        </feMerge>
+      </filter>
+    </defs>
+    
+    <circle cx="12" cy="12" r="10" fill="url(#clockGradient)" stroke="#cccccc" strokeWidth="0.5" filter="url(#clockGlow)" />
+    <path d="M12 6v6l4 2" stroke="#cccccc" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" filter="url(#clockGlow)" />
+  </svg>
+);
