@@ -227,7 +227,7 @@ export default function IntegratedHeader({ userId }: Props) {
               </div>
 
               {/* Center: Controls */}
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 px-2">
                 <button
                   onClick={handlePrevious}
                   className="w-10 h-10 flex items-center justify-center text-white/70 hover:text-white transition-all duration-300 rounded-xl hover:bg-white/10 active:scale-95 backdrop-blur-sm border border-white/10 hover:border-white/20"
