@@ -3,6 +3,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
 import { useAudioManager } from '../contexts/AudioManagerContext';
 import Card from './Card';
+import { MusicNoteIcon, HomeIcon, LoadingIcon } from './LuxuryIcons';
 
 interface SessionItem {
   id: string;
@@ -349,7 +350,9 @@ export default function SessionsListCard({ userId }: SessionsListCardProps) {
           onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
             className="w-full px-3 py-2 pl-8 text-xs bg-graphite/50 border border-white/20 rounded-lg text-white placeholder-silver/60 focus:outline-none focus:ring-2 focus:ring-indigo-400/50 focus:border-indigo-400/50"
         />
-          <div className="absolute left-2.5 top-2.5 text-silver/60">🔍</div>
+          <div className="absolute left-2.5 top-2.5 text-silver/60">
+            <LoadingIcon className="w-4 h-4" />
+          </div>
         </div>
       </div>
 
@@ -416,7 +419,7 @@ export default function SessionsListCard({ userId }: SessionsListCardProps) {
                     
                     {/* Duration */}
                     <div className="flex items-center gap-1 text-silver">
-                      <span>⏱️</span>
+                      <LoadingIcon className="w-3 h-3" />
                       <span>{formatDuration(session.duration_sec)}</span>
                     </div>
                     
@@ -466,7 +469,9 @@ export default function SessionsListCard({ userId }: SessionsListCardProps) {
           ))
         ) : (
           <div className="text-center py-12">
-            <div className="text-6xl mb-4">📚</div>
+            <div className="mb-4 flex justify-center">
+              <HomeIcon className="w-16 h-16 text-silver/60" />
+            </div>
             <div className="text-silver text-sm mb-2 font-medium">No sessions found</div>
             <div className="text-silver/60 text-xs mb-4">
               {filters.search || filters.mood !== 'all' 
