@@ -11,11 +11,9 @@ export default function AuthPage() {
 
   // Local development bypass
   const handleLocalDevSignIn = () => {
-    if (import.meta.env.DEV) {
-      console.log('Local development mode - bypassing auth');
-      // This will trigger the auth context to use demo user
-      window.location.reload();
-    }
+    console.log('Local development mode - bypassing auth');
+    // This will trigger the auth context to use demo user
+    window.location.reload();
   };
 
   async function signInWithGoogle() {
@@ -108,50 +106,50 @@ export default function AuthPage() {
                 </div>
               )}
               {isGoogle ? (
-                <button
-                  onClick={signInWithGoogle}
-                  onMouseEnter={() => setIsHovered(true)}
-                  onMouseLeave={() => setIsHovered(false)}
-                  disabled={loading}
-                  className="w-full group/btn relative overflow-hidden"
-                >
-                  {/* Button Background */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-white/5 rounded-2xl group-hover/btn:from-white/20 group-hover/btn:to-white/10 transition-all duration-300"></div>
-                  
-                  {/* Button Content */}
-                  <div className="relative flex items-center justify-center gap-4 py-4 px-6">
-                    {loading ? (
-                      <div className="flex items-center gap-3">
-                        <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                        <span className="text-white font-medium">Authenticating...</span>
-                      </div>
-                    ) : (
-                      <>
-                        <div className="relative">
-                          <div className="absolute inset-0 bg-white/20 rounded-full blur-sm"></div>
-                          <img 
-                            src="https://www.svgrepo.com/show/475656/google-color.svg" 
-                            className="relative h-6 w-6 drop-shadow-lg" 
-                          />
+                <div>
+                  <button
+                    onClick={signInWithGoogle}
+                    onMouseEnter={() => setIsHovered(true)}
+                    onMouseLeave={() => setIsHovered(false)}
+                    disabled={loading}
+                    className="w-full group/btn relative overflow-hidden"
+                  >
+                    {/* Button Background */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-white/10 to-white/5 rounded-2xl group-hover/btn:from-white/20 group-hover/btn:to-white/10 transition-all duration-300"></div>
+                    
+                    {/* Button Content */}
+                    <div className="relative flex items-center justify-center gap-4 py-4 px-6">
+                      {loading ? (
+                        <div className="flex items-center gap-3">
+                          <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                          <span className="text-white font-medium">Authenticating...</span>
                         </div>
-                        <span className="text-white font-medium text-lg tracking-wide">
-                          Sign in with Google
-                        </span>
-                        <div className={`transition-transform duration-300 ${isHovered ? 'translate-x-1' : ''}`}>
-                          <svg className="w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                          </svg>
-                        </div>
-                      </>
-                    )}
-                  </div>
+                      ) : (
+                        <>
+                          <div className="relative">
+                            <div className="absolute inset-0 bg-white/20 rounded-full blur-sm"></div>
+                            <img 
+                              src="https://www.svgrepo.com/show/475656/google-color.svg" 
+                              className="relative h-6 w-6 drop-shadow-lg" 
+                            />
+                          </div>
+                          <span className="text-white font-medium text-lg tracking-wide">
+                            Sign in with Google
+                          </span>
+                          <div className={`transition-transform duration-300 ${isHovered ? 'translate-x-1' : ''}`}>
+                            <svg className="w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                            </svg>
+                          </div>
+                        </>
+                      )}
+                    </div>
+                    
+                    {/* Hover Effect */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700"></div>
+                  </button>
                   
-                  {/* Hover Effect */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700"></div>
-                </button>
-                
-                {/* Local Development Bypass Button */}
-                {import.meta.env.DEV && (
+                  {/* Local Development Bypass Button */}
                   <button
                     onClick={handleLocalDevSignIn}
                     className="w-full mt-4 py-3 px-6 bg-gradient-to-r from-purple-500/20 to-blue-500/20 border border-purple-400/30 rounded-2xl text-purple-200 hover:from-purple-500/30 hover:to-blue-500/30 hover:border-purple-400/50 transition-all duration-300"
@@ -163,7 +161,7 @@ export default function AuthPage() {
                       <span className="font-medium">Local Development Mode</span>
                     </div>
                   </button>
-                )}
+                </div>
               ) : (
                 <div className="text-center">
                   <div className="text-white/70 text-lg mb-6">

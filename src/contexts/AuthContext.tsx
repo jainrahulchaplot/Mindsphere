@@ -17,8 +17,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Local development bypass - use demo user
-    if (import.meta.env.DEV && !supabase) {
+    // Local development bypass - use demo user when Supabase not configured
+    if (!supabase) {
       console.warn('Local development mode - using demo user');
       setUserId('550e8400-e29b-41d4-a716-446655440000');
       setUser({
@@ -27,14 +27,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         name: 'Demo User',
         picture: null
       });
-      setIsLoading(false);
-      return;
-    }
-
-    // Only use Supabase auth in production
-    if (!supabase) {
-      console.warn('Supabase not configured - authentication disabled');
-      setUserId(null);
       setIsLoading(false);
       return;
     }
