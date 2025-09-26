@@ -28,12 +28,24 @@ export default function VoiceInterface({ token, serverUrl, roomName }: VoiceInte
 
     connectToRoom();
     
+    // Cleanup function to ensure proper disconnect
     return () => {
       if (room) {
+        console.log('Component unmounting, disconnecting from room:', room.name);
         room.disconnect();
       }
     };
   }, [token, serverUrl, roomName]);
+
+  // Additional cleanup effect for room disconnect
+  useEffect(() => {
+    return () => {
+      if (room) {
+        console.log('VoiceInterface cleanup: disconnecting from room');
+        room.disconnect();
+      }
+    };
+  }, [room]);
 
   const connectToRoom = async () => {
     try {
@@ -58,6 +70,9 @@ export default function VoiceInterface({ token, serverUrl, roomName }: VoiceInte
       newRoom.on(RoomEvent.Disconnected, () => {
         console.log('Disconnected from room');
         setIsConnected(false);
+        setIsUserSpeaking(false);
+        setIsAgentSpeaking(false);
+        setMicrophoneEnabled(false);
       });
 
       newRoom.on(RoomEvent.DataReceived, (payload: Uint8Array, participant?: RemoteParticipant) => {
@@ -143,11 +158,42 @@ export default function VoiceInterface({ token, serverUrl, roomName }: VoiceInte
     }
   };
 
-  const disconnect = () => {
+  const disconnect = async () => {
     if (room) {
+      console.log('Disconnecting from room:', room.name);
+      
+      try {
+        // Call backend API to delete the room on the server
+        const backendUrl = import.meta.env.VITE_BACKEND_URL || 
+          (import.meta.env.DEV ? 'http://localhost:8000' : 'https://mindsphere-production-fc81.up.railway.app');
+        
+        const response = await fetch(`${backendUrl}/api/voice/room/${room.name}`, {
+          method: 'DELETE',
+        });
+        
+        if (response.ok) {
+          console.log('Room deleted on server successfully');
+        } else {
+          console.warn('Failed to delete room on server, but continuing with client disconnect');
+        }
+      } catch (error) {
+        console.warn('Error calling room delete API:', error);
+      }
+      
+      // Disconnect from the room
       room.disconnect();
+      
+      // Reset all state
       setRoom(null);
       setIsConnected(false);
+      setIsUserSpeaking(false);
+      setIsAgentSpeaking(false);
+      setMicrophoneEnabled(false);
+      setTranscript('');
+      setUserTranscript('');
+      setAgentTranscript('');
+      
+      console.log('Room disconnected successfully');
     }
   };
 

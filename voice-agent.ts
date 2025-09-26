@@ -7,6 +7,7 @@ import {
 } from '@livekit/agents';
 import * as openai from '@livekit/agents-plugin-openai';
 import { BackgroundVoiceCancellation } from '@livekit/noise-cancellation-node';
+import { RoomServiceClient } from 'livekit-server-sdk';
 import { fileURLToPath } from 'node:url';
 import dotenv from 'dotenv';
 
@@ -69,6 +70,42 @@ export default defineAgent({
       Always respond in English only and keep responses conversational and concise.`,
     });
     await handle.waitForPlayout();
+
+    // Set up room deletion when session should end
+    const roomServiceClient = new RoomServiceClient(
+      process.env.LIVEKIT_URL!,
+      process.env.LIVEKIT_API_KEY!,
+      process.env.LIVEKIT_API_SECRET!
+    );
+
+    // Listen for room events to handle cleanup
+    ctx.room.on('participantDisconnected', async (participant) => {
+      console.log('Participant disconnected:', participant.identity);
+      
+      // If it's a user (not agent) and they disconnect, end the room
+      if (!participant.identity.includes('agent') && !participant.identity.includes('assistant')) {
+        console.log('User disconnected, ending room session');
+        try {
+          await roomServiceClient.deleteRoom(ctx.room.name);
+          console.log('Room deleted successfully:', ctx.room.name);
+        } catch (error) {
+          console.error('Failed to delete room:', error);
+        }
+      }
+    });
+
+    // Handle agent disconnect as well
+    ctx.room.on('participantDisconnected', async (participant) => {
+      if (participant.identity.includes('agent') || participant.identity.includes('assistant')) {
+        console.log('Agent disconnected, ending room session');
+        try {
+          await roomServiceClient.deleteRoom(ctx.room.name);
+          console.log('Room deleted successfully:', ctx.room.name);
+        } catch (error) {
+          console.error('Failed to delete room:', error);
+        }
+      }
+    });
   },
 });
 

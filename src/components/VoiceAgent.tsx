@@ -49,9 +49,16 @@ export default function VoiceAgent({ onSessionStart, onSessionEnd, className = '
   };
 
   const endSession = () => {
+    console.log('Ending voice session...');
+    
+    // Reset local state
     setSessionStarted(false);
     setConnectionData(null);
+    
+    // Call session end callback
     onSessionEnd?.();
+    
+    console.log('Voice session ended successfully');
   };
 
   return (

@@ -71,4 +71,34 @@ router.get('/test', (req, res) => {
   res.json({ message: 'Voice token service is working' });
 });
 
+// Delete room endpoint
+router.delete('/room/:roomName', async (req, res) => {
+  try {
+    const { roomName } = req.params;
+    
+    if (!roomName) {
+      return res.status(400).json({ error: 'Room name is required' });
+    }
+
+    // Import RoomServiceClient dynamically to avoid issues
+    const { RoomServiceClient } = require('livekit-server-sdk');
+    
+    const roomServiceClient = new RoomServiceClient(
+      LIVEKIT_URL,
+      LIVEKIT_API_KEY,
+      LIVEKIT_API_SECRET
+    );
+
+    await roomServiceClient.deleteRoom(roomName);
+    
+    res.json({ 
+      success: true, 
+      message: `Room ${roomName} deleted successfully` 
+    });
+  } catch (error) {
+    console.error('Error deleting room:', error);
+    res.status(500).json({ error: 'Failed to delete room' });
+  }
+});
+
 module.exports = router;
