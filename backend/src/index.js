@@ -89,7 +89,7 @@ app.use(attachUser);
 // Static file serving for local audio files
 app.use('/audio', express.static(path.join(__dirname, '..', 'public', 'audio')));
 
-app.get('/', (_req, res) => res.json({ name: 'MindSphere API', version: 'mvp-1', routes: ['/health','POST /api/v1/session/start','GET /api/v1/session/:id','POST /api/v1/session/:id/feedback','GET /api/v1/journal','POST /api/v1/journal/submit','GET /api/v1/streaks/:user_id','POST /api/v1/streaks/:user_id','GET /api/v1/music_tracks','POST /api/v1/nudges/preview','POST /api/v1/journal/stt','POST /api/v1/coach/chat','GET /api/v1/notes','POST /api/v1/notes','GET /api/v1/notes/:id','PUT /api/v1/notes/:id','DELETE /api/v1/notes/:id','POST /api/v1/notes/similarity','POST /api/v1/notes/:id/embedding','GET /api/v1/usage/daily','GET /api/v1/library','POST /api/v1/me/sync','GET /api/v1/profile/basic','PUT /api/v1/profile/basic'] }));
+app.get('/', (_req, res) => res.json({ name: 'MindSphere API', version: 'mvp-1', routes: ['/health','POST /api/v1/session/start','GET /api/v1/session/:id','POST /api/v1/session/:id/feedback','GET /api/v1/journal','POST /api/v1/journal/submit','GET /api/v1/streaks/:user_id','POST /api/v1/streaks/:user_id','GET /api/v1/music_tracks','POST /api/v1/nudges/preview','POST /api/v1/journal/stt','POST /api/v1/coach/chat','GET /api/v1/notes','POST /api/v1/notes','GET /api/v1/notes/:id','PUT /api/v1/notes/:id','DELETE /api/v1/notes/:id','POST /api/v1/notes/similarity','POST /api/v1/notes/:id/embedding','GET /api/v1/usage/daily','GET /api/v1/library','POST /api/v1/me/sync','GET /api/v1/profile/basic','PUT /api/v1/profile/basic','POST /api/voice/token','GET /api/voice/health','GET /api/voice/test'] }));
 
 // Mount session router
 app.use('/api/v1/session', sessionRouter);
