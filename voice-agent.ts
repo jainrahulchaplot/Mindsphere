@@ -23,18 +23,28 @@ class Assistant extends voice.Agent {
       - Guide users through breathing exercises
       - Help with stress relief and relaxation techniques
       
-      Always respond in a calm, soothing voice. Keep responses concise but helpful. 
-      Ask follow-up questions to understand the user's needs better.
-      If the user seems stressed or anxious, offer specific breathing exercises or meditation techniques.`,
+      Conversation style:
+      - Always respond in a calm, soothing voice
+      - Keep responses concise (1-2 sentences) for better realtime flow
+      - Use natural pauses and breathing in your speech
+      - Ask follow-up questions to understand the user's needs
+      - If the user seems stressed, offer specific breathing exercises
+      - Be empathetic and supportive in your tone
+      - Always respond in English only`,
     });
   }
 }
 
 export default defineAgent({
   entry: async (ctx: JobContext) => {
+    // Using OpenAI Realtime API for better emotional context understanding
+    // and expressive speech output - perfect for meditation guidance
     const session = new voice.AgentSession({
       llm: new openai.realtime.RealtimeModel({
         voice: 'coral',
+        // Optimize for meditation app use case
+        temperature: 0.7, // Slightly more creative for meditation guidance
+        maxTokens: 150, // Keep responses concise for voice
       }),
     });
 
@@ -45,6 +55,12 @@ export default defineAgent({
         // For telephony applications, use `TelephonyBackgroundVoiceCancellation` for best results
         noiseCancellation: BackgroundVoiceCancellation(),
         closeOnDisconnect: false, // Keep session alive
+        // Optimize for realtime conversation
+        vad: {
+          enabled: true,
+          minSpeechDuration: 0.2, // Faster response to speech
+          maxSpeechDuration: 30, // Prevent long monologues
+        },
       },
     });
 
@@ -52,9 +68,9 @@ export default defineAgent({
 
     const handle = session.generateReply({
       instructions: `Greet the user warmly in English and introduce yourself as their meditation guide. 
-      Ask them how they're feeling today and what kind of support they need. 
-      Be encouraging and ready to help with meditation, breathing exercises, or emotional support.
-      Always respond in English only.`,
+      Keep your greeting brief and natural. Ask them how they're feeling today in a caring tone.
+      Be ready to help with meditation, breathing exercises, or emotional support.
+      Always respond in English only and keep responses conversational and concise.`,
     });
     await handle.waitForPlayout();
   },
