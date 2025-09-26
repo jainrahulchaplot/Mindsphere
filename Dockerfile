@@ -1,4 +1,4 @@
-# Simple Dockerfile for Railway deployment
+# Multi-service Dockerfile for Railway deployment
 FROM node:22-slim
 
 # Install system dependencies
@@ -7,20 +7,29 @@ RUN apt-get update -qq && apt-get install --no-install-recommends -y ca-certific
 # Set working directory
 WORKDIR /app
 
-# Copy package files
+# Copy package files for main app
 COPY package.json package-lock.json ./
 
-# Install dependencies
+# Install main app dependencies
 RUN npm install
 
-# Copy source code
+# Copy backend package files
+COPY backend/package.json backend/package-lock.json ./backend/
+
+# Install backend dependencies
+RUN cd backend && npm install
+
+# Copy all source code
 COPY . .
 
 # Set PATH for node modules
 RUN printf '\nPATH=/app/node_modules/.bin:$PATH' >> /root/.profile
 
+# Make startup script executable
+RUN chmod +x start-services.sh
+
 # Expose port
 EXPOSE 3000
 
-# Run the application
-CMD ["npm", "start"]
+# Run both backend and voice agent
+CMD ["./start-services.sh"]

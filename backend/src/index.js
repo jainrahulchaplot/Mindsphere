@@ -10,6 +10,7 @@ const musicRouter = require('./routes_music');
 const musicUploadRouter = require('./routes_music_upload');
 const nudgesRouter = require('./routes_nudges');
 const voiceRouter = require('./routes_voice');
+const voiceTokenRouter = require('./routes_voice_token');
 const coachRouter = require('./routes_coach');
 const sttRouter = require('./routes_stt');
 const sessionRouter = require('./routes_session');
@@ -109,6 +110,7 @@ app.use(nudgesRouter);
 
 // 7) Voice journaling endpoint
 app.use(voiceRouter);
+app.use('/api/voice', voiceTokenRouter);
 
 // 8) Coach chat endpoint
 app.use(coachRouter);

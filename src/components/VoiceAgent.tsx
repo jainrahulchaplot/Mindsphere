@@ -14,8 +14,8 @@ export default function VoiceAgent({ onSessionStart, onSessionEnd, className = '
     try {
       setIsConnecting(true);
       
-      // Get token from token server
-      const response = await fetch('http://localhost:3001/token', {
+      // Get token from backend API
+      const response = await fetch('/api/voice/token', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -32,9 +32,9 @@ export default function VoiceAgent({ onSessionStart, onSessionEnd, className = '
       
       const connectionData = await response.json();
       
-      // Open the voice test page in a new window with connection data
-      const testUrl = `http://localhost:3000?token=${encodeURIComponent(connectionData.token)}&serverUrl=${encodeURIComponent(connectionData.serverUrl)}&roomName=${encodeURIComponent(connectionData.roomName)}`;
-      const newWindow = window.open(testUrl, '_blank', 'width=1200,height=800');
+      // Open the voice interface in a new window with connection data
+      const voiceUrl = `/voice-interface?token=${encodeURIComponent(connectionData.token)}&serverUrl=${encodeURIComponent(connectionData.serverUrl)}&roomName=${encodeURIComponent(connectionData.roomName)}`;
+      const newWindow = window.open(voiceUrl, '_blank', 'width=1200,height=800');
       
       if (newWindow) {
         setSessionStarted(true);
@@ -44,7 +44,7 @@ export default function VoiceAgent({ onSessionStart, onSessionEnd, className = '
       }
     } catch (error) {
       console.error('Connection error:', error);
-      alert('Failed to start voice session. Please ensure both the token server (localhost:3001) and voice test server (localhost:3000) are running.');
+      alert('Failed to start voice session. Please try again.');
     } finally {
       setIsConnecting(false);
     }

@@ -12,6 +12,7 @@ import ViewOnlySessionPage from './pages/ViewOnlySessionPage';
 import AuthPage from './pages/Auth';
 import ProfilePage from './pages/ProfilePage';
 import AIBuddyPage from './pages/AIBuddyPage';
+import VoiceInterface from './pages/VoiceInterface';
 
 function AppContent() {
   const location = useLocation();
@@ -55,6 +56,7 @@ function AppContent() {
           <Route path="/" element={<MeditationPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/ai-buddy" element={<AIBuddyPage />} />
+          <Route path="/voice-interface" element={<VoiceInterface />} />
           <Route path="/session/:sessionId" element={<SessionPage />} />
           <Route path="/view-session/:sessionId" element={<ViewOnlySessionPage />} />
           <Route path="/signin" element={<AuthPage />} />
