@@ -117,3 +117,14 @@ coverage/
 # Build artifacts
 *.tgz
 *.tar.gz
+
+# Credentials and secrets
+backend/src/temp-credentials.json
+*.json
+!package.json
+!package-lock.json
+!tsconfig.json
+!tailwind.config.js
+!vite.config.ts
+!vercel.json
+!railway.json

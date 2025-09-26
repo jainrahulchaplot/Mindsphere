@@ -4,13 +4,19 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "dev": "tsx voice-agent.ts dev",
+    "build": "tsc",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "tsx voice-agent.ts start",
+    "download-files": "tsx voice-agent.ts download-files"
   },
   "dependencies": {
     "@fontsource/montserrat": "^5.2.8",
+    "@livekit/agents": "~1.0.6",
+    "@livekit/agents-plugin-openai": "~1.0.6",
+    "@livekit/components-react": "^2.9.14",
+    "@livekit/noise-cancellation-node": "~0.1.9",
     "@supabase/supabase-js": "^2.57.4",
     "@tanstack/react-query": "^5.89.0",
     "axios": "^1.12.2",
@@ -18,6 +24,8 @@
     "dotenv": "^17.2.2",
     "express": "^5.1.0",
     "jspdf": "^3.0.2",
+    "livekit-client": "^2.15.7",
+    "livekit-server-sdk": "^2.13.3",
     "lucide-react": "^0.344.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
