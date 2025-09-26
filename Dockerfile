@@ -55,6 +55,7 @@ COPY --from=frontend-builder /app/dist ./dist
 # Copy voice agent and other necessary files
 COPY voice-agent.ts ./
 COPY token-server.js ./
+COPY start.sh ./
 
 # Create non-privileged user
 ARG UID=10001
@@ -65,6 +66,9 @@ RUN adduser \
     --shell "/sbin/nologin" \
     --uid "${UID}" \
     appuser
+
+# Make startup script executable
+RUN chmod +x start.sh
 
 # Set proper permissions
 RUN chown -R appuser:appuser /app
@@ -82,5 +86,5 @@ ENV PATH="/pnpm:$PATH"
 # Expose port for the application
 EXPOSE 3000
 
-# Run the voice agent directly
-CMD ["npx", "tsx", "voice-agent.ts", "start"]
+# Run the startup script
+CMD ["./start.sh"]
