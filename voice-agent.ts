@@ -82,12 +82,18 @@ export default defineAgent({
     ctx.room.on('participantDisconnected', async (participant) => {
       console.log('Participant disconnected:', participant.identity);
       
+      const roomName = ctx.room.name;
+      if (!roomName) {
+        console.error('Room name is undefined, cannot delete room');
+        return;
+      }
+      
       // If it's a user (not agent) and they disconnect, end the room
       if (!participant.identity.includes('agent') && !participant.identity.includes('assistant')) {
         console.log('User disconnected, ending room session');
         try {
-          await roomServiceClient.deleteRoom(ctx.room.name);
-          console.log('Room deleted successfully:', ctx.room.name);
+          await roomServiceClient.deleteRoom(roomName);
+          console.log('Room deleted successfully:', roomName);
         } catch (error) {
           console.error('Failed to delete room:', error);
         }
@@ -96,11 +102,17 @@ export default defineAgent({
 
     // Handle agent disconnect as well
     ctx.room.on('participantDisconnected', async (participant) => {
+      const roomName = ctx.room.name;
+      if (!roomName) {
+        console.error('Room name is undefined, cannot delete room');
+        return;
+      }
+      
       if (participant.identity.includes('agent') || participant.identity.includes('assistant')) {
         console.log('Agent disconnected, ending room session');
         try {
-          await roomServiceClient.deleteRoom(ctx.room.name);
-          console.log('Room deleted successfully:', ctx.room.name);
+          await roomServiceClient.deleteRoom(roomName);
+          console.log('Room deleted successfully:', roomName);
         } catch (error) {
           console.error('Failed to delete room:', error);
         }
