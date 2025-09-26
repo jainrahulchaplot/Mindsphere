@@ -13,11 +13,9 @@ COPY package.json package-lock.json ./
 # Install main app dependencies
 RUN npm install
 
-# Copy backend package files
+# Copy backend package files and install in one step
 COPY backend/package.json backend/package-lock.json ./backend/
-
-# Install backend dependencies
-RUN cd backend && npm install
+RUN npm install --prefix ./backend
 
 # Copy all source code
 COPY . .
