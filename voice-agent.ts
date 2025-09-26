@@ -44,7 +44,8 @@ export default defineAgent({
         voice: 'coral',
         // Optimize for meditation app use case
         temperature: 0.7, // Slightly more creative for meditation guidance
-        maxTokens: 150, // Keep responses concise for voice
+        // Use faster model for better realtime performance
+        model: 'gpt-4o-realtime-preview-2024-10-01',
       }),
     });
 
@@ -55,12 +56,7 @@ export default defineAgent({
         // For telephony applications, use `TelephonyBackgroundVoiceCancellation` for best results
         noiseCancellation: BackgroundVoiceCancellation(),
         closeOnDisconnect: false, // Keep session alive
-        // Optimize for realtime conversation
-        vad: {
-          enabled: true,
-          minSpeechDuration: 0.2, // Faster response to speech
-          maxSpeechDuration: 30, // Prevent long monologues
-        },
+        // VAD is handled automatically by the realtime model
       },
     });
 
