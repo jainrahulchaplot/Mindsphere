@@ -11,6 +11,7 @@ import SessionPage from './pages/SessionPage';
 import ViewOnlySessionPage from './pages/ViewOnlySessionPage';
 import AuthPage from './pages/Auth';
 import ProfilePage from './pages/ProfilePage';
+import AIBuddyPage from './pages/AIBuddyPage';
 
 function AppContent() {
   const location = useLocation();
@@ -53,6 +54,7 @@ function AppContent() {
         <Routes>
           <Route path="/" element={<MeditationPage />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/ai-buddy" element={<AIBuddyPage />} />
           <Route path="/session/:sessionId" element={<SessionPage />} />
           <Route path="/view-session/:sessionId" element={<ViewOnlySessionPage />} />
           <Route path="/signin" element={<AuthPage />} />

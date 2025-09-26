@@ -1,6 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import { HomeIcon, DashboardIcon, ProfileIcon, StreakIcon } from './Icons';
-import { useStreaks } from '../api/hooks';
+import { HomeIcon, DashboardIcon, ProfileIcon, AIBuddyIcon } from './Icons';
 
 interface NavItem {
   path: string;
@@ -19,13 +18,16 @@ const navItems: NavItem[] = [
     label: 'Insights',
     icon: DashboardIcon,
   },
+  {
+    path: '/ai-buddy',
+    label: 'AI Buddy',
+    icon: AIBuddyIcon,
+  },
 ];
 
 export default function MobileNavBar({ userId }: { userId: string }) {
   const location = useLocation();
   const navigate = useNavigate();
-  const { data: streak } = useStreaks(userId);
-  const currentStreak = streak?.current_streak ?? 0;
 
   return (
     <div className="mobile-nav-bar">
@@ -94,23 +96,6 @@ export default function MobileNavBar({ userId }: { userId: string }) {
           );
         })}
 
-        {/* Streak Counter with enhanced animation */}
-        <div className="group flex flex-col items-center py-2 px-3 min-h-[48px] min-w-[48px] rounded-2xl hover:bg-gradient-to-br hover:from-orange-500/10 hover:to-red-500/10 transition-all duration-300 relative overflow-hidden">
-          {/* Hover background */}
-          <div className="absolute inset-0 bg-gradient-to-br from-orange-500/10 to-red-500/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-          
-          <div className="relative z-10 transform transition-all duration-300 group-hover:scale-110">
-            <StreakIcon className="w-6 h-6 text-orange-400 mb-1 group-hover:text-orange-300 transition-colors duration-300" />
-            {currentStreak > 0 && (
-              <div className="absolute -top-1 -right-1 bg-gradient-to-br from-orange-500 to-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center font-bold shadow-lg animate-bounce">
-                {currentStreak}
-              </div>
-            )}
-          </div>
-          <span className="text-xs font-medium text-slate-400 group-hover:text-orange-300 transition-colors duration-300 relative z-10">
-            Streak
-          </span>
-        </div>
 
         {/* Profile with enhanced animation */}
         <button

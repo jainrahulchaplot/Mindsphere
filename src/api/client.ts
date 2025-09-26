@@ -21,7 +21,7 @@ console.log('🔧 All env vars:', Object.keys(import.meta.env).filter(key => key
 
 export const api = axios.create({ 
   baseURL,
-  timeout: 100000, // 100 second timeout for long session generation
+  timeout: 300000, // 5 minute timeout for long session generation
   headers: {
     'Content-Type': 'application/json',
   }
