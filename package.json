@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "start": "tsx voice-agent.ts start",
-    "download-files": "tsx voice-agent.ts download-files",
+    "download-files": "echo 'No files to download for this voice agent'",
     "voice-agent:dev": "tsx voice-agent.ts dev",
     "voice-agent:start": "tsx voice-agent.ts start",
     "voice-agent:download": "tsx voice-agent.ts download-files"

@@ -46,8 +46,8 @@ WORKDIR /app
 # Copy package files
 COPY package.json pnpm-lock.yaml ./
 
-# Install only production dependencies
-RUN pnpm install --frozen-lockfile --prod
+# Install dependencies including dev dependencies needed for voice agent
+RUN pnpm install --frozen-lockfile
 
 # Copy built frontend from previous stage
 COPY --from=frontend-builder /app/dist ./dist
@@ -70,8 +70,8 @@ RUN adduser \
 RUN chown -R appuser:appuser /app
 USER appuser
 
-# Pre-download any ML models or files the agent needs
-RUN pnpm download-files
+# Skip download-files step as it's not needed for this voice agent setup
+# RUN pnpm download-files
 
 # Set Node.js to production mode
 ENV NODE_ENV=production
