@@ -51,9 +51,10 @@ export default defineAgent({
     await ctx.connect();
 
     const handle = session.generateReply({
-      instructions: `Greet the user warmly and introduce yourself as their meditation guide. 
+      instructions: `Greet the user warmly in English and introduce yourself as their meditation guide. 
       Ask them how they're feeling today and what kind of support they need. 
-      Be encouraging and ready to help with meditation, breathing exercises, or emotional support.`,
+      Be encouraging and ready to help with meditation, breathing exercises, or emotional support.
+      Always respond in English only.`,
     });
     await handle.waitForPlayout();
   },

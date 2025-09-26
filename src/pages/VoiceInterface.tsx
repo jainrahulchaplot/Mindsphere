@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Room, RoomEvent, RemoteParticipant, RemoteTrack, RemoteTrackPublication, Track } from 'livekit-client';
+import VoiceVisualizer from '../components/VoiceVisualizer';
 
 interface VoiceInterfaceProps {
   token: string;
@@ -13,6 +14,11 @@ export default function VoiceInterface({ token, serverUrl, roomName }: VoiceInte
   const [isConnecting, setIsConnecting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [transcript, setTranscript] = useState<string>('');
+  const [userTranscript, setUserTranscript] = useState<string>('');
+  const [agentTranscript, setAgentTranscript] = useState<string>('');
+  const [isUserSpeaking, setIsUserSpeaking] = useState(false);
+  const [isAgentSpeaking, setIsAgentSpeaking] = useState(false);
+  const [microphoneEnabled, setMicrophoneEnabled] = useState(false);
 
   useEffect(() => {
     if (!token || !serverUrl || !roomName) {
@@ -64,11 +70,70 @@ export default function VoiceInterface({ token, serverUrl, roomName }: VoiceInte
         if (track.kind === Track.Kind.Audio) {
           const audioElement = track.attach();
           audioElement.play();
+          
+          // Track speaking state
+          if (participant.identity.includes('agent') || participant.identity.includes('assistant')) {
+            setIsAgentSpeaking(true);
+            setAgentTranscript(prev => prev + `\n[Agent]: Connected and ready to help`);
+          } else {
+            setIsUserSpeaking(true);
+            setUserTranscript(prev => prev + `\n[You]: Connected to voice session`);
+          }
         }
+      });
+
+      // Handle local track published
+      newRoom.on(RoomEvent.LocalTrackPublished, (publication) => {
+        console.log('Local track published:', publication.track?.kind);
+        if (publication.track?.kind === Track.Kind.Audio) {
+          setMicrophoneEnabled(true);
+          setUserTranscript(prev => prev + `\n[You]: Microphone active`);
+        }
+      });
+
+      // Handle local track unpublished
+      newRoom.on(RoomEvent.LocalTrackUnpublished, (publication) => {
+        console.log('Local track unpublished:', publication.track?.kind);
+        if (publication.track?.kind === Track.Kind.Audio) {
+          setMicrophoneEnabled(false);
+          setUserTranscript(prev => prev + `\n[You]: Microphone inactive`);
+        }
+      });
+
+      // Track speaking events
+      newRoom.on(RoomEvent.ActiveSpeakersChanged, (speakers) => {
+        const userSpeaking = speakers.some(speaker => !speaker.identity.includes('agent') && !speaker.identity.includes('assistant'));
+        const agentSpeaking = speakers.some(speaker => speaker.identity.includes('agent') || speaker.identity.includes('assistant'));
+        
+        setIsUserSpeaking(userSpeaking);
+        setIsAgentSpeaking(agentSpeaking);
       });
 
       // Connect to the room
       await newRoom.connect(serverUrl, token);
+      
+      // Enable microphone and publish audio
+      try {
+        // Request microphone permission first
+        const stream = await navigator.mediaDevices.getUserMedia({ 
+          audio: true, 
+          video: false 
+        });
+        console.log('Microphone permission granted');
+        
+        // Enable microphone in the room
+        await newRoom.localParticipant.enableCameraAndMicrophone();
+        console.log('Microphone enabled successfully');
+        
+        // Stop the temporary stream
+        stream.getTracks().forEach(track => track.stop());
+      } catch (err) {
+        console.error('Failed to enable microphone:', err);
+        setError('Microphone access denied. Please allow microphone permissions and try again.');
+        setIsConnecting(false);
+        return;
+      }
+      
       setRoom(newRoom);
 
     } catch (err) {
@@ -88,8 +153,8 @@ export default function VoiceInterface({ token, serverUrl, roomName }: VoiceInte
 
   return (
     <div className="voice-interface">
-      <div className="text-center space-y-3">
-        <h3 className="text-lg font-semibold text-white mb-3">Voice Session</h3>
+      <div className="space-y-4">
+        <h3 className="text-lg font-semibold text-white text-center mb-4">Voice Session</h3>
         
         {isConnecting && (
           <div className="bg-blue-500/20 border border-blue-500/30 rounded-lg p-3">
@@ -107,20 +172,90 @@ export default function VoiceInterface({ token, serverUrl, roomName }: VoiceInte
         )}
 
         {isConnected && (
-          <div className="bg-green-500/20 border border-green-500/30 rounded-lg p-3">
-            <div className="flex items-center justify-center space-x-2 mb-2">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <span className="text-green-400 font-medium text-sm">Connected</span>
-            </div>
-            <p className="text-gray-300 text-xs">Speak naturally with your meditation guide</p>
-          </div>
-        )}
+          <div className="space-y-4">
+            {/* Voice Visualizers */}
+            <div className="flex justify-center space-x-8">
+              {/* User Visualizer */}
+              <div className="text-center">
+                <VoiceVisualizer 
+                  isActive={isUserSpeaking} 
+                  isUser={true}
+                  className="mb-2"
+                />
+                <p className="text-blue-400 text-xs font-medium">You</p>
+                {isUserSpeaking && (
+                  <p className="text-blue-300 text-xs animate-pulse">Speaking...</p>
+                )}
+              </div>
 
-        {transcript && (
-          <div className="bg-gray-700/50 rounded-lg p-3 max-h-32 overflow-y-auto">
-            <h4 className="text-white font-medium text-sm mb-1">Conversation:</h4>
-            <div className="text-gray-300 text-xs whitespace-pre-wrap">
-              {transcript}
+              {/* Agent Visualizer */}
+              <div className="text-center">
+                <VoiceVisualizer 
+                  isActive={isAgentSpeaking} 
+                  isUser={false}
+                  className="mb-2"
+                />
+                <p className="text-green-400 text-xs font-medium">Agent</p>
+                {isAgentSpeaking && (
+                  <p className="text-green-300 text-xs animate-pulse">Speaking...</p>
+                )}
+              </div>
+            </div>
+
+            {/* Connection Status */}
+            <div className="bg-green-500/20 border border-green-500/30 rounded-lg p-3">
+              <div className="flex items-center justify-center space-x-2 mb-2">
+                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                <span className="text-green-400 font-medium text-sm">Connected</span>
+              </div>
+              <p className="text-gray-300 text-xs text-center">Speak naturally with your meditation guide</p>
+              
+              {/* Microphone Status */}
+              <div className="mt-2 flex items-center justify-center space-x-2">
+                <div className={`w-2 h-2 rounded-full ${microphoneEnabled ? 'bg-green-500' : 'bg-red-500'}`}></div>
+                <span className={`text-xs ${microphoneEnabled ? 'text-green-400' : 'text-red-400'}`}>
+                  {microphoneEnabled ? 'Microphone Active' : 'Microphone Inactive'}
+                </span>
+              </div>
+            </div>
+
+            {/* Transcripts */}
+            <div className="space-y-3">
+              {/* User Transcript */}
+              {userTranscript && (
+                <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-3">
+                  <h4 className="text-blue-400 font-medium text-sm mb-2 flex items-center">
+                    <div className="w-2 h-2 bg-blue-400 rounded-full mr-2"></div>
+                    Your Messages
+                  </h4>
+                  <div className="text-gray-300 text-xs whitespace-pre-wrap max-h-20 overflow-y-auto">
+                    {userTranscript}
+                  </div>
+                </div>
+              )}
+
+              {/* Agent Transcript */}
+              {agentTranscript && (
+                <div className="bg-green-500/10 border border-green-500/20 rounded-lg p-3">
+                  <h4 className="text-green-400 font-medium text-sm mb-2 flex items-center">
+                    <div className="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+                    Agent Responses
+                  </h4>
+                  <div className="text-gray-300 text-xs whitespace-pre-wrap max-h-20 overflow-y-auto">
+                    {agentTranscript}
+                  </div>
+                </div>
+              )}
+
+              {/* General Transcript */}
+              {transcript && (
+                <div className="bg-gray-700/50 rounded-lg p-3">
+                  <h4 className="text-white font-medium text-sm mb-2">System Messages</h4>
+                  <div className="text-gray-300 text-xs whitespace-pre-wrap max-h-20 overflow-y-auto">
+                    {transcript}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         )}
@@ -128,7 +263,7 @@ export default function VoiceInterface({ token, serverUrl, roomName }: VoiceInte
         {!isConnected && !isConnecting && !error && (
           <button
             onClick={connectToRoom}
-            className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-200 text-sm"
+            className="w-full bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-200 text-sm"
           >
             Connect to Voice Session
           </button>
@@ -137,7 +272,7 @@ export default function VoiceInterface({ token, serverUrl, roomName }: VoiceInte
         {isConnected && (
           <button
             onClick={disconnect}
-            className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 text-sm"
+            className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 text-sm"
           >
             Disconnect
           </button>
