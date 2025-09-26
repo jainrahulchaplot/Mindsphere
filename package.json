@@ -4,12 +4,13 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "tsx voice-agent.ts dev",
-    "build": "tsc",
+    "dev": "vite",
+    "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start": "tsx voice-agent.ts start",
-    "download-files": "tsx voice-agent.ts download-files"
+    "voice-agent:dev": "tsx voice-agent.ts dev",
+    "voice-agent:start": "tsx voice-agent.ts start",
+    "voice-agent:download": "tsx voice-agent.ts download-files"
   },
   "dependencies": {
     "@fontsource/montserrat": "^5.2.8",
