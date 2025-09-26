@@ -59,8 +59,16 @@ router.get('/health', (req, res) => {
   res.json({ 
     status: 'ok', 
     service: 'LiveKit Token Service',
-    configured: !!(LIVEKIT_API_KEY && LIVEKIT_API_SECRET && LIVEKIT_URL)
+    configured: !!(LIVEKIT_API_KEY && LIVEKIT_API_SECRET && LIVEKIT_URL),
+    apiKey: LIVEKIT_API_KEY ? 'Set' : 'Missing',
+    apiSecret: LIVEKIT_API_SECRET ? 'Set' : 'Missing',
+    url: LIVEKIT_URL ? 'Set' : 'Missing'
   });
+});
+
+// Test endpoint
+router.get('/test', (req, res) => {
+  res.json({ message: 'Voice token service is working' });
 });
 
 module.exports = router;
