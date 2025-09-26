@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import VoiceInterface from '../pages/VoiceInterface';
+import { useAuth } from '../contexts/AuthContext';
 
 interface VoiceAgentProps {
   onSessionStart?: () => void;
@@ -11,6 +12,7 @@ export default function VoiceAgent({ onSessionStart, onSessionEnd, className = '
   const [sessionStarted, setSessionStarted] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
   const [connectionData, setConnectionData] = useState<any>(null);
+  const { user } = useAuth();
 
   const startSession = async () => {
     try {
@@ -25,7 +27,7 @@ export default function VoiceAgent({ onSessionStart, onSessionEnd, className = '
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          roomName: `meditation_room_${Math.floor(Math.random() * 10_000)}`,
+          roomName: `meditation_room_${user?.id || '550e8400-e29b-41d4-a716-446655440000'}`,
           participantName: 'MindSphere User'
         }),
       });

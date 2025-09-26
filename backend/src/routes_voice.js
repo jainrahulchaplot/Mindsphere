@@ -52,7 +52,7 @@ router.post('/api/v1/journal/stt', upload.single('audio'), async (req, res) => {
     const transcription = await client.audio.transcriptions.create({
       file: fs.createReadStream(tempPath),
       model: 'whisper-1',
-      language: 'en'
+      language: 'en,hi'
     });
     
     // Clean up the renamed file

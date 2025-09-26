@@ -101,4 +101,30 @@ router.delete('/room/:roomName', async (req, res) => {
   }
 });
 
+// Get user context for voice agent
+router.get('/context/:userId', async (req, res) => {
+  try {
+    const { userId } = req.params;
+    
+    if (!userId) {
+      return res.status(400).json({ error: 'User ID is required' });
+    }
+
+    // Get personalization context from vector database using existing service
+    const vectorDB = require('./vector-db-service');
+    const personalizationContext = await vectorDB.getPersonalizationContext(
+      userId, 
+      'meditation', 
+      'calm', 
+      'voice session'
+    );
+
+    // Return the same format as the existing system
+    res.json(personalizationContext);
+  } catch (error) {
+    console.error('Error getting user context:', error);
+    res.status(500).json({ error: 'Failed to get user context' });
+  }
+});
+
 module.exports = router;
