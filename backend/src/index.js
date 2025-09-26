@@ -80,6 +80,9 @@ app.get('/cors-info', (req, res) => {
   });
 });
 
+// Voice token service (no authentication required)
+app.use('/api/voice', voiceTokenRouter);
+
 // Authentication middleware - attaches req.user.id from JWT or demo mode
 app.use(attachUser);
 
@@ -110,7 +113,6 @@ app.use(nudgesRouter);
 
 // 7) Voice journaling endpoint
 app.use(voiceRouter);
-app.use('/api/voice', voiceTokenRouter);
 
 // 8) Coach chat endpoint
 app.use(coachRouter);
