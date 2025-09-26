@@ -14,8 +14,9 @@ export default function VoiceAgent({ onSessionStart, onSessionEnd, className = '
     try {
       setIsConnecting(true);
       
-      // Get token from backend API
-      const response = await fetch('/api/voice/token', {
+      // Get token from Railway backend API
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || 'https://mindsphere-production-fc81.up.railway.app';
+      const response = await fetch(`${backendUrl}/api/voice/token`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
