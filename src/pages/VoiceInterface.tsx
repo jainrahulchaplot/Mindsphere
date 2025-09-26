@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
 import { Room, RoomEvent, RemoteParticipant, RemoteTrack, RemoteTrackPublication, Track } from 'livekit-client';
 
-export default function VoiceInterface() {
-  const [searchParams] = useSearchParams();
-  const token = searchParams.get('token') || '';
-  const serverUrl = searchParams.get('serverUrl') || '';
-  const roomName = searchParams.get('roomName') || '';
+interface VoiceInterfaceProps {
+  token: string;
+  serverUrl: string;
+  roomName: string;
+}
+
+export default function VoiceInterface({ token, serverUrl, roomName }: VoiceInterfaceProps) {
   const [room, setRoom] = useState<Room | null>(null);
   const [isConnected, setIsConnected] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
@@ -86,58 +87,61 @@ export default function VoiceInterface() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 flex items-center justify-center">
-      <div className="max-w-2xl mx-auto p-8">
-        <div className="bg-gray-800/50 backdrop-blur-sm rounded-xl p-8 border border-gray-700">
-          <h1 className="text-3xl font-bold text-white mb-6 text-center">
-            Voice Meditation Assistant
-          </h1>
-          
-          {isConnecting && (
-            <div className="text-center mb-6">
-              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto mb-4"></div>
-              <p className="text-gray-400">Connecting to voice session...</p>
+    <div className="voice-interface">
+      <div className="text-center space-y-3">
+        <h3 className="text-lg font-semibold text-white mb-3">Voice Session</h3>
+        
+        {isConnecting && (
+          <div className="bg-blue-500/20 border border-blue-500/30 rounded-lg p-3">
+            <div className="flex items-center justify-center space-x-2">
+              <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse"></div>
+              <p className="text-blue-400 text-sm">Connecting...</p>
             </div>
-          )}
-
-          {error && (
-            <div className="bg-red-500/20 border border-red-500/30 rounded-lg p-4 mb-6">
-              <p className="text-red-400">{error}</p>
-            </div>
-          )}
-
-          {isConnected && (
-            <div className="text-center mb-6">
-              <div className="flex items-center justify-center space-x-2 mb-4">
-                <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                <span className="text-green-400 font-medium">Connected to Voice Session</span>
-              </div>
-              <p className="text-gray-300 text-sm mb-4">
-                You can now speak with your AI meditation guide. The assistant will respond to your voice.
-              </p>
-              <button
-                onClick={disconnect}
-                className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200"
-              >
-                End Session
-              </button>
-            </div>
-          )}
-
-          {transcript && (
-            <div className="bg-gray-700/50 rounded-lg p-4 mb-6">
-              <h3 className="text-white font-medium mb-2">Conversation:</h3>
-              <div className="text-gray-300 text-sm whitespace-pre-wrap max-h-40 overflow-y-auto">
-                {transcript}
-              </div>
-            </div>
-          )}
-
-          <div className="text-center text-gray-500 text-sm">
-            <p>Room: {roomName}</p>
-            <p>Status: {isConnected ? 'Connected' : isConnecting ? 'Connecting...' : 'Disconnected'}</p>
           </div>
-        </div>
+        )}
+
+        {error && (
+          <div className="bg-red-500/20 border border-red-500/30 rounded-lg p-3">
+            <p className="text-red-400 text-sm">{error}</p>
+          </div>
+        )}
+
+        {isConnected && (
+          <div className="bg-green-500/20 border border-green-500/30 rounded-lg p-3">
+            <div className="flex items-center justify-center space-x-2 mb-2">
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+              <span className="text-green-400 font-medium text-sm">Connected</span>
+            </div>
+            <p className="text-gray-300 text-xs">Speak naturally with your meditation guide</p>
+          </div>
+        )}
+
+        {transcript && (
+          <div className="bg-gray-700/50 rounded-lg p-3 max-h-32 overflow-y-auto">
+            <h4 className="text-white font-medium text-sm mb-1">Conversation:</h4>
+            <div className="text-gray-300 text-xs whitespace-pre-wrap">
+              {transcript}
+            </div>
+          </div>
+        )}
+
+        {!isConnected && !isConnecting && !error && (
+          <button
+            onClick={connectToRoom}
+            className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-all duration-200 text-sm"
+          >
+            Connect to Voice Session
+          </button>
+        )}
+        
+        {isConnected && (
+          <button
+            onClick={disconnect}
+            className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 text-sm"
+          >
+            Disconnect
+          </button>
+        )}
       </div>
     </div>
   );

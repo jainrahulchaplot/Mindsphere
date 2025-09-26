@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import VoiceInterface from '../pages/VoiceInterface';
 
 interface VoiceAgentProps {
   onSessionStart?: () => void;
@@ -9,6 +10,7 @@ interface VoiceAgentProps {
 export default function VoiceAgent({ onSessionStart, onSessionEnd, className = '' }: VoiceAgentProps) {
   const [sessionStarted, setSessionStarted] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
+  const [connectionData, setConnectionData] = useState<any>(null);
 
   const startSession = async () => {
     try {
@@ -33,16 +35,10 @@ export default function VoiceAgent({ onSessionStart, onSessionEnd, className = '
       
       const connectionData = await response.json();
       
-      // Open the voice interface in a new window with connection data
-      const voiceUrl = `/voice-interface?token=${encodeURIComponent(connectionData.token)}&serverUrl=${encodeURIComponent(connectionData.serverUrl)}&roomName=${encodeURIComponent(connectionData.roomName)}`;
-      const newWindow = window.open(voiceUrl, '_blank', 'width=1200,height=800');
-      
-      if (newWindow) {
-        setSessionStarted(true);
-        onSessionStart?.();
-      } else {
-        throw new Error('Failed to open voice session window');
-      }
+      // Store connection data and start voice session inline
+      setConnectionData(connectionData);
+      setSessionStarted(true);
+      onSessionStart?.();
     } catch (error) {
       console.error('Connection error:', error);
       alert('Failed to start voice session. Please try again.');
@@ -53,6 +49,7 @@ export default function VoiceAgent({ onSessionStart, onSessionEnd, className = '
 
   const endSession = () => {
     setSessionStarted(false);
+    setConnectionData(null);
     onSessionEnd?.();
   };
 
@@ -71,32 +68,40 @@ export default function VoiceAgent({ onSessionStart, onSessionEnd, className = '
             disabled={isConnecting}
             className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-105"
           >
-            {isConnecting ? 'Opening...' : 'Start Voice Session'}
+            {isConnecting ? 'Connecting...' : 'Start Voice Session'}
           </button>
           <p className="text-gray-500 text-sm">
-            Opens in a new window for the best voice experience
+            Connect to your AI meditation guide
           </p>
         </div>
-      ) : (
-        <div className="text-center space-y-4">
+      ) : connectionData ? (
+        <div className="space-y-4">
           <div className="bg-green-500/20 border border-green-500/30 rounded-lg p-4">
             <div className="flex items-center justify-center space-x-2 mb-2">
               <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
               <span className="text-green-400 font-medium">Voice Session Active</span>
             </div>
-            <p className="text-gray-300 text-sm">
-              Voice session is running in a separate window
+            <p className="text-gray-300 text-sm text-center">
+              Connected to meditation room: {connectionData.roomName}
             </p>
+          </div>
+          
+          <div className="bg-gray-800/50 rounded-lg p-4">
+            <VoiceInterface 
+              token={connectionData.token}
+              serverUrl={connectionData.serverUrl}
+              roomName={connectionData.roomName}
+            />
           </div>
           
           <button
             onClick={endSession}
-            className="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200"
+            className="w-full bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200"
           >
             End Session
           </button>
         </div>
-      )}
+      ) : null}
     </div>
   );
 }
