@@ -21,8 +21,7 @@
 **/.tmp
 **/.cache
 
-# Docker artifacts
-Dockerfile*
+# Docker artifacts (keep Dockerfile for build)
 .dockerignore
 
 # Git & Editor files
@@ -30,4 +29,21 @@ Dockerfile*
 .gitignore
 .idea
 .vscode
+
+# Development and test files
+**/test
+**/tests
+**/__tests__
+**/*.test.js
+**/*.test.ts
+**/*.spec.js
+**/*.spec.ts
+
+# Documentation
+**/README.md
+**/docs
+**/*.md
+
+# Voice test directory (separate from main app)
+mindsphere-voice-test
 
