@@ -1,13 +1,11 @@
 #!/bin/sh
 
 # Start the backend server in the background
-cd /app/backend
-node src/index.js &
+node /app/backend/src/index.js &
 BACKEND_PID=$!
 
 # Start the voice agent in the background
-cd /app
-npx tsx voice-agent.ts start &
+npx tsx /app/voice-agent.ts start &
 VOICE_PID=$!
 
 # Function to handle shutdown

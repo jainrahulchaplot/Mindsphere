@@ -24,29 +24,8 @@ RUN npm install --prefix ./backend
 # Copy all source code
 COPY . .
 
-# Install PM2 globally for process management
-RUN npm install -g pm2
-
-# Create PM2 ecosystem file
-RUN echo '{\
-  "apps": [\
-    {\
-      "name": "backend",\
-      "cwd": "/app/backend",\
-      "script": "npm",\
-      "args": "start"\
-    },\
-    {\
-      "name": "main-app",\
-      "cwd": "/app",\
-      "script": "npm",\
-      "args": "start"\
-    }\
-  ]\
-}' > ecosystem.config.json
-
 # Expose port
 EXPOSE 3000
 
-# Start with PM2
-CMD ["pm2-runtime", "start", "ecosystem.config.json"]
+# Run both backend and voice agent using Node.js
+CMD ["node", "start-services.js"]
