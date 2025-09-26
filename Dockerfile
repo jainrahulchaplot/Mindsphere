@@ -76,8 +76,11 @@ USER appuser
 # Set Node.js to production mode
 ENV NODE_ENV=production
 
+# Ensure PATH includes pnpm
+ENV PATH="/pnpm:$PATH"
+
 # Expose port for the application
 EXPOSE 3000
 
-# Run the voice agent
-CMD [ "pnpm", "start" ]
+# Run the voice agent directly
+CMD ["npx", "tsx", "voice-agent.ts", "start"]
