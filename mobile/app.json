@@ -14,7 +14,10 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.mindsphere.app"
+      "bundleIdentifier": "com.mindsphere.app",
+      "infoPlist": {
+        "NSMicrophoneUsageDescription": "This app needs microphone access for voice meditation sessions and AI conversations."
+      }
     },
     "android": {
       "package": "com.mindsphere.app",
@@ -26,9 +29,10 @@
       "predictiveBackGestureEnabled": false,
       "permissions": [
         "android.permission.INTERNET",
-        "android.permission.CAMERA",
         "android.permission.READ_EXTERNAL_STORAGE",
-        "android.permission.WRITE_EXTERNAL_STORAGE"
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.RECORD_AUDIO",
+        "android.permission.MODIFY_AUDIO_SETTINGS"
       ]
     },
     "web": {
