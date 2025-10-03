@@ -11,13 +11,23 @@
   ],
   "scripts": {
     "start": "./start-all.sh",
+    "start:local": "./start-local.sh",
     "start:backend": "cd mindsphere-backend && npm start",
     "start:frontend": "cd mindsphere-frontend && npm run dev",
     "start:agent": "cd mindsphere-ai-agent && npm start",
     "build:backend": "cd mindsphere-backend && npm run build",
     "build:frontend": "cd mindsphere-frontend && npm run build",
     "test": "npm run test --workspaces",
-    "clean": "rm -rf node_modules mindsphere-*/node_modules"
+    "clean": "rm -rf node_modules mindsphere-*/node_modules",
+    "git:setup": "./setup-git-repos.sh setup",
+    "git:push": "./setup-git-repos.sh push",
+    "git:status": "./setup-git-repos.sh status",
+    "git:add": "./git-multi-repo.sh add",
+    "git:commit": "./git-multi-repo.sh commit",
+    "git:push": "./git-multi-repo.sh push",
+    "git:feature": "./git-multi-repo.sh feature",
+    "git:sync": "./git-multi-repo.sh sync",
+    "push": "./push-to-git.sh"
   },
   "repository": {
     "type": "git",

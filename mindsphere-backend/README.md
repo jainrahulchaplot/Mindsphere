@@ -1,118 +1,215 @@
 # MindSphere Backend
 
-> Express.js backend server for AI-powered meditation and journaling platform
-
-[![Node.js](https://img.shields.io/badge/Node.js-18.0.0-green.svg)](https://nodejs.org/)
-[![Express.js](https://img.shields.io/badge/Express.js-4.19.0-black.svg)](https://expressjs.com/)
-[![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4-blue.svg)](https://openai.com/)
-
----
+> Node.js API server for MindSphere mental wellness platform
 
 ## 🚀 Quick Start
 
 ### Prerequisites
 - Node.js 18+
-- PostgreSQL (Supabase)
+- Supabase account
 - OpenAI API key
-- Google Cloud TTS credentials
+- LiveKit account
 
 ### Installation
-
 ```bash
-# Install dependencies
 npm install
-
-# Copy environment file
 cp env.example .env
-
-# Update .env with your credentials
+# Edit .env with your credentials
 ```
 
 ### Development
-
 ```bash
-# Start development server
-npm start
-
-# Access at http://localhost:8000
+npm start          # Production mode
+npm run dev        # Development mode
+npm test           # Run tests
 ```
 
----
+## 📁 Project Structure
 
-## 🏗️ Architecture
-
-### Stack
-- **Node.js** with Express.js
-- **OpenAI API** for script generation and analysis
-- **Google Cloud TTS** for premium audio generation
-- **Supabase** for database and authentication
-- **pgvector** for similarity search
-- **Winston** for structured logging
-
-### Project Structure
 ```
 src/
-├── index.js                    # Main server
-├── routes_*.js                 # API routes
-├── openai-content-generator.js # AI content
-├── tts-generator.js            # Text-to-speech
-├── vector-db-service.js        # Vector operations
-├── logger.js                   # Logging
-└── middleware/                 # Express middleware
+├── __tests__/           # Test files
+├── agent/              # AI agent integration
+├── config/             # Configuration files
+├── middleware/         # Express middleware
+├── schemas/            # Data validation schemas
+├── auth_middleware.js  # Authentication
+├── index.js           # Main server file
+├── logger.js          # Structured logging
+├── supabase.js        # Database client
+└── routes_*.js        # API route handlers
 ```
 
----
+## 🔧 API Endpoints
 
-## 🔌 API Endpoints
+### Authentication
+- `POST /auth/login` - User login
+- `POST /auth/register` - User registration
+- `GET /auth/me` - Get current user
 
-### Session Management
-- `POST /api/v1/session/start` - Create new session
-- `GET /api/v1/session/:id` - Get session details
-- `POST /api/v1/session/:id/feedback` - Submit feedback
-
-### Analytics
-- `GET /api/v1/usage/daily` - Daily usage data
-- `GET /api/v1/library` - User's sessions library
+### Sessions
+- `GET /sessions` - List user sessions
+- `POST /sessions` - Create new session
+- `GET /sessions/:id` - Get session details
+- `PUT /sessions/:id` - Update session
 
 ### Voice
-- `POST /api/voice/token` - Generate LiveKit token
-- `GET /api/voice/context/:userId` - Get user context
+- `POST /voice/token` - Generate LiveKit token
+- `POST /voice/join` - Join voice session
+- `POST /voice/leave` - Leave voice session
 
----
+### Content
+- `GET /music` - Get music library
+- `POST /music/upload` - Upload music track
+- `GET /quotes` - Get inspirational quotes
+- `GET /library` - Get content library
+
+### User Data
+- `GET /profile` - Get user profile
+- `PUT /profile` - Update profile
+- `GET /notes` - Get user notes
+- `POST /notes` - Create note
+- `GET /memories` - Get user memories
+
+## 🔐 Environment Variables
+
+```env
+# Server
+PORT=8000
+NODE_ENV=development
+FRONTEND_ORIGIN=http://localhost:5173
+
+# Supabase
+SUPABASE_URL=your_supabase_url
+SUPABASE_SERVICE_ROLE_KEY=your_service_key
+SUPABASE_ANON_KEY=your_anon_key
+
+# OpenAI
+OPENAI_API_KEY=your_openai_key
+
+# LiveKit
+LIVEKIT_URL=your_livekit_url
+LIVEKIT_API_KEY=your_api_key
+LIVEKIT_API_SECRET=your_api_secret
+
+# Google Cloud TTS
+GOOGLE_APPLICATION_CREDENTIALS_BASE64=your_credentials
+TTS_PROVIDER=cloud_tts
+CLOUD_TTS_VOICE=en-US-Studio-O
+
+# ElevenLabs (optional)
+ELEVEN_API_KEY=your_eleven_key
+ELEVEN_VOICE_ID=your_voice_id
+```
 
 ## 🧪 Testing
 
 ```bash
-# Run tests
+# Run all tests
 npm test
 
-# Run tests with coverage
+# Run specific test file
+npm test -- routes_voice_token.test.js
+
+# Run with coverage
 npm run test:coverage
 ```
 
----
+## 🚀 Deployment
 
-## 🚢 Deployment
-
-### Railway (Recommended)
+### Railway
 ```bash
-# Deploy to Railway
+railway login
+railway link
 railway up
 ```
 
-### Environment Variables
-Set these in your deployment platform:
-- `SUPABASE_URL`
-- `SUPABASE_SERVICE_ROLE_KEY`
-- `OPENAI_API_KEY`
-- `GOOGLE_APPLICATION_CREDENTIALS`
-- `LIVEKIT_URL`
-- `LIVEKIT_API_KEY`
-- `LIVEKIT_API_SECRET`
+### Docker
+```bash
+docker build -t mindsphere-backend .
+docker run -p 8000:8000 mindsphere-backend
+```
 
----
+## 📊 Monitoring
 
-## 📝 License
+- **Health Check**: `GET /health`
+- **Logs**: Structured JSON logging
+- **Metrics**: Request timing and error rates
 
-Part of the MindSphere project.
+## 🔧 Development
 
+### Adding New Routes
+1. Create route file: `routes_feature.js`
+2. Add to `index.js`:
+   ```javascript
+   app.use('/api/feature', require('./routes_feature'));
+   ```
+3. Add tests in `__tests__/`
+4. Update this README
+
+### Error Logging Standards
+```javascript
+// Good error logging example
+logger.error('Database connection failed', {
+  service: 'mindsphere-backend',
+  operation: 'user_authentication',
+  userId: userId,
+  correlationId: req.correlationId,
+  error: error.message,
+  stack: process.env.NODE_ENV === 'development' ? error.stack : undefined,
+  timestamp: new Date().toISOString(),
+  environment: process.env.NODE_ENV
+});
+```
+
+### Database Migrations
+- Located in `database/` folder
+- Use Supabase CLI for migrations
+- Test migrations before applying
+- No fallback data - fail fast with clear errors
+
+### Git Workflow
+```bash
+# Make changes
+git add .
+git commit -m "feat: add user authentication endpoint"
+git push origin feature/user-auth
+```
+
+## 🐛 Troubleshooting
+
+### Common Issues
+1. **Database Connection**: Check Supabase credentials
+2. **Voice Token**: Verify LiveKit configuration
+3. **TTS Issues**: Check Google Cloud credentials
+4. **CORS Errors**: Verify FRONTEND_ORIGIN setting
+
+### Debug Mode
+```bash
+DEBUG=mindsphere:* npm run dev
+```
+
+## 📚 Dependencies
+
+### Core
+- `express` - Web framework
+- `cors` - CORS middleware
+- `helmet` - Security headers
+- `morgan` - HTTP logging
+
+### Database
+- `@supabase/supabase-js` - Supabase client
+
+### AI & Voice
+- `openai` - OpenAI API
+- `livekit-server-sdk` - LiveKit integration
+- `@google-cloud/text-to-speech` - Google TTS
+
+### Utilities
+- `joi` - Data validation
+- `winston` - Logging
+- `dotenv` - Environment variables
+
+## 📄 License
+
+MIT License - see [LICENSE](../../LICENSE) for details.

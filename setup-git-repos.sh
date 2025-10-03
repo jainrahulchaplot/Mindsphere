@@ -1,197 +1,270 @@
 #!/bin/bash
 
-echo "🔀 Setting up Separate Git Repositories"
-echo "========================================"
-echo ""
-echo "This will initialize Git in each service directory"
-echo "and create proper .gitignore files."
-echo ""
+# MindSphere Git Repository Setup Script
+# This script sets up Git repositories for all MindSphere services
 
-# Array of repositories
-declare -A repos=(
-  ["mindsphere-frontend"]="React + TypeScript Frontend"
-  ["mindsphere-backend"]="Express.js Backend API"
-  ["mindsphere-ai-agent"]="LiveKit AI Voice Agent"
-  ["mindsphere-mobile"]="React Native Mobile App"
-)
+set -e
 
-# Colors
+# Colors for output
+RED='\033[0;31m'
 GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-# Counter
-count=1
-total=${#repos[@]}
+# Service configuration
+declare -A SERVICES=(
+    ["mindsphere-backend"]="https://github.com/yourusername/mindsphere-backend.git"
+    ["mindsphere-frontend"]="https://github.com/yourusername/mindsphere-frontend.git"
+    ["mindsphere-ai-agent"]="https://github.com/yourusername/mindsphere-ai-agent.git"
+    ["mindsphere-mobile"]="https://github.com/yourusername/mindsphere-mobile.git"
+)
 
-for repo in "${!repos[@]}"; do
-  description="${repos[$repo]}"
-  echo -e "${BLUE}[$count/$total]${NC} Setting up: $repo"
-  echo "    Description: $description"
-  
-  if [ ! -d "$repo" ]; then
-    echo "    ❌ Directory not found: $repo"
-    continue
-  fi
-  
-  cd "$repo" || exit
-  
-  # Check if already initialized
-  if [ -d ".git" ]; then
-    echo "    ⚠️  Git already initialized, skipping..."
-    cd ..
-    ((count++))
-    continue
-  fi
-  
-  # Initialize git
-  git init -b main
-  echo "    ✅ Git initialized"
-  
-  # Create comprehensive .gitignore
-  cat > .gitignore << 'EOF'
+print_status() {
+    echo -e "${BLUE}[INFO]${NC} $1"
+}
+
+print_success() {
+    echo -e "${GREEN}[SUCCESS]${NC} $1"
+}
+
+print_warning() {
+    echo -e "${YELLOW}[WARNING]${NC} $1"
+}
+
+print_error() {
+    echo -e "${RED}[ERROR]${NC} $1"
+}
+
+# Function to check if we're in the right directory
+check_directory() {
+    if [ ! -f ".cursorrules" ]; then
+        print_error "Please run this script from the MindSphere root directory"
+        exit 1
+    fi
+}
+
+# Function to setup Git repository for a service
+setup_service_git() {
+    local service="$1"
+    local remote_url="$2"
+    
+    print_status "Setting up Git for $service..."
+    
+    if [ ! -d "$service" ]; then
+        print_warning "Service directory $service not found, skipping..."
+        return
+    fi
+    
+    cd "$service"
+    
+    # Initialize Git if not already initialized
+    if [ ! -d ".git" ]; then
+        print_status "Initializing Git repository for $service..."
+        git init
+    fi
+    
+    # Add remote origin if not exists
+    if ! git remote get-url origin >/dev/null 2>&1; then
+        print_status "Adding remote origin for $service..."
+        git remote add origin "$remote_url"
+    else
+        print_status "Remote origin already exists for $service"
+    fi
+    
+    # Create .gitignore if not exists
+    if [ ! -f ".gitignore" ]; then
+        print_status "Creating .gitignore for $service..."
+        cat > .gitignore << 'EOF'
 # Dependencies
 node_modules/
-/.pnp
-.pnp.js
-package-lock.json
-pnpm-lock.yaml
-yarn.lock
 
-# Environment variables
+# Environment files
 .env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
-.env.*.local
-*.env
-!.env.example
+.env.*
 !env.example
-
-# Build outputs
-dist/
-build/
-.next/
-out/
-.cache/
 
 # Logs
 logs/
 *.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-lerna-debug.log*
-.pnpm-debug.log*
-server.log
-frontend.log
-backend.log
-
-# Testing
-coverage/
-.nyc_output/
-*.lcov
 
 # OS files
 .DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
 
 # IDE
 .vscode/
 .idea/
-*.swp
-*.swo
-*~
-.project
-.classpath
-.settings/
-*.sublime-project
-*.sublime-workspace
+.cursor/
 
 # Temporary files
-tmp/
-temp/
-*.tmp
+temp-credentials.json
+google-credentials.json
 
-# Uploads (for backend)
-uploads/*.webm
-uploads/*.mp3
-uploads/*.wav
-uploads/*.m4a
-!uploads/.gitkeep
+# Build outputs
+dist/
+build/
+out/
 
-# Misc
-.turbo/
-.parcel-cache/
+# Testing
+coverage/
+
+# Platform specific
+.vercel
+.railway
+.expo/
 EOF
+    fi
+    
+    # Add all files
+    git add .
+    
+    # Create initial commit if no commits exist
+    if ! git rev-parse HEAD >/dev/null 2>&1; then
+        print_status "Creating initial commit for $service..."
+        git commit -m "feat: initial commit for $service"
+    fi
+    
+    # Create main branch if not exists
+    if ! git show-ref --verify --quiet refs/heads/main; then
+        print_status "Creating main branch for $service..."
+        git checkout -b main
+    fi
+    
+    # Create develop branch if not exists
+    if ! git show-ref --verify --quiet refs/heads/develop; then
+        print_status "Creating develop branch for $service..."
+        git checkout -b develop
+    fi
+    
+    cd ..
+    print_success "Git setup completed for $service"
+}
 
-  echo "    ✅ .gitignore created"
-  
-  # Create .gitkeep for uploads directory if it exists
-  if [ -d "uploads" ]; then
-    touch uploads/.gitkeep
-    echo "    ✅ uploads/.gitkeep created"
-  fi
-  
-  # Initial commit
-  git add .
-  git commit -m "feat: initial commit - $description
+# Function to push all repositories
+push_all_repos() {
+    print_status "Pushing all repositories to remote..."
+    
+    for service in "${!SERVICES[@]}"; do
+        if [ -d "$service" ]; then
+            print_status "Pushing $service..."
+            cd "$service"
+            
+            # Push main branch
+            git push -u origin main
+            
+            # Push develop branch
+            git push -u origin develop
+            
+            cd ..
+            print_success "Pushed $service"
+        fi
+    done
+}
 
-- Initialize repository structure
-- Add comprehensive .gitignore
-- Add README and documentation
-- Configure package.json
-- Set up environment templates"
-  
-  echo -e "    ${GREEN}✅ Initial commit created${NC}"
-  echo ""
-  
-  cd ..
-  ((count++))
-done
+# Function to show repository status
+show_status() {
+    print_status "Repository Status:"
+    echo ""
+    
+    for service in "${!SERVICES[@]}"; do
+        if [ -d "$service" ]; then
+            echo -e "${BLUE}=== $service ===${NC}"
+            cd "$service"
+            
+            # Show current branch
+            current_branch=$(git branch --show-current)
+            echo "Current branch: $current_branch"
+            
+            # Show remote URL
+            remote_url=$(git remote get-url origin 2>/dev/null || echo "No remote")
+            echo "Remote URL: $remote_url"
+            
+            # Show status
+            git status --porcelain
+            
+            echo ""
+            cd ..
+        fi
+    done
+}
 
-echo ""
-echo "✅ All repositories initialized!"
-echo ""
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "📋 NEXT STEPS:"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo ""
-echo "1️⃣  Create GitHub repositories:"
-echo "   → https://github.com/new"
-echo "   "
-echo "   Create these 4 repositories:"
-echo "   • mindsphere-frontend"
-echo "   • mindsphere-backend"
-echo "   • mindsphere-ai-agent"
-echo "   • mindsphere-mobile"
-echo ""
-echo "2️⃣  Add remote origins (replace YOUR_USERNAME):"
-echo ""
-echo "   cd mindsphere-frontend"
-echo "   git remote add origin https://github.com/YOUR_USERNAME/mindsphere-frontend.git"
-echo "   git push -u origin main"
-echo ""
-echo "   cd ../mindsphere-backend"
-echo "   git remote add origin https://github.com/YOUR_USERNAME/mindsphere-backend.git"
-echo "   git push -u origin main"
-echo ""
-echo "   cd ../mindsphere-ai-agent"
-echo "   git remote add origin https://github.com/YOUR_USERNAME/mindsphere-ai-agent.git"
-echo "   git push -u origin main"
-echo ""
-echo "   cd ../mindsphere-mobile"
-echo "   git remote add origin https://github.com/YOUR_USERNAME/mindsphere-mobile.git"
-echo "   git push -u origin main"
-echo ""
-echo "3️⃣  Or use the helper script:"
-echo "   ./add-git-remotes.sh YOUR_GITHUB_USERNAME"
-echo ""
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+# Function to update remote URLs
+update_remotes() {
+    local github_username="$1"
+    
+    if [ -z "$github_username" ]; then
+        print_error "GitHub username is required"
+        echo "Usage: $0 update-remotes <github-username>"
+        exit 1
+    fi
+    
+    print_status "Updating remote URLs for GitHub username: $github_username"
+    
+    for service in "${!SERVICES[@]}"; do
+        if [ -d "$service" ]; then
+            print_status "Updating remote for $service..."
+            cd "$service"
+            
+            local new_url="https://github.com/$github_username/$service.git"
+            git remote set-url origin "$new_url"
+            
+            print_success "Updated remote URL for $service: $new_url"
+            cd ..
+        fi
+    done
+}
 
+# Function to show help
+show_help() {
+    echo "MindSphere Git Repository Setup Script"
+    echo ""
+    echo "Usage: $0 <command> [arguments]"
+    echo ""
+    echo "Commands:"
+    echo "  setup                    - Setup Git repositories for all services"
+    echo "  push                     - Push all repositories to remote"
+    echo "  status                   - Show repository status"
+    echo "  update-remotes <username> - Update remote URLs with GitHub username"
+    echo "  help                     - Show this help message"
+    echo ""
+    echo "Examples:"
+    echo "  $0 setup"
+    echo "  $0 push"
+    echo "  $0 status"
+    echo "  $0 update-remotes yourusername"
+}
+
+# Main script logic
+main() {
+    check_directory
+    
+    case "$1" in
+        "setup")
+            print_status "Setting up Git repositories for all MindSphere services..."
+            for service in "${!SERVICES[@]}"; do
+                setup_service_git "$service" "${SERVICES[$service]}"
+            done
+            print_success "Git setup completed for all services!"
+            ;;
+        "push")
+            push_all_repos
+            ;;
+        "status")
+            show_status
+            ;;
+        "update-remotes")
+            update_remotes "$2"
+            ;;
+        "help"|"-h"|"--help")
+            show_help
+            ;;
+        *)
+            print_error "Unknown command: $1"
+            show_help
+            exit 1
+            ;;
+    esac
+}
+
+# Run main function with all arguments
+main "$@"
