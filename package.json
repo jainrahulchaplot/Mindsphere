@@ -1,28 +1,25 @@
 {
-<<<<<<< HEAD
   "name": "mindsphere-monorepo",
   "version": "1.0.0",
   "private": true,
-  "description": "MindSphere - Unified repository for all services",
+  "description": "MindSphere - Multi-service mental wellness platform",
   "workspaces": [
     "mindsphere-backend",
-    "mindsphere-frontend",
+    "mindsphere-frontend", 
     "mindsphere-ai-agent",
     "mindsphere-mobile"
   ],
   "scripts": {
-    "start": "./start-all.sh",
     "start:local": "./start-local.sh",
     "start:backend": "cd mindsphere-backend && npm start",
     "start:frontend": "cd mindsphere-frontend && npm run dev",
     "start:agent": "cd mindsphere-ai-agent && npm start",
+    "start:mobile": "cd mindsphere-mobile && npm start",
     "build:backend": "cd mindsphere-backend && npm run build",
     "build:frontend": "cd mindsphere-frontend && npm run build",
     "test": "npm run test --workspaces",
     "clean": "rm -rf node_modules mindsphere-*/node_modules",
-    "git:setup": "./setup-git-repos.sh setup",
-    "git:push": "./setup-git-repos.sh push",
-    "git:status": "./setup-git-repos.sh status",
+    "git:status": "./git-multi-repo.sh status",
     "git:add": "./git-multi-repo.sh add",
     "git:commit": "./git-multi-repo.sh commit",
     "git:push": "./git-multi-repo.sh push",
@@ -32,64 +29,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/YOUR_USERNAME/mindsphere.git"
+    "url": "git+https://github.com/jainrahulchaplot/Mindsphere.git"
   },
   "author": "Rahul",
-  "license": "UNLICENSED"
-}
-
-=======
-  "name": "vite-react-typescript-starter",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview",
-    "start": "npx tsx voice-agent.ts start",
-    "download-files": "echo 'No files to download for this voice agent'",
-    "voice-agent:dev": "tsx voice-agent.ts dev",
-    "voice-agent:start": "tsx voice-agent.ts start",
-    "voice-agent:download": "tsx voice-agent.ts download-files"
-  },
-  "dependencies": {
-    "@fontsource/montserrat": "^5.2.8",
-    "@livekit/agents": "~1.0.6",
-    "@livekit/agents-plugin-openai": "~1.0.6",
-    "@livekit/components-react": "^2.9.14",
-    "@livekit/noise-cancellation-node": "~0.1.9",
-    "@supabase/supabase-js": "^2.57.4",
-    "@tanstack/react-query": "^5.89.0",
-    "axios": "^1.12.2",
-    "cors": "^2.8.5",
-    "dotenv": "^17.2.2",
-    "express": "^5.1.0",
-    "jspdf": "^3.0.2",
-    "livekit-client": "^2.15.7",
-    "livekit-server-sdk": "^2.13.3",
-    "lucide-react": "^0.344.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-router-dom": "^7.9.1"
-  },
+  "license": "UNLICENSED",
   "devDependencies": {
-    "@eslint/js": "^9.9.1",
-    "@types/react": "^18.3.5",
-    "@types/react-dom": "^18.3.0",
-    "@vitejs/plugin-react": "^4.3.1",
-    "autoprefixer": "^10.4.18",
-    "eslint": "^9.9.1",
-    "eslint-plugin-react-hooks": "^5.1.0-rc.0",
-    "eslint-plugin-react-refresh": "^0.4.11",
-    "globals": "^15.9.0",
-    "postcss": "^8.4.35",
-    "tailwindcss": "^3.4.1",
-    "tsx": "^4.20.5",
-    "typescript": "^5.5.3",
-    "typescript-eslint": "^8.3.0",
-    "vite": "^5.4.2"
+    "concurrently": "^8.2.2"
   }
 }
->>>>>>> 6932d93b9cb55e5f677d276dd88b2d34f9465ca5
