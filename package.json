@@ -1,0 +1,29 @@
+{
+  "name": "mindsphere-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "MindSphere - Unified repository for all services",
+  "workspaces": [
+    "mindsphere-backend",
+    "mindsphere-frontend",
+    "mindsphere-ai-agent",
+    "mindsphere-mobile"
+  ],
+  "scripts": {
+    "start": "./start-all.sh",
+    "start:backend": "cd mindsphere-backend && npm start",
+    "start:frontend": "cd mindsphere-frontend && npm run dev",
+    "start:agent": "cd mindsphere-ai-agent && npm start",
+    "build:backend": "cd mindsphere-backend && npm run build",
+    "build:frontend": "cd mindsphere-frontend && npm run build",
+    "test": "npm run test --workspaces",
+    "clean": "rm -rf node_modules mindsphere-*/node_modules"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YOUR_USERNAME/mindsphere.git"
+  },
+  "author": "Rahul",
+  "license": "UNLICENSED"
+}
+

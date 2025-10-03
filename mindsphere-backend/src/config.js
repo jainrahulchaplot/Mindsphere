@@ -1,0 +1,15 @@
+const SUPABASE_URL = process.env.SUPABASE_URL || '';
+const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || '';
+const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+const SUPABASE_AUTH_ENABLED = process.env.SUPABASE_AUTH_ENABLED === 'true';
+
+// DEMO user ID (only for local development)
+const DEMO_USER_ID = '550e8400-e29b-41d4-a716-446655440000';
+
+module.exports = {
+  SUPABASE_URL,
+  SUPABASE_ANON_KEY,
+  SUPABASE_SERVICE_ROLE_KEY,
+  SUPABASE_AUTH_ENABLED,
+  DEMO_USER_ID
+};

@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+
+# Environment files
+.env
+.env.*
+!env.example
+
+# Logs
+logs/
+*.log
+
+# OS files
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+.cursor/
+
+# Temporary files
+temp-credentials.json
+google-credentials.json
+
+# Uploads
+mindsphere-backend/uploads/*
+
+# Mobile
+mindsphere-mobile/.expo/
+
+# Platform
+.vercel
+.railway
+
+# Testing
+coverage/
+
+# Build
+dist/
+build/
+out/
+

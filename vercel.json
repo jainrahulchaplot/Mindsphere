@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "buildCommand": "cd mindsphere-frontend && npm install && npm run build",
+  "outputDirectory": "mindsphere-frontend/dist",
+  "installCommand": "npm install --prefix mindsphere-frontend",
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
+}
+
