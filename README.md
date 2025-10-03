@@ -76,7 +76,23 @@ This repository contains 4 separate services:
 ## 🔧 Development
 
 ### Git Workflow
-Each service has its own Git repository:
+
+#### **Push All Repositories at Once (Recommended):**
+
+```bash
+# Push all changed repositories with one command
+npm run push "your commit message"
+
+# Example:
+npm run push "feat: add new feature"
+```
+
+This automatically:
+- ✅ Checks all 5 repositories for changes
+- ✅ Commits and pushes only changed repos
+- ✅ Shows a summary of what was pushed
+
+#### **Push Individual Repositories:**
 
 ```bash
 # Backend
@@ -91,8 +107,20 @@ git add .
 git commit -m "feat: your changes"
 git push origin main
 
-# Similar for ai-agent and mobile
+# AI Agent
+cd mindsphere-ai-agent
+git add .
+git commit -m "feat: your changes"
+git push origin main
+
+# Mobile
+cd mindsphere-mobile
+git add .
+git commit -m "feat: your changes"
+git push origin main
 ```
+
+**See `PUSH_GUIDE.md` for detailed instructions.**
 
 ### Coding Standards
 All development follows the guidelines in **`.cursorrules`** - this is the primary reference for:
