@@ -74,3 +74,10 @@ out/
 
 # Credentials and secrets
 **/temp-credentials.json
+
+# Separate Git Repositories (managed independently)
+# These directories have their own Git repos and should not be tracked here
+mindsphere-backend/
+mindsphere-frontend/
+mindsphere-ai-agent/
+mindsphere-mobile/
